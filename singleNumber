@@ -8,3 +8,13 @@
 
 // Input: nums = [2,2,1]
 // Output: 1
+
+nums = [2,2,1]
+
+var singleNumber = function(nums) {
+    let result = nums[0];
+    for (let i = 1; i<nums.length;i++){
+        result ^= nums[i];
+    }
+    return result;
+};
