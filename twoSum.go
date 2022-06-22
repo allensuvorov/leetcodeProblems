@@ -11,7 +11,7 @@ func twoSum(nums []int, target int) []int {
 		numMap[num] = i
 		fmt.Println(numMap)
 	}
-	return []int {0, 0}
+	return nil
 }
 
 func main() {
