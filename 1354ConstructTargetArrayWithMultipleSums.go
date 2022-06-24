@@ -3,6 +3,7 @@ func isPossible(target []int) bool {
 	max := 0
 	sum := 0
 	maxI := 0
+	rest := 0 // rest of array, excluding max
 
 	for {
 		sum = 0
@@ -14,14 +15,15 @@ func isPossible(target []int) bool {
 				maxI = i
 			}
 		}
-		// fmt.Println(target, sum, max, maxI)
+		//fmt.Println(target, sum, max, maxI)
 		if max == 1 {
 			return true
 		}
-		if max < sum-max+1 {
+		rest = sum - max
+		if max < rest+1 {
 			return false
 		} else {
-			target[maxI] = max - (sum - max) // replace max with dif
+			target[maxI] = max % rest // replace max with remainder
 		}
 	}
 }
