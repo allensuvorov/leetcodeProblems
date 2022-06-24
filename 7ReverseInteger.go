@@ -19,7 +19,7 @@ func reverse(x int) int {
 	)
 	//fmt.Println(maxInt)
 
-	if num < 0 {
+	if x < 0 {
 		num = -num
 	}
 
@@ -39,10 +39,13 @@ func reverse(x int) int {
 		// pop
 		num = int(num / 10)
 	}
+	if x < 0 {
+		rev = -rev
+	}
 
 	return rev
 }
 
 func main() {
-	fmt.Println(reverse(123))
+	fmt.Println(reverse(-123))
 }
