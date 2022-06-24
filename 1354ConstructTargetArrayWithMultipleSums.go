@@ -10,7 +10,15 @@ func isPossible(target []int) bool {
 	sum := 0
 	maxI := 0
 	rest := 0 // rest of array, excluding max
-
+	
+	if len(target) == 1 {
+		if target[0] == 1 {
+			return true
+		} else {
+			return false
+		}
+	}
+	
 	for {
 		sum = 0
 		max = 0
