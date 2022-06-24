@@ -9,9 +9,9 @@ import (
 func reverse(x int) int {
 
 	var (
-		num	int = x // max 2147483647 min -2147483648
-		rev   	int = 0
-		pop 	int
+		num int = x // max 2147483647 min -2147483648
+		rev int = 0
+		pop int
 	)
 	const (
 		maxInt int = int(^uint32(0) >> 1)
@@ -25,25 +25,24 @@ func reverse(x int) int {
 
 	for num != 0 {
 		pop = num % 10 // get end digit
-		
-		if rev > maxInt/10 or (rev == maxInt/10 and pop > 7) {
+		fmt.Println(pop)
+
+		// check if rev is about to overflow
+		if rev > maxInt/10 || (rev == maxInt/10 && pop > 7) || rev < minInt/10 ||
+			(rev == minInt/10 && pop < -8) {
 			return 0
-			}
+		}
 
-		# check if rev is about to overflow
-            if rev > (int_max/10) or (rev == int_max/10 and pop > 7):
-                return 0
-            if rev < (int_min/10) or (rev == int_min/10 and pop < -8):
-                return 0
+		// push
+		rev = rev*10 + pop
 
-
-
-		num = int(num / 10) // pop
+		// pop
+		num = int(num / 10)
 	}
-	fmt.Println(endDigit)
-	return revNum
+
+	return rev
 }
 
 func main() {
-	fmt.Println(reverse(10))
+	fmt.Println(reverse(123))
 }
