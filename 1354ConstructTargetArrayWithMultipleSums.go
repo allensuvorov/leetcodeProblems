@@ -1,4 +1,3 @@
-// first idea - start from the end result (reverse engineering)
 package main
 
 import (
@@ -10,7 +9,6 @@ func isPossible(target []int) bool {
 	sum := 0
 	maxI := 0
 	rest := 0 // rest of array, excluding max
-	
 	if len(target) == 1 {
 		if target[0] == 1 {
 			return true
@@ -18,12 +16,18 @@ func isPossible(target []int) bool {
 			return false
 		}
 	}
-	
+
+	for _, num := range target {
+		sum += num
+	}
+
 	for {
-		sum = 0
 		max = 0
+
 		for i, num := range target {
-			sum += num
+			if sum == 0 {
+				sum += num
+			}
 			if num > max {
 				max = num
 				maxI = i
@@ -41,6 +45,7 @@ func isPossible(target []int) bool {
 		} else {
 			target[maxI] = max % rest // replace max with remainder
 		}
+		sum -= max - target[maxI]
 	}
 }
 
@@ -48,6 +53,5 @@ func main() {
 
 	fmt.Println(isPossible([]int{1, 1}))
 	fmt.Println(isPossible([]int{2, 900000001}))
-	fmt.Println(isPossible([]int{2, 900000002}))
+	fmt.Println(isPossible([]int{2}))
 }
-
