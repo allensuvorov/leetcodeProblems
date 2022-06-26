@@ -25,9 +25,6 @@ func isPossible(target []int) bool {
 		max = 0
 
 		for i, num := range target {
-			if sum == 0 {
-				sum += num
-			}
 			if num > max {
 				max = num
 				maxI = i
