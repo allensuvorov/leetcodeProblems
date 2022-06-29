@@ -1,11 +1,7 @@
-// 1354. Construct Target Array With Multiple Sums
-// ideas: recursion, will it help with time complexity?
-// ideas: heap
 package main
 
 import (
 	"fmt"
-  "reflect"
 )
 
 func romanToInt(s string) int {
@@ -20,35 +16,28 @@ func romanToInt(s string) int {
     77: 1000, // M
   }
 
-  // sRune := []rune(s)
-  
-  result := 0
-  for _, char := range s {
-    fmt.Println(reflect.TypeOf(char))
-  }
-  
-  // for i, r := range s {
-  //   fmt.Println(i,r,m[r])
-    
-  //   if !(m[r] < m[rune(s[(i+1)])]) {
-  //     result += m[r]
-  //   } else{
-  //     result -= m[r]
-  //   }
-  // }
+  sRune := []rune(s)
 
-  for i := 0; i < len(s); i++ {  
-    if (!(m[s[i]]<m[s[i+1]])) {    
-      result += m[s[i]]; 
+  var (
+    result, r, next int
+  )
+  
+  for i := 0; i < len(sRune)-1; i++ {  
+    r = m[rune(s[i])]
+    next = m[rune(s[i+1])]
+    if r < next {    
+      result -= r 
     } else {
-      result -= m[s[i]];    
-    } 
+      result += r 
+    }
   }
-
-
+  
+  last := sRune[len(sRune)-1]
+  result += m[last]
   return result
 }
 
 func main() {
-  romanToInt("IVXLCDM") //'I', 'V', 'X', 'L', 'C', 'D', 'M'
+  fmt.Println(romanToInt("IVXLCDM"))
+  fmt.Println(romanToInt("IV"))
 }
