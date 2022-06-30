@@ -1,0 +1,54 @@
+package main
+
+import (
+	"fmt"
+  "strconv"
+)
+
+func addTwoStrings(str1 string, str2 string) string {
+  sum := ""
+
+  // indecies
+  i1:=len(str1)-1
+  i2:=len(str2)-1
+  int1:=0
+  int2:=0
+  ten := 0
+  
+  for {
+    if i1 >= 0 {
+      int1, _ = strconv.Atoi(string(str1[i1]))
+    } else {
+      int1 = 0
+    }
+    if i2 >= 0 {
+      int2, _ = strconv.Atoi(string(str2[i2]))
+    } else {
+      int2 = 0
+    }
+    fmt.Println(int1, int2)
+    fmt.Println((int1+int2)%10)
+    
+    if (int1+int2) < 10 {
+      sum = strconv.Itoa(((int1+int2)%10+ten)) + sum
+      ten = 0
+    } else {
+      // dig = ((int1+int2)%10+ten)
+      sum = strconv.Itoa(((int1+int2)%10+ten)) + sum
+      ten = 1
+    }
+    i1 --
+    i2 --    
+    if i1 < 0 && i2 < 0 {
+      return sum
+    }
+  }
+  return ""
+}
+
+func main() {
+  fmt.Println(addTwoStrings("55555", "911"))
+}
+
+// 12345678
+//     9999
