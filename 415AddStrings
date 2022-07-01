@@ -5,41 +5,39 @@ import (
   "strconv"
 )
 
-func addTwoStrings(str1 string, str2 string) string {
-  sum := ""
+func addStrings(num1 string, num2 string) string {
+  var sum [] byte
 
-  // indecies
-  i1:=len(str1)-1
-  i2:=len(str2)-1
-  int1:=0
-  int2:=0
-  ten := 0
+  i1:=len(num1)-1
+  i2:=len(num2)-1
+  var byte1, byte2, ten byte
   
   for {
     if i1 >= 0 {
-      int1, _ = strconv.Atoi(string(str1[i1]))
+      byte1 = ((num1[i1]-'0'))
     } else {
-      int1 = 0
+      byte2 = 0
     }
     if i2 >= 0 {
-      int2, _ = strconv.Atoi(string(str2[i2]))
+      byte2 = ((num2[i2]-'0'))
     } else {
-      int2 = 0
+      byte2 = 0
     }
-    fmt.Println(int1, int2)
-    fmt.Println((int1+int2)%10)
     
-    if (int1+int2) < 10 {
-      sum = strconv.Itoa(((int1+int2)%10+ten)) + sum
+    if (byte1+byte2+ten) < 10 { // shifting to bytes
+      sum = strconv.Itoa(int1+int2+ten) + sum
       ten = 0
     } else {
-      // dig = ((int1+int2)%10+ten)
-      sum = strconv.Itoa(((int1+int2)%10+ten)) + sum
+      sum = strconv.Itoa((int1+int2+ten)%10) + sum
       ten = 1
     }
+    // fmt.Println(i1, i2, "Data:", int1, int2, ten, "sum:", sum)
     i1 --
     i2 --    
     if i1 < 0 && i2 < 0 {
+      if ten == 1 {
+        sum = "1" + sum
+      }
       return sum
     }
   }
@@ -47,7 +45,8 @@ func addTwoStrings(str1 string, str2 string) string {
 }
 
 func main() {
-  fmt.Println(addTwoStrings("55555", "911"))
+  fmt.Println(addStrings("584", "18"))
+  // fmt.Println(addStrings("9", "1"))
 }
 
 // 12345678
