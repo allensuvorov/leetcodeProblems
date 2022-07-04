@@ -45,7 +45,7 @@ func addStrings(num1 string, num2 string) string {
         carry = 0
         break
       } else {
-        res[i] = 0
+        res[i] = '0'
         carry = 1
       }  
     }
