@@ -6,41 +6,39 @@
  * }
  */
 func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
-    
     var list3 *ListNode = new(ListNode)
+    var head3 *ListNode = list3
+    var list1Done, list2Done bool
     
-    var node1 ListNode = *list1
-    var node2 ListNode = *list2
-    var node3 ListNode = *list3
-    
-    for node1.Next != nil && node2.Next != nil {
-        
-        if node1.Val >= node2.Val {
-            node3.Val = node1.Val
-            node1 = *node1.Next
-        } else {
-            node3.Val = node2.Val
-            node2 = *node2.Next
+    for !list1Done || !list2Done {
+        if !list1Done && list1.Val <= list2.Val {
+            list3.Val = list1.Val
+            fmt.Println("list1", list1.Val)
+            if list1.Next != nil {
+                list1 = list1.Next
+            } else {
+                list1Done = true
+                fmt.Println(list1Done)
+            }
+        } else if !list2Done {
+            list3.Val = list2.Val
+            fmt.Println("list2", list2.Val)
+            if list2.Next != nil{
+                list2 = list2.Next
+            } else {
+                list2Done = true
+                fmt.Println(list2Done)
+            }
         }
         
-        fmt.Println( node1, node2, node3)
+        fmt.Println(list1.Val, list2.Val, list3.Val)
         
-        node3.Next = new(ListNode)
+        if !list1Done || !list2Done {
+            list3.Next = new(ListNode)
+            list3 = list3.Next    
+        }
         
-        fmt.Println("head is", list3)
         
-        node3 = *node3.Next
-        fmt.Println("head is node3", list3)
     }
-    
-    if node1.Val >= node2.Val {
-            node3.Val = node1.Val
-    } else {
-            node3.Val = node2.Val
-    }
-    
-    
-    // fmt.Println(list1, node1, node2, node3, list3)
-    
-    return list3
+    return head3
 }
