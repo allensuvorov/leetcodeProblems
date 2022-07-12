@@ -6,26 +6,14 @@
  * }
  */
 func reverseList(head *ListNode) *ListNode {
-    if head == nil || head.Next == nil{
-        return head
+    
+    var cur, prev, next *ListNode
+    cur = head
+    for cur != nil{
+        next = cur.Next // address of (2)
+        cur.Next = prev // (1)->(nil) pointer
+        prev = cur // save address of (1)
+        cur = next // go to (2)
     }
-    
-    var rev, next, prev *ListNode
-    
-    rev = head
-    next = rev.Next // (2) next address
-    rev.Next = nil // (1)->null
-    prev = rev // (1) current address
-    
-    for rev = next; rev.Next != nil; rev = next{
-        // rev = 2
-        next = rev.Next // address of (3)
-        rev.Next = prev // (2)->(1) pointer
-        prev = rev // save (2) address
-        
-        fmt.Println("end loop", rev.Val, rev.Next.Val)
-    }
-    rev.Next = prev
-    
-    return rev
+    return prev
 }
