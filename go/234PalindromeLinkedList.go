@@ -9,57 +9,24 @@ type ListNode struct {
 }
 
 func isPalindrome(head *ListNode) bool {
-    // walker reverses the first half of the list
-    // when runner reaches finish, walker points to center or pre-center node
-    // 123 123 // then we get two lists, and can compare values from the begining.
-    
-    var cur, prev, next, runner, list1, list2 *ListNode
-    runner = head
-    cur = head
-    
-	if head.Next == nil {
-        return true
+    var rev, next *ListNode
+    fast, slow := head, head
+
+    for fast != nil && fast.Next != nil {
+        fast = fast.Next.Next
+		next = slow.Next
+        slow.Next = rev
+        rev = slow
+        slow = next
     }
-    if head.Next.Next == nil {
-        return head.Val == head.Next.Val
+	if fast != nil { // odd len
+		slow = slow.Next
+	}
+    for rev != nil && rev.Val == slow.Val {
+        rev = rev.Next
+        slow = slow.Next
     }
-    if head.Next.Next.Next == nil {
-        return head.Val == head.Next.Next.Val
-    }
-    // reversing 1 - n/2
-    for head != nil {
-        runner = runner.Next.Next
-        next = cur.Next 
-        cur.Next = prev
-        prev = cur
-        cur = next
-        
-        // fmt.Println(runner)
-        if runner.Next == nil { // odd len
-            list2 = next.Next
-            // fmt.Println(list2)
-            break
-        }
-        if runner.Next.Next == nil { // even len
-            list2 = next
-            // fmt.Println(list2)
-            break
-        }
-    }
-    
-    list1 = prev
-    
-    // comparing list1 and list2
-	fmt.Println(list1.Val,list2.Val)
-    for list1 != nil && list2 != nil {
-        if list1.Val != list2.Val {
-            return false
-        }
-        list1 = list1.Next
-        list2 = list2.Next
-    }
-    return true
-    
+    return rev == nil
 }
 
 func makeList(nums []int) *ListNode {
@@ -79,5 +46,11 @@ func makeList(nums []int) *ListNode {
 
 func main() {
 	var testSlice1 []int = []int{1,2,3,4,3,2,1}
+	var testSlice2 []int = []int{1}
+	var testSlice3 []int = []int{1,1,2,1}
+	var testSlice4 []int = []int{1,2,3}
 	fmt.Println(isPalindrome(makeList(testSlice1)))
+	fmt.Println(isPalindrome(makeList(testSlice2)))
+	fmt.Println(isPalindrome(makeList(testSlice3)))
+	fmt.Println(isPalindrome(makeList(testSlice4)))
 }
