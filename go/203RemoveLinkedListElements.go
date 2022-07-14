@@ -5,23 +5,26 @@
  *     Next *ListNode
  * }
  */
- func removeElements(head *ListNode, val int) *ListNode {
-    
-    for head!=nil {
-        if head.Val == val{
-            head = head.Next
-        } else {
-            break
-        }
-    }
-    
-    pre := head
-    
-    for ptr := head.Next ; ptr != nil; ptr = ptr.Next {
-        if ptr.Val == val {
-            pre.Next = ptr.Next
-        }
-        pre = ptr
-    }
-    return head
+func removeElements(head *ListNode, val int) *ListNode {
+
+	newHead := head
+
+	for newHead != nil && newHead.Val == val {
+		newHead = newHead.Next
+	}
+
+	for ptr := newHead; ptr != nil && ptr.Next != nil; ptr = ptr.Next {
+		next := ptr.Next
+		fmt.Println(ptr, next)
+		for next != nil && next.Val == val {
+			next = next.Next
+		}
+		fmt.Println(next)
+		if next == nil {
+			ptr.Next = nil
+			break
+		}
+		ptr.Next = next
+	}
+	return newHead
 }
