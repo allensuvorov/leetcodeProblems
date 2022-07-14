@@ -15,16 +15,18 @@ func removeElements(head *ListNode, val int) *ListNode {
 
 	for ptr := newHead; ptr != nil && ptr.Next != nil; ptr = ptr.Next {
 		next := ptr.Next
-		fmt.Println(ptr, next)
+
 		for next != nil && next.Val == val {
 			next = next.Next
 		}
-		fmt.Println(next)
+
 		if next == nil {
 			ptr.Next = nil
 			break
 		}
-		ptr.Next = next
+		if ptr.Next != next {
+			ptr.Next = next
+		}
 	}
 	return newHead
 }
