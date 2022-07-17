@@ -15,3 +15,9 @@ func deleteNode(node *ListNode) {
 	}
 	return
 }
+
+// my goodness, it's so short
+func deleteNodeSuper(node *ListNode) {
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
+}
