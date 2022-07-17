@@ -10,34 +10,23 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	b1, b2 := headB, headB
 
 	for a1 != nil && b1 != nil {
-
 		if b1.Next != nil && a1.Next == nil {
 			b2 = b2.Next
 		}
-
 		if a1.Next != nil && b1.Next == nil {
 			a2 = a2.Next
 		}
-
 		if a1.Next != nil {
 			a1 = a1.Next
-
 		}
-
 		if b1.Next != nil {
 			b1 = b1.Next
-
 		}
-		// fmt.Println(a1.Val, b1.Val)
 		if a1.Next == nil && b1.Next == nil {
-			fmt.Println("a1 b1", a1.Val, b1.Val)
-			fmt.Println("a2 b2", a2.Val, b2.Val)
 			break
 		}
 	}
-
 	for a1 == b1 {
-
 		fmt.Println(a2.Val, b2.Val)
 		if a2 == b2 {
 			fmt.Println("intersection", a2.Val, b2.Val)
@@ -49,7 +38,28 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 		}
 		a2 = a2.Next
 		b2 = b2.Next
-
 	}
 	return nil
+}
+
+// the nice and consise solution
+func getIntersectionNodeA(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	a := headA
+	b := headB
+	for a != b {
+		if a == nil {
+			a = headB
+		} else {
+			a = a.Next
+		}
+		if b == nil {
+			b = headA
+		} else {
+			b = b.Next
+		}
+	}
+	return a
 }
