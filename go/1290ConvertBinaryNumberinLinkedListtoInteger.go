@@ -21,3 +21,15 @@ func getDecimalValue(head *ListNode) int {
 	}
 	return int(dec)
 }
+
+// sweet solution to multiply and add next val
+func getDecimalValue(head *ListNode) int {
+	var num = head.Val
+
+	for head.Next != nil {
+		num = num*2 + head.Next.Val
+		fmt.Println(num, head.Next.Val)
+		head = head.Next
+	}
+	return num
+}
