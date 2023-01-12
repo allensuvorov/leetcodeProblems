@@ -16,3 +16,32 @@ func reverseVowels(s string) string {
     }
     return strings.Join(str, "")
 }
+
+// check this out, what a fine solution, high readability
+func reverseVowels(s string) string {
+	temp := []byte(s)
+	i := 0
+	j := len(s) - 1
+
+	for i < j {
+		if !isVowel(s[i]) {
+			i++
+			continue
+		}
+
+		if !isVowel(s[j]) {
+			j--
+			continue
+		}
+
+		temp[i], temp[j] = temp[j], temp[i]
+		i++
+		j--
+	}
+
+	return string(temp)
+}
+
+func isVowel(char byte) bool {
+	return char == 'a' || char == 'e' || char == 'i' || char == 'o' || char == 'u' || char == 'A' || char == 'E' || char == 'I' || char == 'O' || char == 'u' || char == 'U'
+}
