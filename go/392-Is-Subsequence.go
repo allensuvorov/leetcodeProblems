@@ -30,3 +30,23 @@ func isSubsequence(s string, t string) bool {
     }
     return true
 }
+
+// a shorter one
+func isSubsequence(s string, t string) bool {
+    i,j := 0, 0
+    hm := map[byte]int{}
+    for i := range t {
+        hm[t[i]] ++
+    }
+    for i < len(s) && j < len(t) {
+        if s[i] == t[j] {
+            hm[s[i]] --
+            i++
+            if i < len(s) && hm[s[i]] <= 0 {
+                return false
+            }
+        }
+        j++
+    }
+    return i == len(s)
+}
