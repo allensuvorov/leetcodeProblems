@@ -26,3 +26,16 @@ func containsNearbyDuplicate(nums []int, k int) bool {
     }
     return false
 }
+
+// updated my solution
+
+func containsNearbyDuplicate(nums []int, k int) bool {
+    hm := map[int]int{}
+    for i, v := range nums {
+        if _, ok := hm[v]; ok && i - hm[v] <= k {
+            return true
+        }
+        hm[v] = i
+    }
+    return false
+}
