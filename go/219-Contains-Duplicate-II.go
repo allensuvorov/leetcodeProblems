@@ -13,3 +13,16 @@ func containsNearbyDuplicate(nums []int, k int) bool {
     }
     return false
 }
+
+// someone added a cleaner one
+func containsNearbyDuplicate(nums []int, k int) bool {
+    recorder := make(map[int]int)
+    for i, num := range nums {
+        j, ok := recorder[num]
+        if ok && i - j <= k {
+            return true
+        }
+        recorder[num] = i
+    }
+    return false
+}
