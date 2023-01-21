@@ -7,6 +7,9 @@ func canPlaceFlowers(flowerbed []int, n int) bool {
                 flowerbed[i] = 1
             } 
         }
+        if count >= n {
+            return true
+        }
     }
     return count >= n
 }
