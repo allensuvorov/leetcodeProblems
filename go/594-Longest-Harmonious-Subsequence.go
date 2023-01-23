@@ -10,10 +10,6 @@ func findLHS(nums []int) int {
         if ok && hm[i] + hm[i+1] > max {
             max = hm[i] + hm[i+1]
         }
-        _, ok = hm[i-1]
-        if ok && hm[i] + hm[i-1] > max {
-            max = hm[i] + hm[i+1]
-        }
     }
     return max
 }
