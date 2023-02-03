@@ -1,12 +1,12 @@
 func toLowerCase(s string) string {
     shift := 'a' - 'A'
-    res := ""
-    for _, v := range s {
+    res := make([]byte, len(s))
+    for i, v := range s {
         if v >= 'A' && v <= 'Z' {
-            res = res + string(v+shift)
+            res[i] = byte(v+shift)
         } else {
-            res = res + string(v)
+            res[i] = byte(v)
         }
     }
-    return res
+    return string(res)
 }
