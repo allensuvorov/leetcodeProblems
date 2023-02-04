@@ -7,11 +7,12 @@ func uniqueMorseRepresentations(words []string) int {
     }
     transfMap := map[string]int{}
     for _, word := range words {
-        t := ""
+        t := []string{}
         for i := range word {
-            t = t + englishMorseMap[word[i]]
+            t = append(t, englishMorseMap[word[i]])
         }
-        transfMap[t]++
+        ts := strings.Join(t, "")
+        transfMap[ts]++
     }
     return len(transfMap)
 }
