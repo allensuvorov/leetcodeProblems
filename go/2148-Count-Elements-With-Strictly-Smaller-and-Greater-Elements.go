@@ -10,11 +10,11 @@ func countElements(nums []int) int {
             min = v
         }
     }
-    countMinMax := 0
+    count := 0
     for _, v := range nums {
-        if v == min || v == max {
-            countMinMax++
+        if v > min && v < max {
+            count++
         }
     }
-    return len(nums) - countMinMax
+    return count
 }
