@@ -1,26 +1,15 @@
 func secondHighest(s string) int {
-    var firstMax byte
-    var secondMax byte
-    exists := false
-    for i := range s {
-        if s[i] >= '0' && s[i] <= '9' {
-            if firstMax == 0 {
-                if firstMax < s[i] {
-                    firstMax = s[i]
-                }
-            } else if firstMax < s[i] {
-                secondMax = firstMax
-                firstMax = s[i]
-                exists = true
-            } else if secondMax < s[i] && firstMax != s[i] {
-                secondMax = s[i]
-                exists = true
+    first, second := -1, -1
+    for _, c := range s {
+        if unicode.IsDigit(c) {
+            num := int(c-'0')
+            if num > first {
+                second = first
+                first = num
+            } else if num > second && num < first {
+                second = num
             }
         }
     }
-    if exists {
-        return int(secondMax-'0')
-    } else {
-        return -1
-    }
+    return second
 }
