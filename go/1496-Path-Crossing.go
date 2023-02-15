@@ -1,53 +1,22 @@
-// my solution with nested maps
+type Position struct {
+    x, y int
+}
+
 func isPathCrossing(path string) bool {
-    var x, y rune
-    track := map[rune]map[rune]bool{0:{0:true}}
+    var cp Position
+    track := map[Position]struct{}{cp:{}}
 
     for _, v := range path {
         switch v {
-        case 'N': y++
-        case 'S': y--
-        case 'E': x++
-        case 'W': x--
+        case 'N': cp.y++
+        case 'S': cp.y--
+        case 'E': cp.x++
+        case 'W': cp.x--
         }
-        _, exists := track[x]
-        if exists && track[x][y] {
+        if _, ok := track[cp]; ok {
             return true
-        } else {
-            if exists {
-                track[x][y]=true
-            } else {
-                track[x] = map[rune]bool{y:true}
-            }
-
         }
+        track[cp] = struct{}{}
     }
     return false
-}
-
-// top speed solution - uses one map and struct as map key
-type Pos struct {
-	X, Y int
-}
-
-func isPathCrossing(path string) bool {
-	var cur Pos
-	var cache = map[Pos]struct{}{cur: {}}
-	for i := range path {
-		switch path[i] {
-		case 'N':
-			cur.X++
-		case 'S':
-			cur.X--
-		case 'E':
-			cur.Y++
-		case 'W':
-			cur.Y--
-		}
-		if _, ok := cache[cur]; ok {
-			return true
-		}
-		cache[cur] = struct{}{}
-	}
-	return false
 }
