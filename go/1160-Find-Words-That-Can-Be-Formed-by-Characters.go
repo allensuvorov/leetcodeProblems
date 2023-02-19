@@ -1,24 +1,18 @@
 func countCharacters(words []string, chars string) int {
-    cm := map[byte]int{}
-    for i := range chars {
-        cm[chars[i]]++
+    cm := map[rune]int{}
+    for _, v := range chars {
+        cm[v]++
     }
-
     ans := 0
-    for i := range words {
-        isGood := true
-        wcm := map[byte]int{}
-
-        for j := range words[i] {
-            wcm[words[i][j]]++
-            if wcm[words[i][j]] > cm[words[i][j]] {
-                isGood = false
+    for _, w := range words {
+        l := len(w)
+        for _, c := range w {
+            if strings.Count(w, string(c)) > cm[c] {
+                l = 0
                 break
             }
         }
-        if isGood {
-            ans += len(words[i])
-        }
+        ans += l
     }
     return ans
 }
