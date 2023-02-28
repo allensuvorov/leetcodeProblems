@@ -13,15 +13,7 @@ func relativeSortArray(arr1 []int, arr2 []int) []int {
             j++
         }
     }
-    minKey := func(m map[int]int) int {
-        min := 1000
-            for k:= range m {
-                if k < min {
-                    min = k
-                }
-            }
-        return min
-    }
+    
     min := minKey(hm)
     for len(hm)>0 {
         arr1[i] = min
@@ -33,4 +25,14 @@ func relativeSortArray(arr1 []int, arr2 []int) []int {
         }
     }
     return arr1
+}
+
+func minKey(m map[int]int) int {
+    min := 1000
+        for k:= range m {
+            if k < min {
+                min = k
+            }
+        }
+    return min
 }
