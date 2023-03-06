@@ -2,11 +2,9 @@ func findOcurrences(text string, first string, second string) []string {
     words := strings.Split(text, " ")
     res := []string{}
 
-    for i := range words {
-        if words[i] == first && i+1 < len(words) {
-            if words[i+1] == second && i+2 < len(words) {
-                res = append(res, words[i+2])
-            }
+    for i := 0; i < len(words)-2; i++ {
+        if words[i] == first && words[i+1] == second {
+            res = append(res, words[i+2])
         }
     }
     return res
