@@ -1,26 +1,27 @@
 func distanceBetweenBusStops(distance []int, start int, destination int) int {
-    // 0 <- start -> n-1
-    
     i := start
-    cw := 0
-    for i != destination {
-        cw += distance[i]
-        if i == len(distance) - 1 {
-            i = 0
+    j := destination
+    var cw, ccw int
+    
+    for start != destination {
+        if i == destination {
+            if cw < ccw {
+                return cw
+            }
         } else {
-            i++
+            cw += distance[i] 
+            i = (i+1) % len(distance)
+        }
+        if j == start {
+            if ccw < cw {
+                return ccw
+            }
+        } else {
+            ccw += distance[j] 
+            j = (j+1) % len(distance)
         }
     }
-    i = start
-    ccw := 0
-    for i != destination {
-        if i == 0 {
-            i = len(distance) - 1
-        } else {
-            i--
-        }
-        ccw += distance[i]
-    }
+    
     if cw < ccw {
         return cw
     } else {
