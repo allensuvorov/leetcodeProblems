@@ -1,5 +1,5 @@
 func truncateSentence(s string, k int) string {
-    res := []byte{}
+    var b strings.Builder
     count := 0
     for i := range s{
         if s[i] == ' ' {
@@ -8,7 +8,7 @@ func truncateSentence(s string, k int) string {
         if count == k {
             break
         }
-        res = append(res, s[i])
+        b.WriteByte(s[i])
     }
-    return string(res)
+    return b.String()
 }
