@@ -6,15 +6,27 @@ func hasGroupsSizeX(deck []int) bool {
     for i := range deck{
         hm[deck[i]]++
     }
-    for x := 2; x < 10000/2; x ++ {
-        sameDenom := true
+    
+    min := 10000
+    for i := range hm{
+        if hm[i] < min{
+            min = hm[i]
+        }
+    }
+
+    if min == 1 {
+        return false
+    }
+
+    for x := 2; x <= min; x ++ {
+        ok := true
         for i := range hm{
             if hm[i] % x != 0 {
-                sameDenom = false
+                ok = false
                 break
             }
         }
-        if sameDenom {
+        if ok {
             return true
         }
     }
