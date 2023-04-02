@@ -5,6 +5,9 @@
  *     Next *ListNode
  * }
  */
+
+package medium
+
 func deleteNode(node *ListNode) {
 	for ptr := node; ; ptr = ptr.Next {
 		ptr.Val = ptr.Next.Val

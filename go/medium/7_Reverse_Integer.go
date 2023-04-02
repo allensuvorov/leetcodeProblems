@@ -1,6 +1,4 @@
-// You can edit this code!
-// Click here and start typing.
-package main
+package medium
 
 import (
 	"fmt"
@@ -14,10 +12,9 @@ func reverse(x int) int {
 		pop int
 	)
 	const (
-		maxInt int = int(^uint32(0) >> 1) // max 2147483647 
-		minInt int = -(maxInt - 1) // min -2147483648
+		maxInt int = int(^uint32(0) >> 1) // max 2147483647
+		minInt int = -(maxInt - 1)        // min -2147483648
 	)
-	//fmt.Println(maxInt)
 
 	if x < 0 {
 		num = -num
@@ -44,8 +41,4 @@ func reverse(x int) int {
 	}
 
 	return rev
-}
-
-func main() {
-	fmt.Println(reverse(-123))
 }

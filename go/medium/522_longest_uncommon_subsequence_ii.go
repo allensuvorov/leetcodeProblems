@@ -1,3 +1,5 @@
+package medium
+
 // solution - brut
 func findLUSlength(strs []string) int {
 	max := -1
