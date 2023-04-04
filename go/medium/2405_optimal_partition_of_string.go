@@ -1,14 +1,14 @@
+package medium
+
 func partitionString(s string) int {
-    count := 0 
-    bytes := make(map[byte]bool)
-    
-    for i := range s {
-        if bytes[s[i]] {
-            count ++
-            bytes = map[byte]bool{}
+    set := [26]bool{}
+    count := 0
+    for _, r := range s{
+        if set[r-'a'] {
+            count++
+            set = [26]bool{}
         }
-        bytes[s[i]] = true
+        set[r-'a'] = true
     }
-    
     return count+1
 }
