@@ -1,47 +1,30 @@
 func findMaxK(nums []int) int {
 
-// every number placed it the index+1
-// collect nums inside the array
-// shift -1 to index
+    hm := make(map[int]int)
 
-    for i := range nums {
-        // head
-        av := abs(nums[i])
-        if av - 1 == i || av - 1 == 0 {
-            continue
-        } 
-        // next
-        if nums[av-1] == av || nums[av-1] == 0 {
-            nums[av-1] += nums[i]
-            nums[i] = 0
-            continue
-        } 
-        
-        // linked list - chain of update
-        cur := i
-        next := abs(nums[i])-1
+    for _, v := range nums {
+
+        if _, ok := hm[abs(v)]; ok {
+            if hm[abs(v)] + v == 0{
+                hm[abs(v)] = 0
+            }
+        } else {
+            hm[abs(v)] = v
+        }
+
+    }
+    max := -1
     
-        for abs(nums[next]) != next + 1 || nums[next] != 0{ // update target 
-            
-            b := nums[next] // buff the next value
-            nums[next] = nums[cur] // update the next with cur
-            
-            nums[cur] = 0
-            cur = abs(b)
-
-            next = abs(nums[abs(cur)])-1
+    for num, v := range hm {
+        if v == 0 && num > max {
+            max = num
         }
     }
-
-    for i := len(nums)-1; i>=0; i --{
-        if nums[i] == 0 {
-            return i + 1
-        }
-    }
-    return -1
+    
+    return max
 }
 
-func abs (n int) int {
+func abs (n int) int{
     if n < 0 {
         return n * -1
     }
