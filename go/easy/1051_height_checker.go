@@ -1,13 +1,24 @@
+package easy
+
 func heightChecker(heights []int) int {
-    expected := make([]int, len(heights))
-    copy(expected, heights)
-    sort.Ints(expected)
+    heightCount := [101]int{}
     
-    count := 0
-    for i := range expected {
-        if heights[i] != expected[i] {
-            count++
+    for _, height := range heights {
+        heightCount[height]++
+    }
+
+    p := 0
+    res := 0
+
+    for h, c := range heightCount {
+        for c > 0 {
+            if heights[p] != h {
+                res++
+            }
+            p++
+            c--
         }
     }
-    return count
+
+    return res
 }
