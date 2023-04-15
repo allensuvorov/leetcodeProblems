@@ -6,9 +6,9 @@ func distinctIntegers(n int) int {
     for d := 1; d < 10e9 && len(onBoard) != prev; d++ {
         prev = len(onBoard)
         for x := range onBoard {
-            for i := 2; i < n; i ++ { // 2 - 4
-                if x % i == 1 { // 5 
-                    onBoard[i] = struct{}{} // 2, 4
+            for i := 2; i < x; i ++ {
+                if x % i == 1 {
+                    onBoard[i] = struct{}{}
                 }
             }
         }
