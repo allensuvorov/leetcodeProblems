@@ -1,3 +1,5 @@
+package easy
+
 func fib(n int) int {
     // loop
     a, b := 0, 1
