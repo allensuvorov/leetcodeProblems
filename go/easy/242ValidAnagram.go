@@ -1,23 +1,21 @@
-package main
+package easy
 
 func isAnagram(s string, t string) bool {
-	if len(s) != len(t) {
-		return false
-	}
-	mapS, mapT := makeMap(s), makeMap(t)
-	for k, v := range mapS {
-		if v != mapT[k] {
-			return false
-		}
-	}
-	return true
-}
+    if len(s) != len(t) {
+        return false
+    }
 
-func makeMap(s string) map[rune]int {
-	var m map[rune]int = make(map[rune]int)
-
-	for _, v := range s {
-		m[v]++
-	}
-	return m
+    m := map[byte]int{}
+    for i := range s {
+        m[s[i]]++
+        m[t[i]]--
+        if m[s[i]] == 0 {
+            delete(m, s[i])
+        }
+        if m[t[i]] == 0 {
+            delete(m, t[i])
+        }
+    }
+    
+    return len(m) == 0
 }
