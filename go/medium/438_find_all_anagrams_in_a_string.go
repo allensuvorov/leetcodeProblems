@@ -20,7 +20,6 @@ func findAnagrams(s string, p string) []int {
     for i := 1; i <= len(s)-len(p); i++ {
         sCount[s[i-1]-'a']--
         sCount[s[i-1+len(p)]-'a']++
-        fmt.Println(sCount)
         if sCount == pCount {
             res = append(res, i)
         }
