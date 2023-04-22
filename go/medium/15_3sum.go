@@ -1,3 +1,5 @@
+package medium
+
 func threeSum(nums []int) [][]int {    
     res := [][]int{}
     sort.Ints(nums)
