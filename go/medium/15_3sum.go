@@ -12,17 +12,17 @@ func threeSum(nums []int) [][]int {
         r := len(nums) - 1
         for l < r {
             sum := nums[i] + nums[l] + nums[r]
-            switch{
-                case sum < 0:
+            switch {
+            case sum < 0:
+                l++
+            case sum > 0:
+                r--
+            case sum == 0:
+                res = append(res, []int{nums[i], nums[l], nums[r]})
+                l++
+                for nums[l] == nums[l-1] && l < r {
                     l++
-                case sum > 0:
-                    r--
-                case sum == 0:
-                    res = append(res, []int{nums[i], nums[l], nums[r]})
-                    l++
-                    for nums[l] == nums[l-1] && l < r {
-                        l++
-                    }
+                }
             }
         }
     }
