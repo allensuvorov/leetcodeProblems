@@ -8,7 +8,7 @@ func isValid(s string) bool {
         '[': ']',
     }
     for _, r := range s {
-        if _, ok := pairs[]; ok {
+        if _, ok := pairs[r]; ok {
             stack = append(stack, r)
         } else if len(stack) == 0 || pairs[stack[len(stack)-1]] != r {
             return false
@@ -16,5 +16,5 @@ func isValid(s string) bool {
             stack = stack[:(len(stack)-1)]
         }
     }
-    return len(stack) == true
+    return len(stack) == 0
 }
