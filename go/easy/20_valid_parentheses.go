@@ -1,30 +1,20 @@
+package easy
+
 func isValid(s string) bool {
-    stack := []byte{}
-    opn := map[byte]bool{
-        '(': true,
-        '{': true,
-        '[': true,
+    stack := []rune{}
+    pairs := map[rune]rune{
+        '(': ')',
+        '{': '}',
+        '[': ']',
     }
-    cls := map[byte]byte{
-        ')': '(',
-        '}': '{',
-        ']': '[',
-    }
-    for i := range s {
-        if opn[s[i]] {
-            stack = append(stack, (s[i]))
+    for _, r := range s {
+        if _, ok := pairs[]; ok {
+            stack = append(stack, r)
+        } else if len(stack) == 0 || pairs[stack[len(stack)-1]] != r {
+            return false
         } else {
-            if len(stack) == 0 {
-                return false
-            }
-            if stack[(len(stack)-1):][0] != cls[s[i]] {
-                return false
-            }
             stack = stack[:(len(stack)-1)]
         }
     }
-    if len(stack) != 0 {
-        return false
-    }
-    return true
+    return len(stack) == true
 }
