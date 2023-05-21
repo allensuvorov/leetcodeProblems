@@ -1,30 +1,53 @@
 func reformat(s string) string {
-    sl := []rune(s)
+    
     if len(s) == 1 {
         return s
     }
-    if !isPossible(s) {
+    
+    n, ok := isPossible(s)
+    
+    if !ok {
         return ""
     }
-    p := 0 // pointer to opposite search start
-    for i := 1; i < len(s); i++ {
-        if unicode.IsNumber(sl[i]) == unicode.IsNumber(sl[i-1]) {
-            if p == 0 {
-                p = i + 1
-            }
-            for j := p; j < len(s); j ++ {
-                if unicode.IsNumber(sl[j]) != unicode.IsNumber(sl[i-1]) {
-                    sl[i], sl[j] = sl[j], sl[i]
-                    p = j
-                    break
-                }
-            }
+    
+    numbers := make([]rune, 0, n)
+    letters := make([]rune, 0, len(s) - n)
+
+    for _, v := range s {
+        if unicode.IsNumber(v) {
+            numbers = append(numbers, v)
+        }
+        if unicode.IsLetter(v) {
+            letters = append(letters, v)
         }
     }
-    return string(sl)
+
+    res := make([]rune, 0, len(s))
+
+    switch {
+    case n > len(s) - n: 
+        res = fillSlice(numbers, letters)
+    case n == len(s) - n:
+        res = fillSlice(numbers, letters)
+    case n < len(s) - n:
+        res = fillSlice(letters, numbers)
+    }
+    return string(res)
 }
 
-func isPossible(s string) bool {
+func fillSlice(long, short []rune) []rune {
+    res := make([]rune, 0, len(long)+len(short))
+    for i := range short {
+        res = append(res, long[i])
+        res = append(res, short[i])
+    }
+    if len(long)> len(short) {
+        res = append(res, long[len(long)-1])
+    }
+    return res
+}
+
+func isPossible(s string) (int, bool) {
     n := 0
     for _, v := range s {
         if unicode.IsNumber(v) {
@@ -33,12 +56,12 @@ func isPossible(s string) bool {
     }
     if len(s) % 2 == 0 {
         if len(s) / 2 != n {
-            return false
+            return 0, false
         }
     } else {
         if len(s) / 2 != n && len(s) / 2 + 1 != n {
-            return false
+            return 0, false
         }
     }
-    return true
+    return n, true
 }
