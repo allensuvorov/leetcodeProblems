@@ -20,3 +20,37 @@ func findNext(arr []int, i, n int) int {
     }
     return - 1
 }
+
+
+// O(n+m)
+
+func nextGreaterElement(nums1 []int, nums2 []int) []int {
+    var nge = func(nums []int) map[int]int {
+        ngeMap := make(map[int]int)
+        var stack []int
+        
+        for _, num := range nums {
+            for len(stack) > 0 && stack[len(stack) - 1] < num {
+                top := stack[len(stack) - 1]
+                ngeMap[top] = num
+                stack = stack[:len(stack) - 1]
+            }
+            stack = append(stack, num)
+        }
+
+        for _, num := range stack {
+            ngeMap[num] = -1
+        }
+
+        return ngeMap
+    }
+
+    ngeMap := nge(nums2)
+
+    var result []int
+    for _, num := range nums1 {
+        result = append(result, ngeMap[num])
+    }
+
+    return result
+}
