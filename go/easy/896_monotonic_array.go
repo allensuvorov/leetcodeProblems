@@ -3,7 +3,21 @@ package main
 var a1 = []int{1, 2, 3} // true
 var a2 = []int{1, 2, 1} // false
 
-func isMonotonic(nums []int) bool {
+func isMonotonic1(nums {int) bool {
+	inc := true
+	dec := true
+	for i := 0; i < len(nums) - 1; i++ {
+		if nums[i] < nums[i+1] {
+			dec = false
+		}
+		if nums[i] > nums[i+1] {
+			inc = false
+		}
+	}
+	return inc || dec
+}
+
+func isMonotonic2(nums []int) bool {
 	// first, find diff and save sign (+/-)
 	// second, find diff with opposite sign (+/-)
 	sign := ""
