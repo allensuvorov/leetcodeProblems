@@ -1,19 +1,20 @@
 func removeDuplicates(nums []int) int {
+    limit, countDups := 1, 0
     // 2 pointers: collector + scout
-    collector := 0
-    limit := 1
-    countDup := 0
-    for scout := 1; scout < len(nums); scout++ {
+    collector, scout := 0, 1
+    collect := func(){
+        collector++
+        nums[collector] = nums[scout]
+    }
+    for ; scout < len(nums); scout++ {
         if nums[scout] == nums[collector] {
-            if countDup < limit {
-                nums[collector + 1] = nums[scout]
-                collector++
+            if countDups < limit {
+                collect()
             }
-            countDup++
+            countDups++
         } else {
-            nums[collector + 1] = nums[scout]
-            collector++
-            countDup = 0
+            collect()
+            countDups = 0
         }
     }
     return collector + 1
