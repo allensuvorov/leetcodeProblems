@@ -1,43 +1,23 @@
-package main
-
-import (
-	"fmt"
-)
-
 func romanToInt(s string) int {
-  
-  m := map[rune]int{
-    73: 1,    // I
-    86: 5,    // V
-    88: 10,   // X
-    76: 50,   // L
-    67: 100,  // C
-    68: 500,  // D
-    77: 1000, // M
-  }
-
-  sRune := []rune(s)
-
-  var (
-    result, r, next int
-  )
-  
-  for i := 0; i < len(sRune)-1; i++ {  
-    r = m[rune(s[i])]
-    next = m[rune(s[i+1])]
-    if r < next {    
-      result -= r 
-    } else {
-      result += r 
+    m := map[byte]int{
+        'I': 1,
+        'V': 5,
+        'X': 10,
+        'L': 50,
+        'C': 100,
+        'D': 500,
+        'M': 1000,
     }
-  }
-  
-  last := sRune[len(sRune)-1]
-  result += m[last]
-  return result
-}
-
-func main() {
-  fmt.Println(romanToInt("IVXLCDM"))
-  fmt.Println(romanToInt("IV"))
+    ans := 0
+    l := len(s)
+    for i := 0; i < l - 1; i++{
+        r := s[i]
+        if m[r] < m[s[i+1]] {
+            ans -= m[r]
+        } else {
+            ans += m[r]
+        }
+    } 
+    ans += m[s[l-1]]
+    return ans
 }
