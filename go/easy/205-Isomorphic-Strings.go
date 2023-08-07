@@ -1,14 +1,17 @@
 func isIsomorphic(s string, t string) bool {
-    ab := map[byte]byte{s[0]:t[0]}
-    ba := map[byte]byte{t[0]:s[0]}
+    return isMatching(s,t) && isMatching(t,s)
+}
 
+func isMatching(s string, t string) bool {
+    ab := map[byte]byte{}
     for i := range s {
-        if ab[s[i]] != t[i] || ba[t[i]] != s[i] {
-            return false
+        if v, ok := ab[s[i]]; !ok {
+            ab[s[i]] = t[i]
+        } else {
+            if v != t[i] {
+                return false
+            }
         }
-        ab[s[i]] = t[i]
-        ba[t[i]] = s[i]
     }
-
     return true
 }
