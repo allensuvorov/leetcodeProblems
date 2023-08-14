@@ -1,21 +1,9 @@
 func isPalindrome(x int) bool {
-    if x == 0 {
-        return true
-    }
-    
-    if x < 0 || x % 10 == 0 {
-        return false
-    }
-    
-    return x == revDig(x)
-}
-
-func revDig(x int) int {
+    b := x
     y := 0
-    for x > 0 {
-        y *= 10
-        y += x % 10
-        x /= 10
+    for b > 0 {
+        y = y * 10 + b % 10
+        b = b / 10
     }
-    return y
+    return x == y
 }
