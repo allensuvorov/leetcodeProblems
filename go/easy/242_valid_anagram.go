@@ -4,15 +4,13 @@ func isAnagram(s string, t string) bool {
     if len(s) != len(t) {
         return false
     }
-    
-    byteCount := map[byte]int{}
-    for i := range s {
-        byteCount[s[i]]++
-        byteCount[t[i]]--
+    cf := [26]int{}
+    for i := 0; i < len(s); i++ {
+        cf[s[i]-'a']++
+        cf[t[i]-'a']--
     }
-
-    for i := range byteCount {
-        if byteCount[i] != 0 {
+    for _, v := range cf {
+        if v != 0 {
             return false
         }
     }
