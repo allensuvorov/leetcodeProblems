@@ -13,11 +13,9 @@ func addBinary(a string, b string) string {
         if i < len(b) {
             bBit = b[len(b) - 1 - i] - '0'
         }
-        cBit = carry + aBit + bBit // 0, 1, 2, 3
-        
-        if cBit > 1 {
+        cBit = carry ^ aBit ^ bBit // 0s and 1+1 parish, last 1 stays
+        if carry + aBit + bBit > 1 {
             carry = 1
-            cBit = cBit%2
         } else {
             carry = 0
         }
