@@ -1,7 +1,8 @@
 func minWindow(s string, t string) string {
     checkList := map[byte]int{}
-    targetMap := map[byte]int{}
-    windowMap := map[byte]int{}
+    
+    targetMap := [127]int{}
+    windowMap := [127]int{}
 
     for i := 0; i < len(t); i++ { // fill Target Map with letter frequencies
         targetMap[t[i]]++
@@ -11,7 +12,7 @@ func minWindow(s string, t string) string {
     // init r. r captures letters till target collection is fully captured by the window
     r := -1
     for i := 0; i < len(s); i++ {
-        if _, ok := targetMap[s[i]]; ok { // fill up windowMap
+        if targetMap[s[i]] != 0 { // fill up windowMap
             windowMap[s[i]]++
             if checkList[s[i]] != 0 {
                 checkList[s[i]]-- // to track progress
@@ -37,7 +38,7 @@ func minWindow(s string, t string) string {
     for r < len(s) {
         // l trims tail till a must-have letter
         for ; l < len(s); l++ {
-            if _, ok := targetMap[s[l]]; ok {
+            if targetMap[s[l]] != 0 {
                 if windowMap[s[l]] - targetMap[s[l]] >= 1 {
                    windowMap[s[l]]--
                 } else {
@@ -54,7 +55,7 @@ func minWindow(s string, t string) string {
         // look for next window, update r
         r++
         for r < len(s) {
-            if _, ok := targetMap[s[r]]; ok {
+            if targetMap[s[r]] != 0 {
                 windowMap[s[r]]++
                 if s[r] == mustHave {
                     break
