@@ -1,19 +1,24 @@
 func minWindow(s string, t string) string {
-    tCount, window := map[byte]int{}, [127]int{}
-
+    tCount, window := [127]int{}, [127]int{}
     for i := 0; i < len(t); i++ {
         tCount[t[i]]++
     }
-
-    have, need := 0, len(tCount)
+    
+    have, need := 0, 0
+    for _, v := range tCount {
+        if v != 0 {
+            need++
+        }
+    }
+    
     res, resLen := []int{-1,-1}, len(s) + 10
     l := 0
     for r := range s {
-        c := s[r]
-        window[c]++
-
-        if tCount[c] != 0 && window[c] == tCount[c]{
-            have++
+        if tCount[s[r]] != 0{
+            window[s[r]]++
+            if window[s[r]] == tCount[s[r]] {
+                have++
+            }
         }
 
         for have == need {
