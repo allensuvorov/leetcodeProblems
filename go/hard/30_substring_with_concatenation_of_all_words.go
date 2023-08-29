@@ -1,10 +1,16 @@
 func findSubstring(s string, words []string) []int {
-    n := len(s)
     wordLenth := len(words[0])
-    m := len(words) * wordLenth
+    n := len(s)
+    m := len(words)*wordLenth
+
+    // is there a better solution then n * m ?
     res := []int{}
     if m > n {
         return res
+    }
+    
+    if sameLetter(s, words) {
+        return 
     }
 
     target := map[string]int{}
@@ -14,30 +20,31 @@ func findSubstring(s string, words []string) []int {
     }
     
     have, need := 0, len(target)
-    l := 0
-    for r := 0; r < n - wordLenth; r += wordLenth {
+    l, r := 0, 0
+    for r <= n - wordLenth {
+        //substring := s[r : r + m]
+
         word := s[r : r + wordLenth]
+        
         if _, ok := target[word]; ok {
             window[word]++
-            fmt.Println(window, have, need)
-
             if window[word] == target[word] {
                 have++
             }
-            if window[word] > target[word] {
-                l = r
-                have = 0
+            if window[word] > target[word] { // what to do if one item overflows
+                have = 1
                 window = map[string]int{}
-                window[word]++
-                if window[word] == target[word] {
-                    have++
-                }
+                window[word] = target[word]
+                l = r - (target[word] - 1) * wordLenth
             }
+            r += wordLenth
         } else {
             have = 0
             window = map[string]int{}
-            l = r + wordLenth
+            r++
+            l = r
         }
+        fmt.Println(l, r, window, have, need)
 
         if have == need {
             res = append(res, l)
@@ -45,7 +52,7 @@ func findSubstring(s string, words []string) []int {
             word := s[l:l + wordLenth]
             window[word]--
             have--
-            l += wordLenth 
+            l += wordLenth
         }
     }
     return res
