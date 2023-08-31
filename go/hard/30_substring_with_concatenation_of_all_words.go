@@ -10,7 +10,10 @@ func findSubstring(s string, words []string) []int {
     }
     
     if sameLetter(s, words) {
-        return 
+        for i := 0; i < n-m + 1; i++ {
+            res = append(res, i)
+        }
+        return res
     }
 
     target := map[string]int{}
@@ -56,4 +59,20 @@ func findSubstring(s string, words []string) []int {
         }
     }
     return res
+}
+
+func sameLetter (s string, words []string) bool {
+    for i := range s {
+        if s[0] != s[i] {
+            return false
+        }
+    }
+    for _, w := range words {
+        for i := range w {
+            if words[0][0] != w[i] {
+                return false
+            }
+        }
+    }
+    return true
 }
