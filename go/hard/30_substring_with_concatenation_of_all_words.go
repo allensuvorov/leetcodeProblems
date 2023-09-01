@@ -34,13 +34,22 @@ func findSubstring(s string, words []string) []int {
             if window[word] == target[word] {
                 have++
             }
-            if window[word] > target[word] { // what to do if one item overflows
-                have = 1
-                window = map[string]int{}
-                window[word] = target[word]
-                l = r - (target[word] - 1) * wordLenth
-            }
             r += wordLenth
+
+            if window[word] > target[word] { // what to do if one item overflows
+                // start over from after the first entry of overflow letter
+                have = 0
+                window = map[string]int{}
+                
+                w := s[l : l + wordLenth]
+                for w != word {
+                    l += wordLenth
+                    w = s[l : l + wordLenth]
+                }
+                l += wordLenth
+                r = l
+            }
+
         } else {
             have = 0
             window = map[string]int{}
