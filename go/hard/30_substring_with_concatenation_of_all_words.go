@@ -1,51 +1,51 @@
 func findSubstring(s string, words []string) []int {
-    wordLenth := len(words[0])
-    n := len(s)
-    m := len(words)
-
-    // is there a better solution then n * m ?
+    if len(words) == 0 {
+        return nil
+    }
+    
     res := []int{}
-    if m * wordLenth > n {
-        return res
+    wordLen := len(words[0])
+    numWords := len(words)
+    wordsMap := map[string]int{}
+    for _, w := range words {
+        wordsMap[w]++
     }
-    
-    target := map[string]int{}
-    window := map[string]int{}
-    for _, v := range words {
-        target[v]++
-    }
-    
-    have, need := 0, len(target)
-    l, r := 0, 0
 
-    nextLetter := func() {        
-        have = 0
-        window = map[string]int{}
-        l++
-        r = l
-    }
-    for l <= n - m * wordLenth {
+    for i := 0; i < wordLen; i++ {
+        start := i
+        end := i
+        counter := 0
+        tmpMap := map[string]int{}
 
-        word := s[r : r + wordLenth]
-        
-        if _, ok := target[word]; ok {
-            window[word]++
-            if window[word] == target[word] {
-                have++
+        for end+wordLen <= len(s) {
+            word := s[end : end+wordLen]
+            end += wordLen
+
+            if wordsMap[word] != 0 {
+                tmpMap[word]++
+
+                if tmpMap[word] <= wordsMap[word] {
+                    counter++
+                }
+
+                if counter == numWords {
+                    res = append(res, start)
+                }
+
+                if end-start == wordLen*numWords {
+                    if tmpMap[s[start:start+wordLen]] <= wordsMap[s[start:start+wordLen]] {
+                        counter--
+                    }
+                    tmpMap[s[start:start+wordLen]]--
+                    start += wordLen
+                }
+            } else {
+                tmpMap = map[string]int{}
+                start = end
+                counter = 0
             }
-            r += wordLenth
-            if window[word] > target[word] {
-                nextLetter()
-            }
-        } else {
-            nextLetter()
-        }
-        // fmt.Println(l, r, window, have, need)
-
-        if have == need {
-            res = append(res, l)
-            nextLetter()
         }
     }
+
     return res
 }
