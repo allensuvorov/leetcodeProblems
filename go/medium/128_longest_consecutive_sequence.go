@@ -1,30 +1,20 @@
 func longestConsecutive(nums []int) int {
-    res := 0
-    m := map[int]bool{}
-    for _, v := range nums {
-        m[v] = false
+    longest := 0
+    numSet := map[int]bool{}
+    for _, n := range nums {
+        numSet[n] = true
     }
     
-    for _, v := range nums {
-        if !m[v] {
-            count := 1
-            num := v + 1
-            ok := false
-            for _, ok = m[num]; ok; _, ok = m[num] {
-                m[num] = true
-                count++
-                num++
+    for _, n := range nums {
+        if !numSet[n - 1] { // is it the start of a sequence
+            length := 1
+            for numSet[n + length]{
+                length++
             }
-            num = v - 1
-            for _, ok = m[num]; ok; _, ok = m[num] {
-                m[num] = true
-                count++
-                num--
-            }
-            if res < count {
-                res = count
+            if longest < length {
+                longest = length
             }
         }
     }
-    return res
+    return longest
 }
