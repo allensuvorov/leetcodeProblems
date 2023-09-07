@@ -1,20 +1,22 @@
 func summaryRanges(nums []int) []string {
-    l := 0
-    inRange := false
-    res := []string{}
-    for i := range nums {
-        if i == len(nums) - 1 || nums[i+1] - nums[i] > 1 {
-            if inRange {
-                res = append(res, strconv.Itoa(l)+"->"+strconv.Itoa(nums[i]))
-                l = 0
-                inRange = false
-            } else {
-                res = append(res, strconv.Itoa(nums[i]))
-            }
-        } else if !inRange {
+    ranges := []string{}
+    rng := ""
+    l, r := 0, 0
+    for i := 0; i < len(nums); i++ {
+        // range start
+        if rng == "" {
             l = nums[i]
-            inRange = true
+            rng = rng + strconv.Itoa(l)
+        }
+        // range end
+        if i == len(nums) - 1 || nums[i] + 1 != nums[i+1] {
+            r = nums[i]
+            if l != r {
+                rng = strconv.Itoa(l) + "->" + strconv.Itoa(r)
+            }
+            ranges = append(ranges, rng)
+            rng = ""
         }
     }
-    return res
+    return ranges
 }
