@@ -12,6 +12,13 @@ func Constructor() MyHashSet {
 
 
 func (this *MyHashSet) Add(key int)  {
+    group := key % this.setSize
+    keySlice:= this.a[group]
+    for _, v := range keySlice {
+        if v == key {
+            return
+        }
+    }
     this.a[key % this.setSize] = append(this.a[key % this.setSize], key)
 }
 
@@ -23,6 +30,7 @@ func (this *MyHashSet) Remove(key int)  {
         if v == key {
             keySlice[i] = keySlice[len(keySlice)-1]
             this.a[group] = keySlice[:len(keySlice)-1]
+            return
         }
     }
 }
