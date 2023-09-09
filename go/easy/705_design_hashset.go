@@ -1,25 +1,40 @@
 type MyHashSet struct {
-    a [1000001]bool
+    a [][]int
+    setSize int
 }
 
 
 func Constructor() MyHashSet {
-    return MyHashSet{}
+    setSize := 10
+    a := make([][]int, setSize)
+    return MyHashSet {a, setSize}
 }
 
 
 func (this *MyHashSet) Add(key int)  {
-    this.a[key] = true
+    this.a[key % this.setSize] = append(this.a[key % this.setSize], key)
 }
 
 
 func (this *MyHashSet) Remove(key int)  {
-    this.a[key] = false
+    group := key % this.setSize
+    keySlice:= this.a[group]
+    for i, v := range keySlice {
+        if v == key {
+            keySlice[i] = keySlice[len(keySlice)-1]
+            this.a[group] = keySlice[:len(keySlice)-1]
+        }
+    }
 }
 
 
 func (this *MyHashSet) Contains(key int) bool {
-    return this.a[key]
+    for _, v := range this.a[key % this.setSize] {
+        if v == key {
+            return true
+        }
+    }
+    return false
 }
 
 
