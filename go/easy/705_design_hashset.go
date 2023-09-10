@@ -1,32 +1,32 @@
 type MyHashSet struct {
-    a [][]int
+    set [][]int
     setSize int
 }
 
 
 func Constructor() MyHashSet {
     setSize := 10
-    a := make([][]int, setSize)
-    return MyHashSet {a, setSize}
+    set := make([][]int, setSize)
+    return MyHashSet {set, setSize}
 }
 
 
 func (this *MyHashSet) Add(key int)  {
     group := key % this.setSize
     if !this.Contains(key) {
-        this.a[group] = append(this.a[group], key)
+        this.set[group] = append(this.set[group], key)
     }
 }
 
 
 func (this *MyHashSet) Remove(key int)  {
     group := key % this.setSize
-    keySlice := this.a[group]
+    keySlice := this.set[group]
     lastIndex := len(keySlice)-1
     for i, v := range keySlice {
         if v == key {
             keySlice[i] = keySlice[lastIndex]
-            this.a[group] = keySlice[:lastIndex]
+            this.set[group] = keySlice[:lastIndex]
             return
         }
     }
@@ -34,7 +34,7 @@ func (this *MyHashSet) Remove(key int)  {
 
 
 func (this *MyHashSet) Contains(key int) bool {
-    for _, v := range this.a[key % this.setSize] {
+    for _, v := range this.set[key % this.setSize] {
         if v == key {
             return true
         }
