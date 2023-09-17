@@ -23,9 +23,7 @@ func copyRandomList(head *Node) *Node {
     l1 = head
     l2 = dummy.Next
     for l1 != nil {
-        if l1.Random != nil {
-            l2.Random = listMap[l1.Random]
-        }
+        l2.Random = listMap[l1.Random]
         l1 = l1.Next
         l2 = l2.Next
     }
