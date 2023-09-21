@@ -13,7 +13,7 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
     cur := head
     // fill the list of ptrs
     i := 0
-    for i = 1; i < 30 && cur != nil; i++ {
+    for i = 1; i < 31 && cur != nil; i++ {
         ptrs[i] = cur
         cur = cur.Next
     }
