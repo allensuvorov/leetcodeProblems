@@ -1,18 +1,10 @@
 func mySqrt(x int) int {
-
-    l, r := 0, x+1
-    
-    for l < r {
-        
-        m := (l + r)/2
-        guess := m*m
-        fmt.Println(x, guess, l , m, r)
-
-        switch {
-            case guess == x: return m
-            case guess > x: r = m
-            case guess < x: l = m + 1
+    z := 1 
+    for z*z <= x {
+        if z*z == x {
+            return z
         }
+        z++
     }
-    return l - 1 
+    return z - 1
 }
