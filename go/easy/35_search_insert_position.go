@@ -1,12 +1,15 @@
 func searchInsert(nums []int, target int) int {
-    l := 0
-    r := len(nums)-1
+    l, r := 0, len(nums) - 1
     for l <= r {
-        m := (l+r)/2
+        m := (l + r)/2
+        guess := nums[m]
         switch {
-        case nums[m] == target: return m
-        case nums[m] < target: l = m + 1
-        case nums[m] > target: r = m - 1
+        case target == guess:
+            return m
+        case target > guess:
+            l = m + 1
+        case target < guess:
+            r = m - 1
         }
     }
     return l
