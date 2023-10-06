@@ -8,21 +8,17 @@
  */
 
 func guessNumber(n int) int {
-    // two pointers
     l := 1
     r := n
-    // loop
     for l <= r {
-        // gett the middle
-        mid := (l + r)/2
-        // move pointers
-        switch guess(mid) {
-        case 0: 
-            return mid
+        m := l + (r - l)/2
+        switch guess(m) {
         case 1: 
-            l = mid + 1
+            l = m + 1
         case -1: 
-            r = mid - 1
+            r = m - 1
+        default: 
+            return m
         }
     }
     return -1
