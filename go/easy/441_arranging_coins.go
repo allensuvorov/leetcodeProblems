@@ -1,6 +1,6 @@
 // (k * (k + 1)) / 2 <= n
 
-/*
+/
 func arrangeCoins(n int) int {
     return int(math.Sqrt(2.0 * float64(n) + 0.25) - 0.5)
 }
