@@ -5,21 +5,12 @@ func minSubsequence(nums []int) []int {
     for _, v := range nums {
         sum += v
     }
-    
-    // find max, add to subSum, append to res, pop it from nums
+    // sort
+    sort.Ints(nums)
     subSum := 0
-    for subSum * 2 <= sum {
-        maxNum := 0
-        maxInd := 0
-        for i, v := range nums {
-            if v > maxNum {
-                maxNum = v
-                maxInd = i
-            }
-        }
-        subSum += maxNum
-        res = append(res, maxNum)
-        nums[maxInd] = 0
+    for i := len(nums) - 1; 2* subSum <= sum ; i-- {
+        subSum += nums[i]
+        res = append(res, nums[i])
     }
     return res
 }
