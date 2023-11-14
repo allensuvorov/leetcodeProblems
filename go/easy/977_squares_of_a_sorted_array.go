@@ -1,20 +1,17 @@
 func sortedSquares(nums []int) []int {
     size := len(nums)
     res := make([]int, 0, size)
-    // find the middle with binary search
-
-    // for i := 0; nums[i] < 0 and i < size; i++ {
-    //     middle = i
-    // }
 
     r := binarySearch(nums)
-    fmt.Println("start is at:", r)
-    l := 0
+    //fmt.Println("start is at:", r)
+    
+    l := -1
     if r > 0 {
         l = r - 1
     }
+
     v := 0
-    for l > 0 || r < size {
+    for l >= 0 && r < size {
         rSq := nums[r]*nums[r]
         lSq := nums[l]*nums[l]
         if rSq <= lSq {
@@ -24,15 +21,25 @@ func sortedSquares(nums []int) []int {
             }
         } else {
             v = lSq
-            if l > 0 {
+            if l >= 0 {
                 l--
-            } else {
-                
             }
         }
-        fmt.Println("square value is:", v, " pointers are:", l, r)
+        //fmt.Println("square value is:", v, " pointers are:", l, r)
         res = append(res, v)
     }
+
+    for r < size {
+        v = nums[r]*nums[r]
+        res = append(res, v)
+        r++
+    }
+    for l >= 0 {
+        v = nums[l]*nums[l]
+        res = append(res, v)
+        l--
+    }
+
     return res
 }
 
