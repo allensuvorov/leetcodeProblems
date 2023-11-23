@@ -1,13 +1,17 @@
 func timeRequiredToBuy(tickets []int, k int) int {
     time := 0
-    for tickets[k] > 0 { 
-        for i, v := range tickets {
-            if v > 0{
-                tickets[i]--
-                time++
+    for person, number := range tickets {
+        if person > k {
+            if number < tickets[k] {
+                time += number
+            } else {
+                time += tickets[k] - 1
             }
-            if i == k && tickets[k]==0 {
-                return time
+        } else {
+            if number < tickets[k] {
+                time += number
+            } else {
+                time += tickets[k]
             }
         }
     }
