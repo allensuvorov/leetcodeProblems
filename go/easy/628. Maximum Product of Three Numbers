@@ -1,0 +1,76 @@
+func maximumProduct(nums []int) int {
+    pos, neg := 0, 0
+    zeroExists := false
+    min, max := []int{1001, 1001, 1001}, []int{-1001, -1001, -1001}
+    for _, v := range nums {
+        if v > 0 {
+            pos++
+        }
+        if v < 0 {
+            neg++
+        }
+        if v == 0 {
+            zeroExists = true
+        }
+        // find max v
+        if v > max[2] {
+            max[0] = max[1]
+            max[1] = max[2]
+            max[2] = v
+        } else if v > max[1] {
+            max[0] = max[1]
+            max[1] = v
+        } else if v > max[0] {
+            max[0] = v
+        }
+        // find min v
+        if v < min[0] {
+            min[1] = min[0]
+            min[0] = v
+        } else if v < min[1] {
+            min[1] = v
+        } 
+    }
+    
+    maxProd := max[0]*max[1]*max[2]
+    
+    switch {
+    case pos >= 3 || neg >= 2 && pos >= 1: // above zero
+        return getMax(maxProd, min[0]*min[1]*max[2])        
+    case pos == 0 && zeroExists || neg < 2 && zeroExists: // zero
+        return 0
+    case pos == 0 && !zeroExists: // belor zero
+        return maxProd
+    case neg < 2 && pos < 3 && !zeroExists:
+        return nums[0]*nums[1]*nums[2]
+    }
+    return 0
+}
+
+func getMax(a, b int) int {
+    if a > b { 
+        return a
+    }
+    return b
+} 
+// above zero
+
+    // // pos, pos, pos - look for max [1,2,3]
+    // case neg == 0:
+    
+    // // neg, neg, pos - look for 2 min and 1 max
+    // case neg > 1 && pos > 0:
+
+// zero
+
+    // // pos = 0 && and zero exists - return zero
+    
+    // // neg < 2 && pos < 3 && zero exists - return zero
+
+// below zero
+
+    // // neg, neg, neg - look for max [-3-2-1]
+    // case pos == 0:
+
+    // // neg, pos, pos - multiply the three numbers
+    // case pos < 3 && neg < 2
