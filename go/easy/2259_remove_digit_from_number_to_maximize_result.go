@@ -1,13 +1,15 @@
 func removeDigit(number string, digit byte) string {
-    max := ""
+    target := 0
     for i := range number {
         if number[i] == digit {
-            l := number[:i]
-            r := number[i + 1:]
-            if max < l + r {
-                max = l + r
+            if i < len(number) - 1 && number[i] < number[i+1] {
+                target = i
+                break
             }
+            target = i
         }
     }
-    return max
+    l := number[:target]
+    r := number[target + 1:]
+    return l + r
 }
