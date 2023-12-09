@@ -1,0 +1,14 @@
+func canConstruct(s string, k int) bool {
+    if len(s) < k {
+        return false
+    }
+    charCount := make([]int, 26)
+    for i := range s {
+        charCount[s[i]-'a']++
+    }
+    singlesCount := 0
+    for i := range charCount {
+        singlesCount += charCount[i] % 2
+    }
+    return singlesCount <= k
+}
