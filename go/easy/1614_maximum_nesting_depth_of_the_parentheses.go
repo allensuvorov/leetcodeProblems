@@ -1,25 +1,16 @@
 func maxDepth(s string) int {
     max := 0
-    count := 0
-    var stack *StackNode
+    stack := make([]byte, 0, len(s))
     for i := range s {
         if s[i] == '(' {
-            newNode := StackNode{'(', stack}
-            stack = &newNode
-            count++
-            if count > max {
-                max = count
+            stack = append(stack, '(')
+            if len(stack) > max {
+                max = len(stack)
             }
         }
         if s[i] == ')' {
-            stack = stack.Next
-            count--
+            stack = stack[:len(stack)-1]
         }
     }
     return max
-}
-
-type StackNode struct{
-    Val byte
-    Next *StackNode
 }
