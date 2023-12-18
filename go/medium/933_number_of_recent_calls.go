@@ -7,19 +7,19 @@ type RecentCounter struct {
 
 
 func Constructor() RecentCounter {
-    len := 3000
-    requests := make([]int, 10000)
+    len := 3002
+    requests := make([]int, len)
     return RecentCounter{requests, 0, 0, len}
 }
 
 
 func (this *RecentCounter) Ping(t int) int {
     // Enqueue
-    this.requests[this.tail] = t
+    this.requests[this.tail % this.len] = t
     this.tail++
 
     // Dequeue requests that are older than 3000ms
-    for this.requests[this.head] < t - this.len {
+    for this.requests[this.head % this.len] < t - 3000 {
         this.head++
     }
 
