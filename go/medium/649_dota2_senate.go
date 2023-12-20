@@ -1,67 +1,52 @@
+// 2 queues implemented via channels
 func predictPartyVictory(senate string) string {
-    size := len(senate)
-    rq := NewQueue(size)
-    dq := NewQueue(size)
-    
-    for i := range senate {
-        if senate[i] == 'R' {
-            rq.Enqueue(i)
+    n := len(senate)
+    r, d := make(chan int, n), make(chan int, n)
+
+    for i, c := range senate {
+        if c == 'R' {
+            r <- i
         } else {
-            dq.Enqueue(i)
+            d <- i
         }
     }
-    fmt.Println("1: ",rq, dq)
-    for rq.Head != rq.Tail && dq.Head != dq.Tail {
-        if rq.Data[rq.Head] < dq.Data[dq.Head] {
-            Ban(&rq, &dq, size)
+
+    for len(r) > 0 && len(d) > 0 {
+        rHead := <- r
+        dHead := <- d
+        if rHead < dHead {
+            r <- rHead + n
         } else {
-            Ban(&dq, &rq, size)
+            d <- dHead + n
         }
-
     }
-    fmt.Println("2: ",rq, dq)
 
-    if rq.Head == rq.Tail {
-        return "Dire"
-    } else {
-        return "Radiant"
+    if len(r) == 0 { return "Dire" }
+    return "Radiant"
+}
+
+// 2 queues implemented via slices
+func predictPartyVictory(senate string) string {
+    n := len(senate)
+    r, d := []int{}, []int{}
+    for i, c := range senate {
+        if c == 'R' {
+            r = append(r, i)
+        } else {
+            d = append(d, i)
+        }
     }
-}
-
-func Ban (a, b *Queue, offset int) {
-    a.Enqueue(a.Head + offset)
-    a.Dequeue()
-    b.Dequeue()
-}
-
-type Queue struct {
-    Data []int
-    Head int
-    Tail int
-}
-
-func NewQueue (len int) Queue {
-    data := make([]int, len)
-    return Queue{data, 0, 0}
-}
-
-
-func (q *Queue) Enqueue(v int) {
-    q.Data[q.Tail] = v
-    if q.Tail == len(q.Data) {
-        q.Tail = 0
-    } else {
-        q.Tail++
+    for len(r) > 0 && len(d) > 0 {
+        rHead := r[0]
+        r = r[1:]
+        dHead := d[0]
+        d = d[1:]
+        if rHead < dHead {
+            r = append(r, rHead + n)
+        } else {
+            d = append(d, dHead + n)
+        }
     }
-}
-
-
-func (q *Queue) Dequeue() int {
-    res := q.Data[q.Head]
-    if q.Head == len(q.Data) {
-        q.Head = 0
-    } else {
-        q.Head++
-    }
-    return res
+    if len(r) == 0 { return "Dire" }
+    return "Radiant"
 }
