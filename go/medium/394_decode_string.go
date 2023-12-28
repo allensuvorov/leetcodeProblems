@@ -1,13 +1,9 @@
 func decodeString(s string) string {
-    // Transform from in-fix to post-fix expression
     postFixExpression := buildPostFixExpression(s)
     fmt.Printf("%s", postFixExpression)
-
-    // Calculate the sum
-    res := getSum(postFixExpression)
+    res := getCalculation(postFixExpression)
     return string(res[0])
 }
-
 
 func buildPostFixExpression(s string) [][]byte{
     stack := make([]byte, 0, len(s))
@@ -52,20 +48,27 @@ func buildPostFixExpression(s string) [][]byte{
             stack = append(stack, '[')
         }
         if v == ']'{
-            data := make([]byte, len(letters))
-            copy(data, letters)
-            postFixExpression = append(postFixExpression, data)
-            letters = letters[:0]
+            if len(letters) != 0 {
+                data := make([]byte, len(letters))
+                copy(data, letters)
+                postFixExpression = append(postFixExpression, data)
+                letters = letters[:0]
+            }
             for stack[len(stack)-1] != '[' {
                 popFromStackToPostFixExpression()
             }
             stack = stack[:len(stack)-1]
-
             if i + 1 < len(s) && s[i + 1] != ']' {
                 pushPlus()
             }
         }
         // fmt.Printf("loop end: v = %v, postFixExpression = %s \n", string(v), postFixExpression)
+    }
+    if len(letters) != 0 {
+        data := make([]byte, len(letters))
+        copy(data, letters)
+        postFixExpression = append(postFixExpression, data)
+        letters = letters[:0]
     }
     for len(stack) != 0 {
         popFromStackToPostFixExpression()
@@ -73,21 +76,46 @@ func buildPostFixExpression(s string) [][]byte{
     return postFixExpression
 }
 
-func getSum(pfe [][]byte) []byte {
-    for i, v := range pfe {
-        // what is it? numbers or letters
+func getCalculation(pfe [][]byte) [][]byte {
+    stack := make([][]byte, 0, len(pfe))
+
+    for _, v := range pfe {
         switch {
-        case unicode.IsDigit(v[0]):
-        case unicode.IsLetter(v[0]):
+        case unicode.IsDigit(rune(v[0])):
+            stack = append(stack, v)
+        case unicode.IsLetter(rune(v[0])):
+            stack = append(stack, v)
         case v[0] == '+':
+            // pop, pop, append, append
+            b := stack[len(stack) - 1]
+            a := stack[len(stack) - 2]
+            stack = stack[ : len(stack) - 2]
+            c := append(a, b...)
+            stack = append(stack, c)
         case v[0] == '*':
+            letters := stack[len(stack) - 1]
+            k := buildNum(stack[len(stack) - 2])
+            repeated := repeat(k, letters)
+            stack = stack[ : len(stack) - 2]
+            stack = append(stack, repeated)
+
         }
     }
+    return stack
 }
 
-// in-fix: 3 * a + 2 * bc
-// post-fix: 3 a * 2 bc * +
+func buildNum(digits []byte) int {
+    num := 0
+    for _, v := range digits {
+        num = num * 10 + int(v - '0')
+    }
+    return num
+}
 
-
-// in-fix: 3 * [a + 2 * [c] ] = 3 * [a + cc]
-// post-fix: 3a2c*+*
+func repeat(k int, letters []byte) []byte {
+    res := make([]byte, 0, k * len(letters))
+    for i := 1; i <= k; i++ {
+        res = append(res, letters...)
+    }
+    return res
+}
