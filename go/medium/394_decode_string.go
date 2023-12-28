@@ -21,11 +21,9 @@ func buildPostFixExpression(s string) [][]byte{
         stack = append(stack, '+')    
     }
     for i, v := range s {
-        // fmt.Printf("loop start: v = %v, postFixExpression = %s \n", string(v), postFixExpression)
         if unicode.IsDigit(v) {
             digits = append(digits, s[i])
             if len(letters) != 0 {
-                // fmt.Printf("about to flush letter to pfe: %s \n", postFixExpression)
                 data := make([]byte, len(letters))
                 copy(data, letters)
                 postFixExpression = append(postFixExpression, data)
@@ -62,7 +60,6 @@ func buildPostFixExpression(s string) [][]byte{
                 pushPlus()
             }
         }
-        // fmt.Printf("loop end: v = %v, postFixExpression = %s \n", string(v), postFixExpression)
     }
     if len(letters) != 0 {
         data := make([]byte, len(letters))
@@ -78,7 +75,6 @@ func buildPostFixExpression(s string) [][]byte{
 
 func getCalculation(pfe [][]byte) [][]byte {
     stack := make([][]byte, 0, len(pfe))
-
     for _, v := range pfe {
         switch {
         case unicode.IsDigit(rune(v[0])):
@@ -86,7 +82,6 @@ func getCalculation(pfe [][]byte) [][]byte {
         case unicode.IsLetter(rune(v[0])):
             stack = append(stack, v)
         case v[0] == '+':
-            // pop, pop, append, append
             b := stack[len(stack) - 1]
             a := stack[len(stack) - 2]
             stack = stack[ : len(stack) - 2]
@@ -98,7 +93,6 @@ func getCalculation(pfe [][]byte) [][]byte {
             repeated := repeat(k, letters)
             stack = stack[ : len(stack) - 2]
             stack = append(stack, repeated)
-
         }
     }
     return stack
