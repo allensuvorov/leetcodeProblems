@@ -1,12 +1,7 @@
 func rob(nums []int) int {
-    // track max before prev
-    curDP := 0
-    prevDP := 0
-    prevMaxDP := 0
+    curMax, prevMax := 0, 0
     for _, v := range nums {
-        curDP = v + prevMaxDP
-        prevMaxDP = max(prevDP, prevMaxDP)
-        prevDP = curDP
+        curMax, prevMax = max(prevMax + v, curMax), curMax
     }
-    return max(prevDP, prevMaxDP)
+    return curMax
 }
