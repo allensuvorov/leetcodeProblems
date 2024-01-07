@@ -11,8 +11,7 @@ func nearestExit(maze [][]byte, entrance []int) int {
         
         checkVertex := func(m, n int) bool {
             if m >= 0 && m < len(maze) && n >= 0 && n < len(maze[0]) {
-                // empty - mark dist and enq
-                if maze[m][n] == '.' {
+                if maze[m][n] == '.' {  // empty - mark dist and enq
                     q = append(q, []int{m, n, dist + 1})
                     maze[m][n] = '1'
                 }
@@ -23,10 +22,10 @@ func nearestExit(maze [][]byte, entrance []int) int {
         }
 
         checkNearestVertices := func(now []int) bool {
-            if exit := checkVertex(now[0]-1, now[1]); exit { return true } // up 
-            if exit := checkVertex(now[0]+1, now[1]); exit { return true } // down
-            if exit := checkVertex(now[0], now[1]+1); exit { return true } // right
-            if exit := checkVertex(now[0], now[1]-1); exit { return true } // left
+            edges := [][]int{[]int{-1,0}, []int{1,0}, []int{0,1}, []int{0,-1}}   
+            for _, v := range edges{
+                if exit := checkVertex(now[0] + v[0], now[1] + v[1]); exit { return true }
+            }
             return false
         }
         
