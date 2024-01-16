@@ -1,34 +1,26 @@
 type Trie struct {
-    root *TrieNode
+    root *Node
 }
 
 
-type TrieNode struct {
-    children map[rune] *TrieNode
+type Node struct {
+    children [26] *Node
     isEnd bool
 }
 
-
-func NewTrieNode() TrieNode {
-    nm := make(map[rune] *TrieNode)
-    return TrieNode {children: nm}
-}
-
-
 func Constructor() Trie {
-    tn := NewTrieNode()
-    return Trie {&tn}
+    return Trie{new(Node)}
 }
 
 
 func (this *Trie) Insert(word string)  {
     now := this.root
     for _, c := range word {
-        if _, ok := now.children[c]; !ok {
-            tn := NewTrieNode()
-            now.children[c] = &tn
+        i := c - 'a'
+        if now.children[i] == nil {
+            now.children[i] = new(Node)
         }
-        now = now.children[c]
+        now = now.children[i]
     }
     now.isEnd = true
 }
@@ -37,10 +29,11 @@ func (this *Trie) Insert(word string)  {
 func (this *Trie) Search(word string) bool {
     now := this.root
     for _, c := range word {
-        if _, ok := now.children[c]; !ok {
+        i := c - 'a'
+        if now.children[i] == nil {
             return false
         }
-        now = now.children[c]
+        now = now.children[i]
     }
     return now.isEnd 
 }
@@ -49,10 +42,11 @@ func (this *Trie) Search(word string) bool {
 func (this *Trie) StartsWith(prefix string) bool {
     now := this.root
     for _, c := range prefix {
-        if _, ok := now.children[c]; !ok {
+        i := c - 'a'
+        if now.children[i] == nil {
             return false
         }
-        now = now.children[c]
+        now = now.children[i]
     }
     return true
 }
