@@ -1,9 +1,17 @@
 func suggestedProducts(products []string, searchWord string) [][]string {
     t := newTrie()
+    res := [][]string{}
+
     for _, p := range products {
         t.Insert(p)
     }
-    return t.FindProducts(searchWord)
+
+    pref := []rune{}
+    for _, c := range searchWord {
+        pref = append(pref, c)
+        res = append(res, t.getWordsStartingWith(pref))
+    }
+    return res
 }
 
 
@@ -14,7 +22,7 @@ type Trie struct {
     
 type Node struct {
     Children [26] *Node // array for edges - to sort lexicographically
-    IsEnd bool
+    IsWord bool
 }
 
 
@@ -32,48 +40,34 @@ func (this *Trie) Insert(product string) {
         }
         now = now.Children[i]
     }
-    now.IsEnd = true
+    now.IsWord = true
 }
 
-
-func (this *Trie) FindProducts(searchWord string) [][]string{
-    res := [][]string{}
+func (this *Trie) getWordsStartingWith(pref []rune) []string{
     now := this.Root
-    pref := []rune{}
-    for _, c := range searchWord {
-        i := c - 'a'
-        pref = append(pref, c)
-        count := 0
-        // fmt.Printf("%v \n",string(pref))
-        if now.Children[i] != nil {
-            // fmt.Println(now.Children[i].Children)
-            threeProducts := make([]string, 3)
-            this.FindThreeProducts(now.Children[i], pref, threeProducts, &count)
-            res = append(res, threeProducts[:count])
-            now = now.Children[i]
-        } else {
-            res = append(res, []string{})
+    res := []string{}
+    // Check: are there any words with that prefix?
+    for _, c := range pref {
+        if now.Children[c - 'a'] == nil { 
+            return res
         }
+        now = now.Children[c - 'a']
     }
+    this.dfsWithPrefix(now, pref, &res)
     return res
 }
 
-func (this *Trie) FindThreeProducts(now *Node, pref []rune, threeProducts []string, count *int) {
-    
-    if now.IsEnd {
-        // fmt.Println(string(pref), *count)
-        threeProducts[*count] = string(pref)
-        *count++
+func (this *Trie) dfsWithPrefix(now *Node, pref []rune, result *[]string) {
+    if len(*result) == 3 {
+        return
+    }
+    if now.IsWord {
+        *result = append(*result, string(pref))
     }
     for i, node := range now.Children {
         if node != nil {
-            pref := append(pref, rune(i + 'a'))
-            // fmt.Println(string(rune(i + 'a')), string(pref), *count)
-            now = node
-            this.FindThreeProducts(now, pref, threeProducts, count)
-        }
-        if *count == 3 {
-            return
+            this.dfsWithPrefix(node, append(pref, rune(i + 'a')), result)
+            
         }
     }
 }
