@@ -30,27 +30,26 @@ func (this *WordDictionary) Search(word string) bool {
     return this.dfs(this.root, word, 0)
 }
 
-func (this *WordDictionary) dfs(now *Node, word string, i int) bool {
-    if i == len(word) {
-        return now.isWord
-    }
-
-    if word[i] == '.' {
-        for _, node := range now.children {
-            if node != nil {
-                if this.dfs(node, word, i + 1) {
-                    return true
+func (this *WordDictionary) dfs(now *Node, word string, j int) bool {
+    for i := j; i < len(word); i++{
+        if word[i] == '.' {
+            for _, node := range now.children {
+                if node != nil {
+                    if this.dfs(node, word, i + 1) {
+                        return true
+                    }
                 }
             }
-        }
-    } else {
-        if node := now.children[word[i] - 'a']; node == nil {
             return false
         } else {
-            return this.dfs(node, word, i + 1)
+            if node := now.children[word[i] - 'a']; node == nil {
+                return false
+            } else {
+                now = node
+            }
         }
     }
-    return false
+    return now.isWord
 }
 
 
