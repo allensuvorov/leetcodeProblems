@@ -48,7 +48,6 @@ type Trie struct {
 }
 
 type Node struct {
-    isEnd bool
     children [26]*Node
 }
 
