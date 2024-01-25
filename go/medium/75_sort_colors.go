@@ -1,14 +1,11 @@
 func sortColors(nums []int)  {
-    cnt := [3]int{}
-    for _, v := range nums {
-        cnt[v]++
-    }
-    color := 0
-    for i := range nums {
-        for cnt[color] == 0 && color < 3 {
-            color++
+    r := len(nums) - 1
+    for r > 0 {
+        for l := 0; l < r; l++ {
+            if nums[l] > nums[l + 1] {
+                nums[l], nums[l + 1] = nums[l + 1], nums[l]
+            }
         }
-        nums[i] = color
-        cnt[color]--
+        r--
     }
 }
