@@ -4,34 +4,27 @@ func permute(nums []int) [][]int {
     for _, v := range nums {
         m[v] = true
     }
-    var dfs func(num int, rem map[int]bool)
-    dfs = func(now int, rem map[int]bool) {
+    var dfs func(int, map[int]bool, []int)
+    dfs = func(now int, rem map[int]bool, perm [] int) {
         if len(rem) == 0 {
-            newPerm := make([]int, 0, len(nums))
-            newPerm = append(newPerm, now)
-            ans = append(ans, newPerm)
+            ans = append(ans, perm)
             return
         }
 
         for next := range rem {
+            newPerm := slices.Clone(perm)
+            newPerm = append(newPerm, next)
+
             newRem := make(map[int]bool)
             for k := range rem {
                 if k != next {
                     newRem[k] = true
                 }
             }
-            dfs(next, newRem)
-
-            i := len(ans)-1
-            // if len(ans[i]) < len(nums) {
-            //     ans[i]= append(ans[i], next)
-            // }
-            if len(ans[i]) < len(nums) {
-                ans[i]= append(ans[i], now)
-            }
+            dfs(next, newRem, newPerm)
         }
     }
-    dfs(0, m)
+    dfs(0, m, []int{})
     return ans
 }
 
