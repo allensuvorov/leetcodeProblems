@@ -6,22 +6,20 @@ func permute(nums []int) [][]int {
     }
     var dfs func(int, map[int]bool, []int)
     dfs = func(now int, rem map[int]bool, perm [] int) {
-        if len(rem) == 0 {
-            ans = append(ans, perm)
+        if len(perm) == len(nums) {
+            tmp := slices.Clone(perm)
+            ans = append(ans, tmp)
             return
         }
 
-        for next := range rem {
-            newPerm := slices.Clone(perm)
-            newPerm = append(newPerm, next)
-
-            newRem := make(map[int]bool)
-            for k := range rem {
-                if k != next {
-                    newRem[k] = true
-                }
+        for next, ok := range rem {
+            if ok {
+                perm = append(perm, next)
+                rem[next] = false
+                dfs(next, rem, perm)
+                rem[next] = true
+                perm = perm[:len(perm)-1]
             }
-            dfs(next, newRem, newPerm)
         }
     }
     dfs(0, m, []int{})
