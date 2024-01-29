@@ -1,18 +1,23 @@
 func generateParenthesis(n int) []string {
     res := []string{}
-    var dfs func(op, cl, rem int, comb []byte)
-    dfs = func(op, cl, rem int, comb []byte) {
-        if rem == 0 {
-            res = append(res, string(comb))
+    stack := []byte{}
+    var dfs func(op, cl int)
+    dfs = func(op, cl int) {
+        if cl == n  {
+            res = append(res, string(stack))
             return 
         }
         if op < n {
-            dfs(op+1, cl, rem-1, append(comb, '('))
+            stack = append(stack, '(')
+            dfs(op+1, cl)
+            stack = stack[:len(stack) - 1]
         }
         if op > cl {
-            dfs(op, cl+1, rem-1, append(comb, ')'))
+            stack = append(stack, ')')
+            dfs(op, cl+1)
+            stack = stack[:len(stack) - 1]
         }
     }
-    dfs(0, 0, n*2, []byte{})
+    dfs(0, 0)
     return res
 }
