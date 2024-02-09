@@ -1,6 +1,6 @@
 type MyHashMap struct {
-    hashTable []*Record
-    mapSize int
+    HashTable []*Record
+    MapSize int
 }
 
 
@@ -19,17 +19,54 @@ func Constructor() MyHashMap {
 
 
 func (this *MyHashMap) Put(key int, value int)  {
-    
+    bucket := key % this.MapSize
+    runner := this.HashTable[bucket]
+    keyExists := false
+    for runner != nil {
+        if runner.Key == key {
+            keyExists = true
+            runner.Val = value
+        }
+        runner = runner.Next 
+    }
+    if !keyExists { 
+        this.HashTable[bucket] = &Record{
+            Key: key, 
+            Val: value,
+            Next: this.HashTable[bucket],
+            } 
+    }
 }
 
 
 func (this *MyHashMap) Get(key int) int {
-    
+    bucket := key % this.MapSize
+    runner := this.HashTable[bucket]
+    for runner != nil {
+        if runner.Key == key {
+            return runner.Val
+        }
+        runner = runner.Next 
+    }
+    return -1
 }
 
 
 func (this *MyHashMap) Remove(key int)  {
-    
+    bucket := key % this.MapSize
+    runner := this.HashTable[bucket]
+    prev := runner
+    for runner != nil {
+        if runner.Key == key {
+            if runner == this.HashTable[bucket] {
+                this.HashTable[bucket] = runner.Next
+            } else {
+                prev.Next = runner.Next
+            }
+        }
+        prev = runner
+        runner = runner.Next 
+    }
 }
 
 
