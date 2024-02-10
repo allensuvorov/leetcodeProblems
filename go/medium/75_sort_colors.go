@@ -1,11 +1,17 @@
 func sortColors(nums []int)  {
-    r := len(nums) - 1
-    for r > 0 {
-        for l := 0; l < r; l++ {
-            if nums[l] > nums[l + 1] {
-                nums[l], nums[l + 1] = nums[l + 1], nums[l]
-            }
+    pivot := 1
+    l, m, r := 0, 0, len(nums) - 1
+    for m <= r {
+        switch {
+        case nums[m] < pivot:
+            nums[l], nums[m] = nums[m], nums[l]
+            l++
+            m++
+        case nums[m] > pivot:
+            nums[r], nums[m] = nums[m], nums[r]
+            r--
+        default:
+            m++
         }
-        r--
-    }
+    }    
 }
