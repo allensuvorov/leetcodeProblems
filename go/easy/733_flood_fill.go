@@ -6,24 +6,16 @@ func floodFill(image [][]int, sr int, sc int, color int) [][]int {
 	}
     stack := [][]int{{sr, sc}}
     for len(stack) > 0 {
-        r := stack[len(stack) - 1][0]
-        c := stack[len(stack) - 1][1]
+        r, c := stack[len(stack) - 1][0], stack[len(stack) - 1][1]
         stack = stack[:len(stack) - 1]
-        if image[r][c] == canvas {
-			image[r][c] = color
-			if r > 0 {
-				stack = append(stack, []int{r-1, c})
-			}
-			if r < rows-1 {
-				stack = append(stack, []int{r+1, c})
-			}
-			if c > 0 {
-				stack = append(stack, []int{r, c-1})
-			}
-			if c < cols-1 {
-				stack = append(stack, []int{r, c+1})
-			}
-		}
+        image[r][c] = color
+        for _, pos := range [][]int{{1,0},{-1,0},{0,1},{0,-1}} {
+            nr, nc := r+pos[0], c+pos[1]
+            if nr >= 0 && nr < rows && nc >= 0 && nc < cols && image[nr][nc] == canvas {
+                stack = append(stack, []int{nr, nc})
+            }
+        }
+		
     }
 	return image
 }
