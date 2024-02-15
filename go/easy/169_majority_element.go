@@ -23,17 +23,17 @@ func majorityElement(nums []int) int {
 // Space complexity: O(1) // Boyer-Moore allocates only constant additional memory.
 
 func majorityElement(nums []int) int {
-	var ctr int
-	var mgr int
-	for _, num := range nums {
-		if ctr == 0 {
-			mgr = num
-		}
-		if num == mgr {
-			ctr++
-		} else {
-			ctr--
-		}
-	}
-	return mgr
+    count := 0
+    major := 0
+    for _, v := range nums {
+        if count == 0 {
+            major = v
+        }
+        if v == major {
+            count++
+        } else {
+            count--
+        }
+    }
+    return major
 }
