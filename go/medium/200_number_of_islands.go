@@ -1,5 +1,5 @@
 func numIslands(grid [][]byte) int {
-    // look for and island - find 1s and count it
+    // look for an island - find 1s and count it
     // traverse the island and mark it - change 1 to 2
     count := 0
     var dfs func(i, j int) 
