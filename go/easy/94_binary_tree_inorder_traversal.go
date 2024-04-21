@@ -6,18 +6,12 @@
  *     Right *TreeNode
  * }
  */
+
 func inorderTraversal(root *TreeNode) []int {
-    ans := []int{}
-    var dfs func(root *TreeNode) []int
-    dfs = func (root *TreeNode) []int {
-        if root == nil {
-            return nil
-        }
-        dfs(root.Left)
-        ans = append(ans, root.Val)
-        dfs(root.Right)
-        return ans
+    if root == nil {
+        return []int{}
     }
-    dfs(root)
-    return ans
+    left := inorderTraversal(root.Left)
+    right := inorderTraversal(root.Right)
+    return append(append(left, root.Val), right...)
 }
