@@ -1,15 +1,11 @@
 func separateDigits(nums []int) []int {
-    stack := make([]int, 0, len(nums))
+    ans := make([]int, len(nums)*6)
+    r := len(ans) - 1
     for i := len(nums)-1; i >= 0; i-- {
         for tmp := nums[i]; tmp > 0; tmp /= 10 {
-            stack = append(stack, tmp % 10)
+            ans[r] = tmp % 10
+            r--
         }
     }
-    ans := make([]int, len(stack))
-    for i := range ans {
-        top := len(stack) - 1
-        ans[i] = stack[top]
-        stack = stack[:top]
-    }
-    return ans
+    return ans[r+1:]
 }
