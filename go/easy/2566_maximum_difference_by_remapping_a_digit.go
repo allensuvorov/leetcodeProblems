@@ -3,16 +3,14 @@ func minMaxDifference(num int) int {
     for x := num; x > 0; x /= 10 {
         digits = append([]int{x%10}, digits...)
     }
-
     target := -1
     max := 0
     for i := range digits {
         d := digits[i]
-        if target == -1 {
-            if d != 9 {
-                target = d
-                d = 9
-            }
+        if target == -1 && d != 9 {
+            target = d
+            d = 9
+            
         } else if d == target {
             d = 9
         }
