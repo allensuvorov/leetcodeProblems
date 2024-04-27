@@ -5,22 +5,18 @@ func minMaxDifference(num int) int {
     }
 
     target := -1
+    max := 0
     for i := range digits {
-        if digits[i] != 9 {
-            target = digits[i]
-            break
-        }
-    }
-    max := num
-    if target != -1 {
-        max = 0
-        for i := range digits {
-            d := digits[i]
-            if d == target {
+        d := digits[i]
+        if target == -1 {
+            if d != 9 {
+                target = d
                 d = 9
             }
-            max = max*10 + d
+        } else if d == target {
+            d = 9
         }
+        max = max*10 + d
     }
     min := 0
     target = digits[0]
