@@ -1,18 +1,11 @@
 func reversePrefix(word string, ch byte) string {
-    var l int
-    var chExists bool
-    for l = range word {
+    pref := make([]byte, len(word))
+    for l := range word {
+        r := len(pref) - 1 - l
+        pref[r] = word[l]
         if word[l] == ch {
-            chExists = true
-            break
+            return string(pref[r:]) + word[l+1:]
         }
     }
-    if !chExists {
-        return word
-    }
-    stack := []byte{}
-    for r := l; r >=0; r-- {
-        stack = append(stack, word[r])
-    }
-    return string(stack) + word[l+1:]
+    return word
 }
