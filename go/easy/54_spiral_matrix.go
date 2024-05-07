@@ -1,8 +1,10 @@
 func spiralOrder(matrix [][]int) []int {
     rows, cols := len(matrix), len(matrix[0])
-    t, b, l, r := 0, rows - 1, 0, cols - 1
     size := rows*cols
     ans := make([]int, 0, size)
+    
+    // Initialize boundries
+    t, b, l, r := 0, rows - 1, 0, cols - 1
 
     for len(ans) < size { 
         for i := l; i <= r && len(ans) < size; i++ {
