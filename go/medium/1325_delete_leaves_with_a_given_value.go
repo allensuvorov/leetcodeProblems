@@ -7,9 +7,9 @@
  * }
  */
 func removeLeafNodes(root *TreeNode, target int) *TreeNode {         
-    if root == nil { return root }
-    if removeLeafNodes(root.Left, target) == nil { root.Left = nil }
-    if removeLeafNodes(root.Right, target) == nil { root.Right = nil }
+    if root == nil { return nil }
+    root.Left = removeLeafNodes(root.Left, target)
+    root.Right = removeLeafNodes(root.Right, target)
     if root.Left == nil && root.Right == nil && root.Val == target { return nil }
     return root
 }
