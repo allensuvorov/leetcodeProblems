@@ -10,14 +10,10 @@ func minDepth(root *TreeNode) int {
     if root == nil {
         return 0
     }
-    if root.Left != nil && root.Right != nil {
-        return 1 + min(minDepth(root.Left), minDepth(root.Right))
+    left := minDepth(root.Left)
+    right := minDepth(root.Right)
+    if left != 0 && right != 0 {
+        return 1 + min(left, right)
     }
-    if root.Left != nil {
-        return 1 + minDepth(root.Left)
-    }
-    if root.Right != nil {
-        return 1 + minDepth(root.Right)
-    }
-    return 1
+    return 1 + left + right
 }
