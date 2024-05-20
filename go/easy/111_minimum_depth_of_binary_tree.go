@@ -1,4 +1,3 @@
-// DFS solution
 /**
  * Definition for a binary tree node.
  * type TreeNode struct {
@@ -9,26 +8,18 @@
  */
 func minDepth(root *TreeNode) int {
     md := 100000
-    depth := 0
     if root == nil {
         return 0
     }
-    var DFS func (root *TreeNode)
-    DFS = func(root *TreeNode) {
-        if root == nil {
-            return
-        }
-        depth++
-        if root.Left == nil && root.Right == nil {
-            md = min(md, depth)
-        }
-        DFS(root.Left)
-        DFS(root.Right)
-        depth--
-        return
-    }
-    DFS(root)
-    return md
+    return DFS(root, md, 1)
 }
 
-// BFS, counting distance till first leaf
+func DFS(root *TreeNode, md, d int) int {
+    if root == nil {
+        return md
+    }
+    if root.Left == nil && root.Right == nil {
+        return min(md, d)
+    }
+    return min(DFS(root.Left, md, d + 1), DFS(root.Right, md, d + 1))
+}
