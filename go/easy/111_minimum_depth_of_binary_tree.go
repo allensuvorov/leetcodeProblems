@@ -7,19 +7,20 @@
  * }
  */
 func minDepth(root *TreeNode) int {
-    md := 100000
     if root == nil {
         return 0
     }
-    return DFS(root, md, 1)
-}
-
-func DFS(root *TreeNode, md, d int) int {
-    if root == nil {
-        return md
-    }
     if root.Left == nil && root.Right == nil {
-        return min(md, d)
+        return 1
     }
-    return min(DFS(root.Left, md, d + 1), DFS(root.Right, md, d + 1))
+    if root.Left != nil && root.Right != nil {
+        return 1 + min(minDepth(root.Left), minDepth(root.Right))
+    }
+    if root.Left != nil {
+        return 1 + minDepth(root.Left)
+    }
+    if root.Right != nil {
+        return 1 + minDepth(root.Right)
+    }
+    return 0
 }
