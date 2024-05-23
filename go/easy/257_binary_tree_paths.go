@@ -13,9 +13,10 @@ func binaryTreePaths(root *TreeNode) []string {
     if root.Left == nil && root.Right == nil {
         return []string{strconv.Itoa(root.Val)} 
     }
-    left := binaryTreePaths(root.Left)
-    right := binaryTreePaths(root.Right)
-    paths := append(left, right...)
+    paths := append(
+        binaryTreePaths(root.Left),
+        binaryTreePaths(root.Right)...
+    )
     for i := range paths {
         paths[i] = strconv.Itoa(root.Val) + "->" + paths[i]
     }
