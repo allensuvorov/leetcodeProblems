@@ -7,22 +7,17 @@
  * }
  */
 func binaryTreePaths(root *TreeNode) []string {
-    paths := dfs(root, "")
-    return paths
-}
-
-func dfs(root *TreeNode, path string) []string {
     if root == nil {
         return nil
     }
-    if len(path) > 0 {
-        path += "->"
-    } 
-    path += strconv.Itoa(root.Val)
     if root.Left == nil && root.Right == nil {
-        return []string{path} 
+        return []string{strconv.Itoa(root.Val)} 
     }
-    left := dfs(root.Left, path)
-    right := dfs(root.Right, path)
-    return append(left, right...)
-} 
+    left := binaryTreePaths(root.Left)
+    right := binaryTreePaths(root.Right)
+    paths := append(left, right...)
+    for i := range paths {
+        paths[i] = strconv.Itoa(root.Val) + "->" + paths[i]
+    }
+    return paths
+}
