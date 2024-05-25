@@ -10,9 +10,15 @@ func countSubstrings(s string, c byte) int64 {
         countSubstr = countSubstr + 1 + i
     }
     return countSubstr
+    // return countChar*(countChar+1)/2;
 }
 
 // a - 0 + 1 + 0 = 1
 // aa - 1 + 1 + 1 = 3
 // aaa - 3 + 1 + 2 = 6
 // aaaa - 6 + 1 + 3 = 11
+
+// a a a a
+// a a a a
+// a a a a
+// a a a a
