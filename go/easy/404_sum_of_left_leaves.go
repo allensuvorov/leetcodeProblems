@@ -7,18 +7,11 @@
  * }
  */
 func sumOfLeftLeaves(root *TreeNode) int {
-    return dfs(root, false)
-}
-
-func dfs(root *TreeNode, isLeftChild bool) int {
     if root == nil {
         return 0
     }
-    if root.Left == nil && root.Right == nil {
-        if isLeftChild {
-            return root.Val
-        }
-        return 0
+    if root.Left != nil && root.Left.Left == nil && root.Left.Right == nil {
+        return root.Left.Val + sumOfLeftLeaves(root.Right)
     }
-    return dfs(root.Left, true) + dfs(root.Right, false)
+    return sumOfLeftLeaves(root.Left) + sumOfLeftLeaves(root.Right)
 }
