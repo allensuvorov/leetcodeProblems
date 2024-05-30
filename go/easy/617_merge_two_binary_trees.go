@@ -13,22 +13,17 @@ func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 
     node := new(TreeNode)
 
-    var root1Left, root1Right *TreeNode
-
-    if root1 != nil {
-        node.Val += root1.Val
-        root1Left, root1Right = root1.Left, root1.Right
+    if root2 == nil {
+        return root1
     }
-    
-    var root2Left, root2Right *TreeNode
 
-    if root2 != nil {
-        node.Val += root2.Val
-        root2Left, root2Right = root2.Left, root2.Right
+    if root1 == nil {
+        return root2
     }
-    
-    node.Left = mergeTrees(root1Left, root2Left )
-    node.Right = mergeTrees(root1Right, root2Right)
+
+    node.Val = root1.Val + root2.Val
+    node.Left = mergeTrees(root1.Left, root2.Left)
+    node.Right = mergeTrees(root1.Right, root2.Right)
 
     return node
 }
