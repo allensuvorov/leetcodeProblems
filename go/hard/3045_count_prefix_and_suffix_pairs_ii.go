@@ -29,3 +29,5 @@ func isPrefixAndSuffix(str1, str2 string) bool {
 //   some kind of sorting
 
 // ["a","aba","ababa","aa"]
+
+// how about using some space to win time?
