@@ -9,7 +9,7 @@ func binaryGap(n int) int {
                 curGap++
             }
             if d == 1 {
-                maxGap = max(maxGap, curGap)
+                maxGap = max(maxGap, curGap + 1)
                 curGap = 0
             }
         } else {
