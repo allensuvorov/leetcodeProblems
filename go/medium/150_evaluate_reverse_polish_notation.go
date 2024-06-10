@@ -1,29 +1,24 @@
 func evalRPN(tokens []string) int {
-    var stack *node
+    stack := []int{}
     for _, v := range tokens {
-        if v == "+" || v == "-" || v == "*" || v == "/" {
-            stack.Next.Val = ops[v](stack.Next.Val, stack.Val)
-            stack = stack.Next
+        top := len(stack) - 1
+        if _, ok := ops[v]; ok {
+            stack[top-1] = ops[v](stack[top-1], stack[top])
+            stack = stack[:top]
         } else {
             num, err := strconv.Atoi(v)
             if err != nil {
-		        fmt.Println(err)
-	        }  
-            newNode := node{num, stack}
-            stack = &newNode
+                fmt.Println(err)
+            }
+            stack = append(stack, num)
         }
     }
-    return stack.Val
-}
-
-type node struct {
-    Val int
-    Next *node
+    return stack[0]
 }
 
 var ops = map[string]func(int, int) int {
-        "+": func(a, b int) int { return a + b },
-        "-": func(a, b int) int { return a - b },
-        "*": func(a, b int) int { return a * b },
-        "/": func(a, b int) int { return a / b },
-    }
+    "*": func(a, b int) int { return a * b },
+    "/": func(a, b int) int { return a / b },
+    "+": func(a, b int) int { return a + b },
+    "-": func(a, b int) int { return a - b },
+}
