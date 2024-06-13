@@ -1,8 +1,7 @@
 func calculate(s string) int {
     curNum, lastNum, result := 0, 0, 0
     operation := '+'
-    for i, v := range s {
-        curChar := v
+    for i, curChar := range s {
         if unicode.IsDigit(curChar) {
             curNum = (curNum * 10) + int(curChar - '0')
         }
