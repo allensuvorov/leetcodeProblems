@@ -1,8 +1,4 @@
 func calculate(s string) int {
-    if len(s) == 0 {
-        return 0
-    }
-
     curNum, lastNum, result := 0, 0, 0
     operation := '+'
     for i, v := range s {
