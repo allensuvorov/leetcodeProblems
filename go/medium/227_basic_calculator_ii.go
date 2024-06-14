@@ -7,16 +7,16 @@ func calculate(s string) int {
         }
         if !unicode.IsDigit(curChar) && !unicode.IsSpace(curChar) || i == len(s) - 1 {
             switch operation {
+            case '*':
+                lastNum *= curNum
+            case '/':
+                lastNum /= curNum
             case '+':
                 result += lastNum
                 lastNum = curNum
             case '-':
                 result += lastNum
                 lastNum = -curNum
-            case '*':
-                lastNum *= curNum
-            case '/':
-                lastNum /= curNum
             }
             operation = curChar
             curNum = 0
