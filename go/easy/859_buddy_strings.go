@@ -20,8 +20,22 @@ func buddyStrings(s string, goal string) bool {
             }
         }
     }
-    if difCount < 2 {
+    if difCount == 1 {
         return false 
     }
+    if difCount == 0 {
+        return hasDuplicate(s)
+    }
     return true
+}
+
+func hasDuplicate(s string) bool {
+    charCount := map[rune]int{}
+    for _, v := range s {
+        if charCount[v] == 1 {
+            return true
+        }
+        charCount[v]++
+    }
+    return false
 }
