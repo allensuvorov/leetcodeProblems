@@ -2,31 +2,18 @@ func buddyStrings(s string, goal string) bool {
     if len(s) != len(goal) {
         return false
     }
-    prevIndex := 0
-    difCount := 0
+
+    if s == goal && hasDuplicate(s) {
+        return true
+    }
+
+    diff := []int{}
     for i := range s {
         if s[i] != goal[i] {
-            difCount++
-            if difCount == 1 {
-                prevIndex = i
-            }
-            if difCount == 2 {
-                if s[prevIndex] != goal[i] || s[i] != goal[prevIndex] {
-                    return false
-                }
-            }
-            if difCount == 3 {
-                return false
-            }
+           diff = append(diff, i)
         }
     }
-    if difCount == 1 {
-        return false 
-    }
-    if difCount == 0 {
-        return hasDuplicate(s)
-    }
-    return true
+    return len(diff) == 2 && s[diff[0]] == goal[diff[1]] && s[diff[1]] == goal[diff[0]]
 }
 
 func hasDuplicate(s string) bool {
