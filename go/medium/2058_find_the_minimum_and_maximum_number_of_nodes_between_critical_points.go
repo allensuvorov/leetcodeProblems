@@ -8,32 +8,26 @@
 func nodesBetweenCriticalPoints(head *ListNode) []int {
     minDist := 100000
     maxDist := -1
-    curDist := -1
+    curMin := -1
+    curMax := -1
     for prev, cur := head, head.Next; cur.Next != nil; prev, cur = cur, cur.Next {
         if isCritical(prev.Val, cur.Val, cur.Next.Val) {
-            if curDist != -1 {
-                minDist = min(minDist, curDist)
+            if curMin != -1 {
+                minDist = min(minDist, curMin)
             }
-            curDist = 1
-        } else {
-            if curDist != -1 {
-                curDist++
-            }
-        }
-    }
-
-    curDist = -1
-    for prev, cur := head, head.Next; cur.Next != nil; prev, cur = cur, cur.Next {
-        if isCritical(prev.Val, cur.Val, cur.Next.Val) {
-            if curDist != -1 {
-                maxDist = max(maxDist, curDist)
-                curDist++
+            curMin = 1
+            if curMax != -1 {
+                maxDist = max(maxDist, curMax)
+                curMax++
             } else {
-                curDist = 1
+                curMax = 1
             }
         } else {
-            if curDist != -1 {
-                curDist++
+            if curMin != -1 {
+                curMin++
+            }
+            if curMax != -1 {
+                curMax++
             }
         }
     }
