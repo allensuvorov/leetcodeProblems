@@ -8,27 +8,20 @@
  */
 func findBottomLeftValue(root *TreeNode) int {
     q := []*TreeNode{root}
+    ans := 0
     for len(q) > 0 {
-        curRowJobsNum := len(q)
-        isLastRow := true
-        for i := range curRowJobsNum {
+        ans = q[0].Val
+        rowLen := len(q)
+        for i := range rowLen {
             now := q[i]
             if now.Left != nil {
-                isLastRow = false
                 q = append(q, now.Left)
-
             }
-
             if now.Right != nil {
-                isLastRow = false
                 q = append(q, now.Right)
             }
         }
-        if isLastRow {
-            return q[0].Val
-        }
-        q = q[curRowJobsNum:]
-
+        q = q[rowLen:]
     }
-    return 0
+    return ans
 }
