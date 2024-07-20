@@ -15,8 +15,9 @@ func rightSideView(root *TreeNode) []int {
     for len(q) > 0 {
         rowLen := len(q)
         ans = append(ans, q[0].Val)
-        for i := range rowLen {
-            now := q[i]
+        for range rowLen {
+            now := q[0]
+            q = q[1:]
             if now.Right != nil {
                 q = append(q, now.Right)
             }
@@ -24,7 +25,6 @@ func rightSideView(root *TreeNode) []int {
                 q = append(q, now.Left)
             }
         }
-        q = q[rowLen:]
     }
     return ans
 }
