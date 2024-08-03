@@ -29,3 +29,31 @@ func reversePostOrderDFS(root *TreeNode) *TreeNode {
     }
     return tail
 }
+
+// with extra space O(n)
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func flatten1(root *TreeNode)  {
+    treeNodes := []*TreeNode{}
+    
+    var preOrderDFS func(root *TreeNode)
+    preOrderDFS = func(root *TreeNode) {
+        if root != nil {
+            treeNodes = append(treeNodes, root)
+            preOrderDFS(root.Left)
+            preOrderDFS(root.Right)
+        }
+    }
+    preOrderDFS(root)
+
+    for i := 0; i < len(treeNodes) - 1; i++ {
+        treeNodes[i].Right = treeNodes[i+1]
+        treeNodes[i].Left = nil
+    }
+}
