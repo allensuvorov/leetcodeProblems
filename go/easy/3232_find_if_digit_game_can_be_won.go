@@ -1,11 +1,11 @@
 func canAliceWin(nums []int) bool {
-    var sum int
+    var balance int
     for _, v := range nums {
         if v > 9 {
-            sum += v
+            balance += v
         } else {
-            sum -= v
+            balance -= v
         }
     }
-    return sum != 0
+    return balance != 0
 }
