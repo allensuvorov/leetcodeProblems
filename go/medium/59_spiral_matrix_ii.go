@@ -1,6 +1,6 @@
 func generateMatrix(n int) [][]int {
 	left, top := 0, 0
-    right, bottom := n-1, n-1
+    	right, bottom := n-1, n-1
 	ans := make([][]int, n)
 	for i := range ans {
 		ans[i] = make([]int, n)
