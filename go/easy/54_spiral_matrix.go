@@ -1,28 +1,25 @@
 func spiralOrder(matrix [][]int) []int {
+    res := []int{}
+    t, l, b, r := 0, 0, len(matrix) - 1, len(matrix[0]) - 1
     rows, cols := len(matrix), len(matrix[0])
-    size := rows*cols
-    ans := make([]int, 0, size)
     
-    // Initialize boundries
-    t, b, l, r := 0, rows - 1, 0, cols - 1
-
-    for len(ans) < size { 
-        for i := l; i <= r && len(ans) < size; i++ {
-            ans = append(ans, matrix[t][i])
+    for len(res) < rows*cols {
+        for i, j := t, l; j <= r && len(res) < rows*cols; j++ {
+            res = append(res, matrix[i][j])
         }
         t++
-        for i := t; i <= b && len(ans) < size; i++ {
-            ans = append(ans, matrix[i][r])
+        for i, j := t, r; i <= b && len(res) < rows*cols; i++ {
+            res = append(res, matrix[i][j])
         }
         r--
-        for i := r; i >= l && len(ans) < size; i-- {
-            ans = append(ans, matrix[b][i])
+        for i, j := b, r; j >= l && len(res) < rows*cols; j-- {
+            res = append(res, matrix[i][j])
         }
         b--
-        for i := b; i >= t && len(ans) < size; i-- {
-            ans = append(ans, matrix[i][l])
+        for i, j := b, l; i >= t && len(res) < rows*cols; i-- {
+            res = append(res, matrix[i][j])
         }
         l++
     }
-    return ans
+    return res   
 }
