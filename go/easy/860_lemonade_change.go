@@ -1,26 +1,29 @@
 func lemonadeChange(bills []int) bool {
-    m := map[int]int{}
-    for _, v := range bills {
-        m[v]++
-        switch v {
-        case 10:
-            if m[5] == 0 {
-                return false
-            } else {
-                m[5]--
-            }
-        case 20: 
-            if m[5] < 3 && (m[5]==0 || m[10]==0) {
-                return false
-            } else {
-                if m[10] > 0{
-                    m[10]--
-                    m[5]--
-                } else {
-                    m[5] -= 3
-                }
-            }
+    cash := make(map[int]int)
+    for _, bill := range bills {
+        cash[bill]++
+
+        if bill == 5 {
+            continue
         }
+
+        if bill == 10 && cash[5] > 0 {
+            cash[5]--
+            continue
+        }
+
+        if bill == 20 && cash[10] > 0 && cash[5] > 0 {
+            cash[10]--
+            cash[5]--
+            continue
+        }
+
+        if bill == 20 && cash[5] > 2 {
+            cash[5] -= 3
+            continue
+        }
+        
+        return false
     }
     return true
 }
