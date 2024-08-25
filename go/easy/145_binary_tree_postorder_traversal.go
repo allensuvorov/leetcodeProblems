@@ -12,5 +12,5 @@ func postorderTraversal(root *TreeNode) []int {
     }
     left := postorderTraversal(root.Left)
     right := postorderTraversal(root.Right)
-    return append(append(append([]int{}, left...), right...), root.Val)
+    return append(left, append(right, root.Val)...)
 }
