@@ -1,11 +1,9 @@
 func largestAltitude(gain []int) int {
-    max := 0
-    sum := 0
-    for i := range gain {
-        sum += gain[i]
-        if max < sum {
-            max = sum
-        }
+    maxAlt := 0
+    curAlt := 0
+    for _, v := range gain {
+        curAlt += v
+        maxAlt = max(maxAlt, curAlt)
     }
-    return max
+    return maxAlt
 }
