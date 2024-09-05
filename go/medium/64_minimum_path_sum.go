@@ -1,48 +1,15 @@
 func minPathSum(grid [][]int) int {
-    dp := make(map[[2]int]int)
-
-    rows := len(grid)
-    cols := len(grid[0])
-
-    q := [][2]int{[2]int{0,0}}
-    for len(q) > 0 {
-        now := q[0]
-        q = q[1:]
-
-        up := -1
-        if now[0] - 1 >= 0 {
-            parent := [2]int{now[0] - 1, now[1]}
-            up = dp[parent]
-        }
-
-        left := -1
-        if now[1] - 1 >= 0 {
-            parent := [2]int{now[0], now[1] - 1}
-            left = dp[parent]
-        }
-
-        switch {
-        case up >= 0 && left >= 0:
-            dp[now] = min(up, left)
-        case up >= 0:
-            dp[now] = up
-        case left >= 0:
-            dp[now] = left
-        }
-
-        dp[now] += grid[now[0]][now[1]]
-        fmt.Println("row*cols:", rows*cols, "len(dp):", len(dp), "dp[now]: ", dp[now])
-
-        if now[0] + 1 < rows {
-            if len(q) == 0 || q[len(q)-1] != [2]int{now[0] + 1, now[1]} {
-                q = append(q, [2]int{now[0] + 1, now[1]})
-            }
-        }
-
-        if now[1] + 1 < cols {
-            q = append(q, [2]int{now[0], now[1] + 1})
+    rows, cols := len(grid), len(grid[0])
+    for c := 1; c < cols; c++ {
+        grid[0][c] += grid[0][c-1]
+    }
+    for r := 1; r < rows; r++ {
+        grid[r][0] += grid[r-1][0]
+    }
+    for r := 1; r < rows; r++ {
+        for c := 1; c < cols; c++ {
+            grid[r][c] += min(grid[r][c-1], grid[r-1][c])
         }
     }
-    end := [2]int{rows-1, cols-1}
-    return dp[end]
+    return grid[rows-1][cols-1]
 }
