@@ -1,6 +1,6 @@
 func maximumSwap(num int) int {
 	digits := intByDigits(num)
-    last := make([]int, 10)
+    	last := make([]int, 10)
     
 	for i := range digits {
 		last[digits[i]] = i
