@@ -1,43 +1,43 @@
 func maximumSwap(num int) int {
-    stack := []int{}
-    maxDigVal := 0
-    maxDigPos := 0
-    position := 0
+	digits := intByDigits(num)
+    last := make([]int, 10)
     
-    for x := num; x > 0; x /= 10 {
-        digit := x % 10
-        if digit > maxDigVal {
-            maxDigVal = digit
-            maxDigPos = position
-        }
-        stack = append(stack, digit)
-        position++
-    }
-    minDigPos := 0
-    for i := len(stack) - 1; i > maxDigPos; i-- {
-        if stack[i] < maxDigVal {
-            minDigPos = i
-        }
-    }
-    if minDigPos > 0 {
-        stack[minDigPos], stack[maxDigPos] = stack[maxDigPos], stack[minDigPos]
-    }
-    ans := 0
-    for i := len(stack) - 1; i >= 0; i-- {
-        ans *= 10
-        ans += stack[i]
-    }
-    return ans
+	for i := range digits {
+		last[digits[i]] = i
+	}
 
+	for i, digit := range digits {
+		for j := len(last) - 1; j > digit; j-- {
+			if last[j] > i {
+				digits[i], digits[last[j]] = digits[last[j]], digits[i]
+				return digitsToInt(digits)
+			}
+		}
+	}
+	return num
 }
 
-// 2736
+func intByDigits(num int) []int {
+	digits := []int{}
+	for x := num; x > 0; x /= 10 {
+		digit := x % 10
+		digits = append(digits, digit)
+	}
 
-// 66177
-// 76176
+	// reverse digits
+	for l, r := 0, len(digits)-1; l < r; {
+		digits[l], digits[r] = digits[r], digits[l]
+		l++
+		r--
+	}
+	return digits
+}
 
-// 1234
-// stack: 4321
-
-
-
+func digitsToInt(digits []int) int {
+	ans := 0
+	for _, v := range digits {
+		ans *= 10
+		ans += v
+	}
+	return ans
+}
