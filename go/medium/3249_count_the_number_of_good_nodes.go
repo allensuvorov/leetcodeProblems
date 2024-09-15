@@ -1,29 +1,21 @@
 func countGoodNodes(edges [][]int) int {
     goodNodesCount := 0
-    children := make(map[int][]int)
+    children := make([][]int, len(edges) + 1)
     for _, edge := range edges {
-        parent := edge[0]
-        child := edge[1]
-        for range 2 {
-            if _, ok := children[parent]; !ok {
-                children[parent] = []int{}
-            }
-            children[parent] = append(children[parent], child)
-            parent, child = child, parent
-        }
+        children[edge[0]] = append(children[edge[0]], edge[1])
+        children[edge[1]] = append(children[edge[1]], edge[0])
     }
 
     visited := map[int]bool{0:true}
     var dfs func(int) int
     dfs = func(node int) int {
-        size := 0
         prevSize := 0
         isGood := true
         sum := 0
         for _, child := range children[node] { 
             if !visited[child] {
                 visited[child] = true
-                size = dfs(child)
+                size := dfs(child)
                 if prevSize != 0 && size != prevSize {
                     isGood = false
                 }
