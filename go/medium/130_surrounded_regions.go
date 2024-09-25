@@ -1,49 +1,43 @@
 func solve(board [][]byte)  {
     rows, cols := len(board), len(board[0])
-    // loop over the matrix, excluding outer edges
+    
+    // DFS to ID border regions, mark them with 'T'
+    var dfs func(r, c int) 
+    
+    dfs = func(r, c int) {
+        if r < 0 || c < 0 || r == rows || c == cols || board[r][c] != 'O' {
+            return
+        }
+        board[r][c] = 'T'
+        dfs(r-1, c)
+        dfs(r+1, c)
+        dfs(r, c+1)
+        dfs(r, c-1)
+    }
+    
+    // loop over border
+    for c := 0; c < cols; c++ {
+        dfs(0, c)
+    }
+    for c := 0; c < cols; c++ {
+        dfs(rows-1, c)
+    }
     for r := 1; r < rows - 1; r++ {
-        for c := 1; c < cols - 1; c++ {
+        dfs(r, 0)
+    }
+    for r := 1; r < rows - 1; r++ {
+        dfs(r, cols-1)
+    }
+
+    // loop over the matrix, flip 'O' to 'X', and 'T' to 'O'
+    for r := range rows {
+        for c := range cols {
             if board[r][c] == 'O' {
-                visited := make(map[[2]int]bool)
-                isSurrounded, visited := dfs(r, c, board, visited)
-                if isSurrounded {
-                    capture(board, visited)
-                }
+                board[r][c] = 'X'
+            }
+            if board[r][c] == 'T' {
+                board[r][c] = 'O'
             }
         }
-    }
-}
-
-// DFS over each region, track visited
-func dfs(r, c int, board [][]byte, visited map[[2]int]bool) (bool, map[[2]int]bool) {
-    if board[r][c] == 'X' || visited[[2]int{r,c}] {
-        return true, visited
-    }
-
-    if r == 0 || c == 0 || r == len(board) - 1 || c == len(board[0]) -1 {
-        return false, visited
-    }
-
-    visited[[2]int{r, c}] = true
-
-    if isSurrounded, visited := dfs(r-1, c, board, visited); !isSurrounded {
-        return false, visited
-    }
-    if isSurrounded, visited := dfs(r+1, c, board, visited); !isSurrounded {
-        return false, visited
-    }
-    if isSurrounded, visited := dfs(r, c-1, board, visited); !isSurrounded {
-        return false, visited
-    }
-    if isSurrounded, visited := dfs(r, c+1, board, visited); !isSurrounded {
-        return false, visited
-    }
-    return true, visited
-}
-
-// if region surrounded, capture visited
-func capture(board [][]byte, visited map[[2]int]bool) {
-    for pos := range visited {
-        board[pos[0]][pos[1]] = 'X'
     }
 }
