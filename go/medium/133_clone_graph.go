@@ -8,52 +8,24 @@
 
 func cloneGraph(node *Node) *Node {
     if node == nil {
-        return node
+        return nil
     }
-    
-    clone := new(Node)
-    clone.Val = node.Val
-    
-    q := []*Node{node}
-    cloneQ := []*Node{clone}
 
-    visited := make(map[*Node]bool)
+    clones := make(map[*Node]*Node) 
 
-    for len(q) > 0 {
-        neiSize := len(q)
-        for range neiSize {
-            now := q[0]
-            visited[now] = true
-            fmt.Println(now.Val, "is now visited")
-            q = q[1:]
-
-            cloneNow := cloneQ[0]
-            cloneQ = cloneQ[1:]
-
-            for _, nei := range now.Neighbors {
-                if !visited[nei] {
-                    fmt.Println("working on nei:", nei.Val)
-                    q = append(q, nei)
-
-                    cloneNei := new(Node)
-                    cloneQ = append(q, cloneNei)
-                    cloneNei.Val = nei.Val
-
-                    cloneNow.Neighbors = append(cloneNow.Neighbors, cloneNei)
-                    cloneNei.Neighbors = append(cloneNei.Neighbors, cloneNow)
-                    if cloneNow.Val == 2 {
-                        fmt.Println("Clone 2 neighbros", cloneNow.Neighbors)
-                    }
-                }
-            }
-            
-            fmt.Print(cloneNow.Val, " - ")
-            for _, nei := range cloneNow.Neighbors {
-                fmt.Print(nei.Val, ", ")
-            }
-            fmt.Println()
-
+    var dfs func(node *Node) *Node
+    dfs = func(node *Node) *Node {
+        if clone, ok := clones[node]; ok {
+            return clone
         }
+        clone := &Node{node.Val, []*Node{}}
+        clones[node] = clone
+        for _, nei := range node.Neighbors {
+            clone.Neighbors = append(clone.Neighbors, dfs(nei))
+            fmt.Println(clone)
+        }
+        return clone
     }
-    return clone
+    
+    return dfs(node)
 }   
