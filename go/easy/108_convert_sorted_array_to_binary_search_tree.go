@@ -11,12 +11,6 @@ func sortedArrayToBST(nums []int) *TreeNode {
         return nil
     }
 
-    if len(nums) == 1 {
-        return &TreeNode{
-            Val:nums[0],
-        }
-    }
-
     mid := len(nums) / 2
 
     return &TreeNode {
