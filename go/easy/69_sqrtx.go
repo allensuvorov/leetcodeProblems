@@ -1,12 +1,12 @@
 func mySqrt(x int) int {
     l, r := 0, x
     for l < r {
-        m := (l + r + 1)/2    
-        if m*m <= x {
-            l = m
-        } else {
+        m := (r + l)/2 + 1
+        if m*m > x {
             r = m - 1
+        } else {
+            l = m
         }
     }
-    return l
+    return r
 }
