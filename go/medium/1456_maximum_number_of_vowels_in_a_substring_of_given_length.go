@@ -6,7 +6,7 @@ func maxVowels(s string, k int) int {
         if vowels[s[head]] {
             count++
         }
-        if tail := head + 1 - k; tail > 0 && vowels[s[tail - 1]] {
+        if head >= k && vowels[s[head-k]] {
             count--
         }
         maxCount = max(maxCount, count)
