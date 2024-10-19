@@ -1,12 +1,12 @@
 func sortPeople(names []string, heights []int) []string {
-    nameHeight := make(map[int]string)
-    for i := range names {
-        nameHeight[heights[i]] = names[i] 
+    m := make(map[int]string, len(names))
+    for i, v := range names {
+        m[heights[i]] = v
     }
-    sort.Ints(heights)
-    res := make([]string, 0, len(names))
-    for i := len(heights)-1; i >= 0; i-- {
-        res = append(res, nameHeight[heights[i]])
-    } 
-    return res
+    sort.SliceStable(heights, func(i, j int) bool { return heights[i] > heights[j]} )
+    
+    for i, v := range heights {
+        names[i] = m[v]
+    }
+    return names
 }
