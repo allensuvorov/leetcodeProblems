@@ -3,7 +3,6 @@ func equalPairs(grid [][]int) int {
     n := len(grid)
     const maxLen = 200
     rowInventory := make(map[[maxLen]int]int, n)
-    colInventory := make(map[[maxLen]int]int, n)
 
     for r := range n {
         row := [maxLen]int{}
@@ -13,17 +12,15 @@ func equalPairs(grid [][]int) int {
         rowInventory[row]++
     }
 
+    equalPairsCount := 0
+    
     for c := range n {
         col := [maxLen]int{}
         for r := range n {
             col[r] = grid[r][c]
         }
-        colInventory[col]++
+        equalPairsCount += rowInventory[col]
     }
 
-    equalPairsCount := 0
-    for k, v := range rowInventory {
-        equalPairsCount += v * colInventory[k]
-    }
     return equalPairsCount
 }
