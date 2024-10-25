@@ -7,33 +7,20 @@
  * }
  */
 func pathSum(root *TreeNode, targetSum int) int {
-	// dfs over dfs : time O (n^2)
-
-	targetPathSumsCount := 0
-	var countPathSums func(root *TreeNode, curSum int)
-	countPathSums = func(root *TreeNode, curSum int) {
+    ans := 0
+    prefixSumCount := map[int]int{0:1}
+	var dfs func(root *TreeNode, sum int)
+	dfs = func(root *TreeNode, sum int) {
 		if root == nil {
 			return
 		}
-		curSum += root.Val
-		if curSum == targetSum {
-			targetPathSumsCount++
-		}
-		countPathSums(root.Left, curSum)
-		countPathSums(root.Right, curSum)
+        sum += root.Val
+        ans += prefixSumCount[sum - targetSum]
+        prefixSumCount[sum]++
+		dfs(root.Left, sum)
+		dfs(root.Right, sum)
+        prefixSumCount[sum]--
 	}
-    
-	var dfs func(root *TreeNode)
-	dfs = func(root *TreeNode) {
-		if root == nil {
-			return
-		}
-		countPathSums(root, 0)
-		dfs(root.Left)
-		dfs(root.Right)
-	}
-
-	dfs(root)
-
-	return targetPathSumsCount
+	dfs(root, 0)
+	return ans
 }
