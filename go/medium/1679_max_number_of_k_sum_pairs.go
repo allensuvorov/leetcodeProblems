@@ -1,18 +1,14 @@
 func maxOperations(nums []int, k int) int {
-    fm := map[int]int{}
-    for _, v := range nums {
-        fm[v]++
-    }
-    ans := 0
-    for num, v := range fm {   
-        if num * 2 == k {
-            ans += v / 2 
+    counts := map[int]int{}
+    res := 0
+    for _, num := range nums {   
+        diff := k - num
+        if counts[diff] > 0 {
+            res++
+            counts[diff]--
         } else {
-            temp := min(v, fm[k - num])
-            ans += temp
-            fm[num] -= temp
-            fm[k - num] -= temp
+            counts[num]++
         }
     }
-    return ans
+    return res
 }
