@@ -110,27 +110,43 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
 				heap.Push(bot, targetItem)
 			}
 		} else { // update item
-			if !less(targetItem, (*top)[0]) { // from top
+			if !less(targetItem, (*top)[0]) { // in top
 				index := binarySearchTop(*top, targetItem)
 				(*top)[index].priority = freqs[nums[newHead]]
 				sum += (*top)[index].value
 				heap.Fix(top, index)
-				if less((*top)[0], (*bot)[0]) { // swap
-					item := heap.Pop(top).(*Item)
-					sum -= item.value * item.priority
-					heap.Push(bot, item)
-
-					item = heap.Pop(bot).(*Item)
-					sum += item.value * item.priority
-					heap.Push(top, item)
-				}
-			} else { // from bottom
+                swap(top, bot, &sum)
+			} else { // in bottom
 				index := binarySearchBot(*bot, targetItem)
 				(*bot)[index].priority = freqs[nums[newHead]]
-				heap.Fix(top, index)
+				heap.Fix(bot, index)
+                swap(top, bot, &sum)
 			}
 		}
         return sum
+}
+
+func swap (top *MinHeap, bot *MaxHeap, sum *int){
+    fmt.Println("swap:", (*top)[0], (*bot)[0], "start ?")
+    if less((*top)[0], (*bot)[0]) { // swap
+        item := heap.Pop(top).(*Item)
+        *sum -= item.value * item.priority
+        heap.Push(bot, item)
+        fmt.Printf("swap from %v from top \n", item.value)
+
+        item = heap.Pop(bot).(*Item)
+        *sum += item.value * item.priority
+        heap.Push(top, item)
+        fmt.Printf("swap from %v from bot \n", item.value)
+    }
+}
+
+
+func printTopHeap(top MinHeap) {
+    fmt.Println("top len is", len(top))
+    for i := range top {
+        fmt.Println(*top[i])
+    }
 }
 
 func findXSum(nums []int, k int, x int) []int64 {
@@ -166,6 +182,8 @@ func findXSum(nums []int, k int, x int) []int64 {
 
 		// newHead
         sum = addNewHead(&top, &bot, freqs, nums, newHead, sum, x)
+        printTopHeap(top)
+        fmt.Println("freqs", freqs)
 
 		xSums[i+1] = int64(sum)
 	}
@@ -233,7 +251,7 @@ func less(a, b *Item) bool {
 	if a.priority == b.priority {
 		return a.value < b.value
 	}
-	return a.priority < a.priority
+	return a.priority < b.priority
 }
 
 // A MinHeap implements heap.Interface and holds Items.
