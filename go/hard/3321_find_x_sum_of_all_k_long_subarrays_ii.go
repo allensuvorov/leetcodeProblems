@@ -1,20 +1,20 @@
 import "container/heap"
 
 func findXSum(nums []int, k int, x int) []int64 {
-    
+    log.Println("findXSum start for ", nums)
     // two heaps, minHeap and maxHeap, with rebalancing
     // binary search
     // sliding window
 
-	top := make(MinHeap, x)
-    bot := make(MaxHeap, k)
-    
     freqs:= make(map[int]int)
 
     // initial k items for bottom heap
 	for i := range k {
         freqs[nums[i]]++
 	}
+
+	top := make(MinHeap, 0)
+    bot := make(MaxHeap, len(freqs))
 
     i := 0
     for value, priority := range freqs{
@@ -27,11 +27,8 @@ func findXSum(nums []int, k int, x int) []int64 {
     }
     
     log.Println("heaps initialization start")
-
-	heap.Init(&top)
     heap.Init(&bot)
 
-    log.Println("heaps initialization end")
 
     // move top x items the top heap and get initial xSum
 	n := len(nums)
@@ -42,6 +39,9 @@ func findXSum(nums []int, k int, x int) []int64 {
         xSums[0] += int64(item.value)
         heap.Push(&top, item)
     }
+
+    heap.Init(&top)
+    log.Printf("heaps initialization - end len(top): %v, len(bot): %v \n", len(top), len(bot))
 
 	// sliding window
 	for i := range n - k {
@@ -60,19 +60,28 @@ func findXSum(nums []int, k int, x int) []int64 {
 
         // cut oldTail
         if freqs[nums[oldTail]] == 0 { // delete item
+            log.Printf("cut oldTail delete value %v at index %v - start \n", nums[oldTail], oldTail)
+
             delete(freqs,nums[oldTail])
+
             if !less(targetItem, top[0]) {
+                log.Printf("cut oldTail delete value %v at index %v from top %+v - start \n", nums[oldTail], oldTail, top[0])
+
                 index := binarySearchTop(top, targetItem)
                 sum -= top[index].value
                 heap.Remove(&top, index)
 
-                item := heap.Pop(&bot).(*Item)
-                sum += item.value * item.priority
-                heap.Push(&top, item)
+                if len(top) < x && len(bot) > 0 {
+                    log.Printf("cut oldTail pop item from bot, len(bot): %v- start \n", len(bot))
+                    item := heap.Pop(&bot).(*Item)
+                    sum += item.value * item.priority
+                    heap.Push(&top, item)
+                }
             } else {
                 index := binarySearchBot(bot, targetItem)
                 heap.Remove(&bot, index)
             }
+            log.Printf("cut oldTail delete value %v at index %v - end \n", nums[oldTail], oldTail)
         } else { // update item
             if !less(targetItem, top[0]) { // from top
                 index := binarySearchTop(top, targetItem)
@@ -84,9 +93,11 @@ func findXSum(nums []int, k int, x int) []int64 {
                     sum -= item.value * item.priority
                     heap.Push(&bot, item)
 
-                    item = heap.Pop(&bot).(*Item)
-                    sum += item.value * item.priority
-                    heap.Push(&top, item)
+                    if len(top) < x && len(bot) > 0 {
+                        item = heap.Pop(&bot).(*Item)
+                        sum += item.value * item.priority
+                        heap.Push(&top, item)
+                    }
                 }
             } else { // from bottom
                 index := binarySearchBot(bot, targetItem)
@@ -140,8 +151,8 @@ func findXSum(nums []int, k int, x int) []int64 {
 
         xSums[i+1] = int64(sum)
 	}
+    log.Printf("findXSum end for %v with result %v \n", nums, xSums)
 	return xSums
-
 }
 
 
@@ -193,8 +204,6 @@ func binarySearchBot(pq MaxHeap, target *Item) int {
     return -1
 }
 
-
-
 // An Item is something we manage in a priority queue.
 type Item struct {
 	value    int // The value of the item; arbitrary.
@@ -218,7 +227,7 @@ type MinHeap []*Item
 func (pq MinHeap) Len() int { return len(pq) }
 
 func (pq MinHeap) Less(i, j int) bool {
-    log.Println("MinHeap.Less() start")
+    // log.Println("MinHeap.Less() start")
 
 	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
 	if pq[i].priority == pq[j].priority {
