@@ -99,13 +99,15 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
 		if freqs[nums[newHead]] == 1 { // add item
 			targetItem.priority = 1
 
-			if !less(targetItem, (*top)[0]) { // add to top
+			if !less(targetItem, (*top)[0]) || len(*top) < x { // add to top
 				heap.Push(top, targetItem)
 				sum += targetItem.value
 
-				item := heap.Pop(top).(*Item) // move
-				sum -= item.value * item.priority
-				heap.Push(bot, item)
+                if len(*top) > x {
+                    item := heap.Pop(top).(*Item) // move
+                    sum -= item.value * item.priority
+                    heap.Push(bot, item)
+                }
 			} else {
 				heap.Push(bot, targetItem)
 			}
@@ -141,7 +143,6 @@ func swap (top *MinHeap, bot *MaxHeap, sum *int){
     }
 }
 
-
 func printTopHeap(top MinHeap) {
     fmt.Println("top len is", len(top))
     for i := range top {
@@ -169,6 +170,7 @@ func findXSum(nums []int, k int, x int) []int64 {
 	xSums := make([]int64, n-k+1)
 
 	xSums[0] = int64(initializeHeaps(&top, &bot, freqs, x))
+    printTopHeap(top)
 
 	// sliding window
 	for i := range n - k {
