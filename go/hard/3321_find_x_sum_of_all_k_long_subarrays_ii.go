@@ -17,7 +17,7 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 
 	// move top x items the top heap and get initial xSum
 
-	for range x {
+	for len(*bot) > 0 && len(*top) < x {
 		item := heap.Pop(bot).(*Item)
 		sum += item.value*item.priority
 		heap.Push(top, item)
@@ -99,7 +99,7 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
 		if freqs[nums[newHead]] == 1 { // add item
 			targetItem.priority = 1
 
-			if !less(targetItem, (*top)[0]) || len(*top) < x { // add to top
+			if len(*top) < x || !less(targetItem, (*top)[0])  { // add to top
 				heap.Push(top, targetItem)
 				sum += targetItem.value
 
