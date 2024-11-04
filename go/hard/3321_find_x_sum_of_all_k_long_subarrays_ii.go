@@ -19,19 +19,19 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 
 	for len(*bot) > 0 && len(*top) < x {
 		item := heap.Pop(bot).(*Item)
-		sum += item.value*item.priority
+		sum += item.value * item.priority
 		heap.Push(top, item)
 	}
 
 	heap.Init(top)
-    
+
 	log.Printf("heaps initialization - end len(top): %v, len(bot): %v \n", len(*top), len(*bot))
 
 	return sum
 }
 
 func cutOldTail(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, oldTail, sum, x int) int {
-    targetItem := &Item{
+	targetItem := &Item{
 		value:    nums[oldTail],
 		priority: freqs[nums[oldTail]],
 	}
@@ -65,89 +65,84 @@ func cutOldTail(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, oldTa
 	} else { // update item
 		if !less(targetItem, (*top)[0]) { // from top
 			index := binarySearchTop(*top, targetItem)
-			(*top)[index].priority = freqs[nums[oldTail]]
+			(*top)[index].priority--
 			sum -= (*top)[index].value
 			heap.Fix(top, index)
-			if less((*top)[0], (*bot)[0]) { // swap
-				item := heap.Pop(top).(*Item)
-				sum -= item.value * item.priority
-				heap.Push(bot, item)
-
-				if len(*top) < x && len(*bot) > 0 {
-					item = heap.Pop(bot).(*Item)
-					sum += item.value * item.priority
-					heap.Push(top, item)
-				}
-			}
+			
+            swap(top, bot, &sum)
+            
 		} else { // from bottom
 			index := binarySearchBot(*bot, targetItem)
 			(*bot)[index].priority = freqs[nums[oldTail]]
 			heap.Fix(top, index)
 		}
 	}
-    return sum
+	return sum
 }
 
 func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHead, sum, x int) int {
+	log.Printf("addNewHead %v at index %v", nums[newHead], newHead)
+    log.Printf("addNewHead len(top) %v, len(bot) %v", len(*top), len(*bot))
     targetItem := &Item{
-			value:    nums[newHead],
-			priority: freqs[nums[newHead]],
-		}
+		value:    nums[newHead],
+		priority: freqs[nums[newHead]],
+	}
 
-		freqs[nums[newHead]]++
+	freqs[nums[newHead]]++
 
-		if freqs[nums[newHead]] == 1 { // add item
-			targetItem.priority = 1
+	if freqs[nums[newHead]] == 1 { // add item
+		targetItem.priority = 1
 
-			if len(*top) < x || !less(targetItem, (*top)[0])  { // add to top
-				heap.Push(top, targetItem)
-				sum += targetItem.value
+		if len(*top) < x || !less(targetItem, (*top)[0]) { // add to top
+			heap.Push(top, targetItem)
+			sum += targetItem.value
 
-                if len(*top) > x {
-                    item := heap.Pop(top).(*Item) // move
-                    sum -= item.value * item.priority
-                    heap.Push(bot, item)
-                }
-			} else {
-				heap.Push(bot, targetItem)
+			if len(*top) > x {
+				item := heap.Pop(top).(*Item) // move
+				sum -= item.value * item.priority
+				heap.Push(bot, item)
 			}
-		} else { // update item
-			if !less(targetItem, (*top)[0]) { // in top
-				index := binarySearchTop(*top, targetItem)
-				(*top)[index].priority = freqs[nums[newHead]]
-				sum += (*top)[index].value
-				heap.Fix(top, index)
-                swap(top, bot, &sum)
-			} else { // in bottom
-				index := binarySearchBot(*bot, targetItem)
-				(*bot)[index].priority = freqs[nums[newHead]]
-				heap.Fix(bot, index)
-                swap(top, bot, &sum)
-			}
+		} else {
+			heap.Push(bot, targetItem)
 		}
-        return sum
+	} else { // update item
+		if !less(targetItem, (*top)[0]) { // in top
+			index := binarySearchTop(*top, targetItem)
+			(*top)[index].priority = freqs[nums[newHead]]
+			sum += (*top)[index].value
+			heap.Fix(top, index)
+			swap(top, bot, &sum)
+		} else { // in bottom
+			index := binarySearchBot(*bot, targetItem)
+			(*bot)[index].priority = freqs[nums[newHead]]
+			heap.Fix(bot, index)
+			swap(top, bot, &sum)
+		}
+	}
+	return sum
 }
 
-func swap (top *MinHeap, bot *MaxHeap, sum *int){
-    fmt.Println("swap:", (*top)[0], (*bot)[0], "start ?")
-    if less((*top)[0], (*bot)[0]) { // swap
-        item := heap.Pop(top).(*Item)
-        *sum -= item.value * item.priority
-        heap.Push(bot, item)
-        fmt.Printf("swap from %v from top \n", item.value)
+func swap(top *MinHeap, bot *MaxHeap, sum *int) {
+	fmt.Println("swap: start ?")
+	log.Printf("addNewHead - swap - len(top) %v, len(bot) %v", len(*top), len(*bot))
+	if len(*bot) > 0 && less((*top)[0], (*bot)[0]) { // swap
+		item := heap.Pop(top).(*Item)
+		*sum -= item.value * item.priority
+		heap.Push(bot, item)
+		fmt.Printf("swap from %v from top \n", item.value)
 
-        item = heap.Pop(bot).(*Item)
-        *sum += item.value * item.priority
-        heap.Push(top, item)
-        fmt.Printf("swap from %v from bot \n", item.value)
-    }
+		item = heap.Pop(bot).(*Item)
+		*sum += item.value * item.priority
+		heap.Push(top, item)
+		fmt.Printf("swap from %v from bot \n", item.value)
+	}
 }
 
 func printTopHeap(top MinHeap) {
-    fmt.Println("top len is", len(top))
-    for i := range top {
-        fmt.Println(*top[i])
-    }
+	fmt.Println("top len is", len(top))
+	for i := range top {
+		fmt.Println(*top[i])
+	}
 }
 
 func findXSum(nums []int, k int, x int) []int64 {
@@ -170,7 +165,7 @@ func findXSum(nums []int, k int, x int) []int64 {
 	xSums := make([]int64, n-k+1)
 
 	xSums[0] = int64(initializeHeaps(&top, &bot, freqs, x))
-    printTopHeap(top)
+	printTopHeap(top)
 
 	// sliding window
 	for i := range n - k {
@@ -183,9 +178,9 @@ func findXSum(nums []int, k int, x int) []int64 {
 		sum = cutOldTail(&top, &bot, freqs, nums, oldTail, sum, x)
 
 		// newHead
-        sum = addNewHead(&top, &bot, freqs, nums, newHead, sum, x)
-        printTopHeap(top)
-        fmt.Println("freqs", freqs)
+		sum = addNewHead(&top, &bot, freqs, nums, newHead, sum, x)
+		printTopHeap(top)
+		fmt.Println("freqs", freqs)
 
 		xSums[i+1] = int64(sum)
 	}
