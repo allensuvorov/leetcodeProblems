@@ -19,11 +19,12 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 
 	for range x {
 		item := heap.Pop(bot).(*Item)
-		sum += item.value
+		sum += item.value*item.priority
 		heap.Push(top, item)
 	}
 
 	heap.Init(top)
+    
 	log.Printf("heaps initialization - end len(top): %v, len(bot): %v \n", len(*top), len(*bot))
 
 	return sum
