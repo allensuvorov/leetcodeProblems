@@ -1,21 +1,3 @@
-/*
-find bug in code below:
-- problem at test case: nums = [3,4,1,5,2,5,1,3] k = 6 x = 4
-
-
-[1,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-[2,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-[3,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
-[4,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
-[5,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
-[6,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-[7,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-[8,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-[9,4,1,5,2,5,1,3] k = 6 x = 4 - ok
-
-seems like heap.Fix can't sort the heap properly when adding 1 at index 6 to the sliding window.
-*/
-
 import "container/heap"
 
 func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
@@ -42,10 +24,8 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 	}
 
 	heap.Init(top)
-    printTopHeap(*top)
 
 	log.Printf("heaps initialization - end len(top): %v, len(bot): %v \n", len(*top), len(*bot))
-
 	return sum
 }
 
@@ -145,7 +125,7 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
             
             heap.Fix(top, index)
             if !checkTopIsSortedIncreasing(*top) {
-                fmt.Println("error - fix at line 128 - did not sort heap")
+                fmt.Println("error - heap.Fix at line 126 - did not sort heap")
             }
             
             printTopHeap(*top)
