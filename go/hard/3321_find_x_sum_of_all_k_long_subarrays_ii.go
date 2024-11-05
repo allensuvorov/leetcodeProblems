@@ -1,5 +1,123 @@
 import "container/heap"
 
+func findXSum(nums []int, k int, x int) []int64 {
+    // init two heaps and rebalance
+    // top (to update xSum quickly) and bot
+    // why use 
+
+	h := &IntHeap{
+		Nums:   make([]int, 0),
+		Counts: map[int]int{},
+	}
+
+	for i := range k {
+		if _, ok := h.Counts[nums[i]]; !ok {
+			h.Nums = append(h.Nums, nums[i])
+		}
+		h.Counts[nums[i]]++
+	}
+
+	heap.Init(h)
+
+	fmt.Println(h)
+	n := len(nums)
+	xSums := make([]int64, n-k+1)
+
+	// get X-Sum
+	// sliding window
+	for i := range n - k + 1 {
+		sum := 0
+		for j := range x {
+			num := h.Nums[j]
+			sum += num * h.Counts[num]
+		}
+		xSums[i] = int64(sum)
+
+		l := i
+		r := i + k
+		if r < len(nums) {
+			h.Counts[nums[l]]--
+			// binary search to find idx of [nums[l]]
+			idx := binarySearch(h.Nums, h.Counts, nums[l])
+            heap.Fix(h, idx)
+			// fmt.Println(h)
+
+			if _, ok := h.Counts[nums[r]]; !ok {
+				heap.Push(h, nums[r])
+				h.Counts[nums[r]]++
+			} else {
+				// binary search to find idx of [nums[r]]
+				idx = binarySearch(h.Nums, h.Counts, nums[r])
+				fmt.Println("fixing ", nums[r], "found at index", idx)
+				h.Counts[nums[r]]++
+				heap.Fix(h, idx)
+			}
+			fmt.Println(h)
+		}
+
+	}
+	return xSums
+
+}
+
+func binarySearch(nums []int, counts map[int]int, target int) int {
+	l := 0
+	r := len(nums) - 1
+	for l <= r {
+		m := l + (r-l)/2
+		guess := nums[m]
+		if guess == target {
+			return m
+		}
+		if counts[guess] > counts[target] {
+			l = m + 1
+		} else if counts[guess] < counts[target] {
+			r = m - 1
+		} else {
+			if guess > target {
+				l = m + 1
+			} else {
+				r = m - 1
+			}
+		}
+	}
+	return 0
+}
+
+// An IntHeap is a min-heap of ints.
+type IntHeap struct {
+	Nums   []int
+	Counts map[int]int
+}
+
+func (h IntHeap) Len() int { return len(h.Nums) }
+
+func (h IntHeap) Less(i, j int) bool {
+	if h.Counts[h.Nums[i]] == h.Counts[h.Nums[j]] {
+		return h.Nums[i] > h.Nums[j]
+	}
+	return h.Counts[h.Nums[i]] > h.Counts[h.Nums[j]]
+}
+
+func (h IntHeap) Swap(i, j int) { h.Nums[i], h.Nums[j] = h.Nums[j], h.Nums[i] }
+
+func (h *IntHeap) Push(x any) {
+	// Push and Pop use pointer receivers because they modify the slice's length,
+	// not just its contents.
+	h.Nums = append(h.Nums, x.(int))
+}
+
+func (h *IntHeap) Pop() any {
+	old := h.Nums
+	n := len(old)
+	x := old[n-1]
+	h.Nums = old[0 : n-1]
+	return x
+}
+
+/*
+import "container/heap"
+
 func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 	log.Println("heaps initialization start")
 	sum := 0
@@ -375,3 +493,4 @@ func (pq *MaxHeap) update(item *Item, value int, priority int) {
 	item.priority = priority
 	heap.Fix(pq, item.index)
 }
+*/
