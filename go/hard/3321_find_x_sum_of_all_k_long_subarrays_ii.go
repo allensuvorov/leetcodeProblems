@@ -1,3 +1,21 @@
+/*
+find bug in code below:
+- problem at test case: nums = [3,4,1,5,2,5,1,3] k = 6 x = 4
+
+
+[1,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+[2,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+[3,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
+[4,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
+[5,4,1,5,2,5,1,3] k = 6 x = 4 - failed - can't sort at heap.Fix
+[6,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+[7,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+[8,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+[9,4,1,5,2,5,1,3] k = 6 x = 4 - ok
+
+seems like heap.Fix can't sort the heap properly when adding 1 at index 6 to the sliding window.
+*/
+
 import "container/heap"
 
 func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
@@ -24,6 +42,7 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 	}
 
 	heap.Init(top)
+    printTopHeap(*top)
 
 	log.Printf("heaps initialization - end len(top): %v, len(bot): %v \n", len(*top), len(*bot))
 
@@ -31,6 +50,8 @@ func initializeHeaps(top *MinHeap, bot *MaxHeap, freqs map[int]int, x int) int {
 }
 
 func cutOldTail(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, oldTail, sum, x int) int {
+	log.Println("cut oldTail - start")
+
 	targetItem := &Item{
 		value:    nums[oldTail],
 		priority: freqs[nums[oldTail]],
@@ -45,7 +66,9 @@ func cutOldTail(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, oldTa
 		delete(freqs, nums[oldTail])
 
 		if !less(targetItem, (*top)[0]) {
-			log.Printf("cut oldTail delete value %v at index %v from top %+v - start \n", nums[oldTail], oldTail, (*top)[0])
+			log.Printf("cut oldTail delete value %v at index %v from top - start \n", nums[oldTail], oldTail)
+
+			log.Printf("binarySearchTop, top - targetItem %+v \n", targetItem)
 
 			index := binarySearchTop(*top, targetItem)
 			sum -= (*top)[index].value
@@ -68,22 +91,25 @@ func cutOldTail(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, oldTa
 			(*top)[index].priority--
 			sum -= (*top)[index].value
 			heap.Fix(top, index)
-			
-            swap(top, bot, &sum)
-            
+
+			swap(top, bot, &sum)
+
 		} else { // from bottom
 			index := binarySearchBot(*bot, targetItem)
 			(*bot)[index].priority = freqs[nums[oldTail]]
 			heap.Fix(top, index)
 		}
 	}
+	printTopHeap(*top)
+	log.Println("cut oldTail - end")
 	return sum
 }
 
 func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHead, sum, x int) int {
+	log.Println("addNewHead - start")
 	log.Printf("addNewHead %v at index %v", nums[newHead], newHead)
-    log.Printf("addNewHead len(top) %v, len(bot) %v", len(*top), len(*bot))
-    targetItem := &Item{
+	log.Printf("addNewHead len(top) %v, len(bot) %v", len(*top), len(*bot))
+	targetItem := &Item{
 		value:    nums[newHead],
 		priority: freqs[nums[newHead]],
 	}
@@ -107,10 +133,26 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
 		}
 	} else { // update item
 		if !less(targetItem, (*top)[0]) { // in top
+
 			index := binarySearchTop(*top, targetItem)
-			(*top)[index].priority = freqs[nums[newHead]]
+			(*top)[index].priority++
 			sum += (*top)[index].value
-			heap.Fix(top, index)
+
+            log.Println("\n")
+			log.Println("heap.Fix - start - index:", index)
+			
+            printTopHeap(*top)
+            
+            heap.Fix(top, index)
+            if !checkTopIsSortedIncreasing(*top) {
+                fmt.Println("error - fix at line 128 - did not sort heap")
+            }
+            
+            printTopHeap(*top)
+            
+			log.Println("heap.Fix - end")
+            log.Println("\n")
+
 			swap(top, bot, &sum)
 		} else { // in bottom
 			index := binarySearchBot(*bot, targetItem)
@@ -119,11 +161,13 @@ func addNewHead(top *MinHeap, bot *MaxHeap, freqs map[int]int, nums []int, newHe
 			swap(top, bot, &sum)
 		}
 	}
+
+	printTopHeap(*top)
+	log.Println("addNewHead - end")
 	return sum
 }
 
 func swap(top *MinHeap, bot *MaxHeap, sum *int) {
-	fmt.Println("swap: start ?")
 	log.Printf("addNewHead - swap - len(top) %v, len(bot) %v", len(*top), len(*bot))
 	if len(*bot) > 0 && less((*top)[0], (*bot)[0]) { // swap
 		item := heap.Pop(top).(*Item)
@@ -139,10 +183,20 @@ func swap(top *MinHeap, bot *MaxHeap, sum *int) {
 }
 
 func printTopHeap(top MinHeap) {
-	fmt.Println("top len is", len(top))
+	log.Println("printTop - start, len is", len(top))
 	for i := range top {
-		fmt.Println(*top[i])
+		log.Printf("top has: %v, %v, %v,", top[i].index, top[i].priority, top[i].value)
 	}
+}
+
+func checkTopIsSortedIncreasing(top MinHeap) bool {
+    isSorted := true
+    for i := 1; i < len(top); i++ {
+        if less(top[i], top[i-1]) {
+            isSorted = false
+        }
+    }
+    return isSorted
 }
 
 func findXSum(nums []int, k int, x int) []int64 {
@@ -150,6 +204,8 @@ func findXSum(nums []int, k int, x int) []int64 {
 	// binary search
 	// sliding window
 	log.Println("findXSum start for ", nums)
+    fmt.Println("findXSum start for ", nums)
+
 
 	freqs := make(map[int]int)
 
@@ -165,7 +221,6 @@ func findXSum(nums []int, k int, x int) []int64 {
 	xSums := make([]int64, n-k+1)
 
 	xSums[0] = int64(initializeHeaps(&top, &bot, freqs, x))
-	printTopHeap(top)
 
 	// sliding window
 	for i := range n - k {
@@ -179,7 +234,7 @@ func findXSum(nums []int, k int, x int) []int64 {
 
 		// newHead
 		sum = addNewHead(&top, &bot, freqs, nums, newHead, sum, x)
-		printTopHeap(top)
+
 		fmt.Println("freqs", freqs)
 
 		xSums[i+1] = int64(sum)
@@ -238,10 +293,10 @@ func binarySearchBot(pq MaxHeap, target *Item) int {
 
 // An Item is something we manage in a priority queue.
 type Item struct {
-	value    int // The value of the item; arbitrary.
-	priority int // The priority of the item in the queue.
 	// The index is needed by update and is maintained by the heap.Interface methods.
 	index int // The index of the item in the heap.
+	priority int // The priority of the item in the queue.
+	value    int // The value of the item; arbitrary.
 }
 
 func less(a, b *Item) bool {
@@ -257,12 +312,14 @@ type MinHeap []*Item
 func (pq MinHeap) Len() int { return len(pq) }
 
 func (pq MinHeap) Less(i, j int) bool {
-	// log.Println("MinHeap.Less() start")
+	log.Println("MinHeap.Less() - start")
 
-	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
+	// We want Pop to give us the lowest, not highest, priority so we use less than here.
 	if pq[i].priority == pq[j].priority {
+		log.Printf("MinHeap.Less() - end - equal priority: %v < %v, result %t", pq[i], pq[j], pq[i].value < pq[j].value)
 		return pq[i].value < pq[j].value
 	}
+	log.Printf("MinHeap.Less() - end - diff priority: %v < %v, result %t", pq[i], pq[j], pq[i].priority < pq[j].priority)
 	return pq[i].priority < pq[j].priority
 }
 
