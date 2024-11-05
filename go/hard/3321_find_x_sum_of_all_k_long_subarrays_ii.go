@@ -1,3 +1,10 @@
+/*
+heaps and map is not enough
+need a ordered set to access values directly
+Go does not have ordred set, Btree is an option
+might do later if appropriate
+*/
+
 import "container/heap"
 
 func findXSum(nums []int, k int, x int) []int64 {
