@@ -3,7 +3,7 @@ func uniquePaths(m int, n int) int {
 
     dp[0] = 1
 
-    for r := 0; r < m; r++ {
+    for range m {
         for c := 1; c < n; c++ {
             dp[c] += dp[c-1]
         }
