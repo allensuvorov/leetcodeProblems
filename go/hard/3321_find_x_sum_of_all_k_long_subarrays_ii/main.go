@@ -12,39 +12,24 @@ type Item struct {
 	priority int    // The priority of the item in the queue.
 }
 
-// A PriorityQueue implements heap.Interface and holds Items.
-type PriorityQueue []*Item
-
-func (pq PriorityQueue) Len() int { return len(pq) }
-
-func (pq PriorityQueue) Less(i, j int) bool {
-	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
-	return pq[i].priority > pq[j].priority
-}
-
-func (pq PriorityQueue) Swap(i, j int) {
-	pq[i], pq[j] = pq[j], pq[i]
-}
-
-func (pq *PriorityQueue) Push(x any) {
-	*pq = append(*pq, x.(*Item))
-}
-
-func (pq *PriorityQueue) Pop() any {
-	old := *pq
-	n := len(old)
-	item := old[n-1]
-	old[n-1] = nil // don't stop the GC from reclaiming the item eventually
-	*pq = old[0 : n-1]
-	return item
-}
-
 func findXSum(nums []int, k int, x int) []int64 {
 	// two heaps, minHeap and maxHeap, with rebalancing
 	// binary search
 	// sliding window
+
+	counts := make(map[int]int)
+
+	// initial k items for bottom heap
+	for i := range k {
+		counts[nums[i]]++
+	}
+
+	top := make(MinHeap, 0)
+	bot := make(MaxHeap, len(counts))
+
 	return []int64{}
 }
+
 func main() {
 	// Some items and their priorities.
 	items := map[string]int{
@@ -53,7 +38,7 @@ func main() {
 
 	// Create a priority queue, put the items in it, and
 	// establish the priority queue (heap) invariants.
-	pq := make(PriorityQueue, len(items))
+	pq := make(MaxHeap, len(items))
 	i := 0
 	for value, priority := range items {
 		pq[i] = &Item{
