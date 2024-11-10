@@ -1,4 +1,3 @@
-// This example demonstrates a priority queue built using the heap interface.
 package main
 
 import (
@@ -24,8 +23,8 @@ func findXSum(nums []int, k int, x int) []int64 {
 		counts[nums[i]]++
 	}
 
-	top := make(MinHeap, 0)
-	bot := make(MaxHeap, len(counts))
+	// top := make(MinHeap, 0)
+	// bot := make(MaxHeap, len(counts))
 
 	return []int64{}
 }

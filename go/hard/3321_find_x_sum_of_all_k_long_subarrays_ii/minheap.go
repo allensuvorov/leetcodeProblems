@@ -6,8 +6,10 @@ type MinHeap []*Item
 func (pq MinHeap) Len() int { return len(pq) }
 
 func (pq MinHeap) Less(i, j int) bool {
-	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
-	return pq[i].priority > pq[j].priority
+	if pq[i].priority == pq[j].priority {
+		return pq[i].value < pq[j].value
+	}
+	return pq[i].priority < pq[j].priority
 }
 
 func (pq MinHeap) Swap(i, j int) {
