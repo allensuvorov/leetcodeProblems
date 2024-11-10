@@ -39,6 +39,12 @@ func (pq *PriorityQueue) Pop() any {
 	return item
 }
 
+func findXSum(nums []int, k int, x int) []int64 {
+	// two heaps, minHeap and maxHeap, with rebalancing
+	// binary search
+	// sliding window
+	return []int64{}
+}
 func main() {
 	// Some items and their priorities.
 	items := map[string]int{
