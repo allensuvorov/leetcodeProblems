@@ -1,103 +1,43 @@
 type RandomizedSet struct {
-    buckets [][]int
-    divider int
-    bucketMaxLen int
+    nums []int
+    set map[int]int
 }
-
-func (this *RandomizedSet) evacuate() {
-    // grow case
-    this.divider = this.growSet()
-    newBuckets := make([][]int, this.divider)
-    for _, bucket := range this.buckets{
-        for _, num := range bucket {
-            bucket := this.hashFunc(num)
-            newBuckets[bucket] = append(newBuckets[bucket], num)
-        }
-    }
-    this.buckets = newBuckets
-}
-
-
-func (this *RandomizedSet) hashFunc(val int) int {
-    if val < 0 {
-        val = -val
-    }
-    return val % this.divider
-}
-
-
-func (this *RandomizedSet) growSet() int {
-    val := len(this.buckets)
-    return val + val/2
-}
-
 
 
 func Constructor() RandomizedSet {
-    return RandomizedSet{make([][]int,10), 10, 1000}
+    return RandomizedSet{[]int{}, map[int]int{}}
 }
 
 
 func (this *RandomizedSet) Insert(val int) bool {
-    present := false
-    bucket := this.hashFunc(val)
-    for _, v := range this.buckets[bucket] {
-        if v == val {
-            present = true
-        }
+    if _, ok := this.set[val]; ok {
+        return false
     }
-    // insert
-    if !present {
-        this.buckets[bucket] = append(this.buckets[bucket], val)
-        if len(this.buckets[bucket]) > this.bucketMaxLen {
-            this.evacuate()
-        }
-    }
-    return !present
+
+    this.nums = append(this.nums, val)
+    this.set[val] = len(this.nums) - 1
+
+    return true
 }
 
 
 func (this *RandomizedSet) Remove(val int) bool {
-    present := false
-    bucket := this.hashFunc(val)
-    for i, v := range this.buckets[bucket] {
-        if v == val {
-            present = true
-            oldLen := len(this.buckets[bucket])
-            part1 := this.buckets[bucket][:i]
-            part2 := this.buckets[bucket][i+1:]
-            this.buckets[bucket] = append(part1, part2...)
-            newLen := len(this.buckets[bucket])
-            if newLen != oldLen - 1 {
-                fmt.Printf("error removing value %v from backet", v)
-            }
-            break
-        }
+    if _, ok := this.set[val]; !ok {
+        return false
     }
-    return present
+
+    i := this.set[val]
+    end := len(this.nums) - 1
+    this.nums[i] = this.nums[end] // swap val from end
+    this.set[this.nums[end]] = i // update index in set
+    this.nums = this.nums[:end] // pop
+    delete(this.set, val)
+    return true
 }
 
 
 func (this *RandomizedSet) GetRandom() int {
-    nonEmptyBackets := []int{}
-    setLen := 0
-    for i, v := range this.buckets {
-        if len(v) > 0 {
-            setLen += len(v)
-            nonEmptyBackets = append(nonEmptyBackets, i)
-        }
-    }
-
-    randVal := rand.Intn(setLen) + 1
-    for _, v := range nonEmptyBackets {
-        bucketLen := len(this.buckets[v])
-        if randVal - bucketLen > 0 { // 1 - 1 = 0
-            randVal -= bucketLen
-        } else {
-            return this.buckets[v][randVal-1]
-        }
-    }
-    return 0
+    return this.nums[rand.Intn(len(this.nums))]
 }
 
 /**
@@ -107,3 +47,5 @@ func (this *RandomizedSet) GetRandom() int {
  * param_2 := obj.Remove(val);
  * param_3 := obj.GetRandom();
  */
+
+ // 2, 2 
