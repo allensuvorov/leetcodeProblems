@@ -18,7 +18,6 @@ func intToRoman(num int) string {
             break
         }
     }
-    fmt.Println(ans)
 
     return ans + intToRoman(num - symbolToValue[ans])
 }
