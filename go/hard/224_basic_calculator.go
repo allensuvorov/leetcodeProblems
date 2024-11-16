@@ -9,21 +9,23 @@ func evaluate(s []rune) (int, int) {
     numReady := false
     for i := 0; i < len(s); i++{
         if !unicode.IsNumber(s[i]) && numReady {
-            sum += num * sign
-            num, numReady, sign = 0, false, 1
+            sum += sign * num
+            num, numReady = 0, false
         }
-        
+
         switch s[i] {
-        case ' ', '+': // skip
+        case ' ': // skip
+        case '+':
+            sign = 1
+        case '-':
+            sign = -1
         case '(':
             num, i = evaluate(s[i+1:])
             i = len(s) - i
-            sum += num * sign
-            num, numReady, sign = 0, false, 1
+            sum += sign * num
+            num, numReady = 0, false
         case ')':
             return sum, len(s) - i
-        case '-':
-            sign = -1
         }
 
         if unicode.IsNumber(s[i]) {
@@ -32,7 +34,7 @@ func evaluate(s []rune) (int, int) {
         }
     }
     if num > 0 {
-        sum += num * sign
+        sum += sign * num
     }
     return sum, 0
 }
