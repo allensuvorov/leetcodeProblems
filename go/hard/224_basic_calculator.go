@@ -4,20 +4,13 @@ func calculate(s string) int {
 }
 
 func getSum(s []rune) (int, int) {
-    sum := 0
-    num := 0
-    minus := false
+    sum, num := 0, 0
+    minus := 1
     numExists := false
     for i := 0; i < len(s); i++{
         if !unicode.IsNumber(s[i]) && numExists {
-            if minus {
-                sum -= num
-            } else {
-                sum += num
-            }
-            num = 0
-            numExists = false
-            minus = false
+            sum += num * minus
+            num, numExists, minus = 0, false, 1
         }
 
         if unicode.IsNumber(s[i]) {
@@ -26,31 +19,20 @@ func getSum(s []rune) (int, int) {
         }
 
         switch s[i] {
-        case ' ', '+':
-            // skip
+        case ' ', '+': // skip
         case '(':
             num, i = getSum(s[i+1:])
             i = len(s) - i
-            if minus {
-                sum -= num
-            } else {
-                sum += num
-            }
-            num = 0
-            numExists = false
-            minus = false
+            sum += num * minus
+            num, numExists, minus = 0, false, 1
         case ')':
             return sum, len(s) - i
         case '-':
-            minus = true
+            minus = -1
         }
     }
     if num > 0 {
-        if minus {
-            sum -= num
-        } else {
-            sum += num
-        }
+        sum += num * minus
     }
     return sum, 0
 }
