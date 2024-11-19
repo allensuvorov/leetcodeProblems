@@ -6,40 +6,29 @@
  * }
  */
 func reverseBetween(head *ListNode, left int, right int) *ListNode {
-    // edge cases
-    if head.Next == nil || left == right{
-        return head
+    i := 1
+    before := &ListNode{Next:head}
+    for runner := head; runner != nil && i < left; runner = runner.Next{
+        before = runner
+        i++
     }
+    // before, segmentHead
+    segmentHead := before.Next
 
-    // init end of first slice
-    r1 := head
-    for i := 1; i + 1 < left; i++ {
-        r1 = r1.Next
+    var prev *ListNode
+    cur := segmentHead
+
+    for cur != nil && i <= right {
+        cur. Next, prev, cur = prev, cur, cur.Next
+        i++
     }
+    // reconnect reversed segment
+    before.Next = prev // prev is new segmentHead
+    segmentHead.Next = cur // cur is after
     
-    // reverse slice
-    cur := r1
-    if left != 1 {
-        cur = r1.Next
-    }
-
-    r2 := cur // future end of second (reversed) slice
-    var temp *ListNode
-    for i := 1; i <= right - left + 1 && cur != nil; i++ {
-        temp, cur.Next = cur.Next, temp
-        cur, temp = temp, cur
-    }
-    l2 := temp
-
-    // insert reversed slice
-    if left != 1 {
-        r1.Next = l2
-    } else {
-        head = l2
-    }
-
-    if cur != nil {
-        r2.Next = cur
+    // edge case
+    if left == 1 {
+        head = prev
     }
     return head
 }
