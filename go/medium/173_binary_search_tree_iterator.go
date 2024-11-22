@@ -23,12 +23,12 @@ func Constructor(root *TreeNode) BSTIterator {
 
 func (this *BSTIterator) Next() int {
     top := len(this.stack) - 1
-    topNode := this.stack[top]
+    result := this.stack[top]
     this.stack = this.stack[:top]
-    for node := topNode.Right; node != nil; node = node.Left {
+    for node := result.Right; node != nil; node = node.Left {
         this.stack = append(this.stack, node)
     }
-    return topNode.Val
+    return result.Val
 }
 
 
