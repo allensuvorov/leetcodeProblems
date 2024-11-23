@@ -1,10 +1,10 @@
 func isSubsequence(s string, t string) bool {
-   track, scout := 0, 0
-   for track < len(s) && scout < len(t) {
-       if s[track] == t[scout] {
-           track++
-       }
-       scout++
-   }
-   return track == len(s)
+    j := 0
+    for i := 0; i < len(t) && j < len(s); i++ {
+        if t[i] != s[j] {
+            continue
+        }
+        j++
+    }
+    return j == len(s)
 }
