@@ -9,32 +9,22 @@
  */
 
 func connect(root *Node) *Node {
-	if root == nil {
-        return nil
-    }
-    tail, head := root, root
-    levelSize := 1
-    for head != nil {
-        newSize := 0
-
-        for i := range levelSize {
-            if head.Left != nil {
-                tail.Next = head.Left
-                tail = tail.Next
-                newSize++
+    q1 := root // currentQueue
+    for q1 != nil {
+        dummy := &Node{} // nextQueue
+        q2 := dummy
+        for q1 != nil {
+            if q1.Left != nil {
+                q2.Next = q1.Left
+                q2 = q2.Next
             }
-            if head.Right != nil {
-                tail.Next = head.Right
-                tail = tail.Next
-                newSize++
+            if q1.Right != nil {
+                q2.Next = q1.Right
+                q2 = q2.Next
             }
-            next := head.Next
-            if i == levelSize - 1 {
-                head.Next = nil
-            }
-            head = next
+            q1 = q1.Next
         }
-        levelSize = newSize
+        q1 = dummy.Next
     }
     return root
 }
