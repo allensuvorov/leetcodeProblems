@@ -1,9 +1,13 @@
 func ladderLength(beginWord string, endWord string, wordList []string) int {
-    // BFS till find endWord
     steps := 0
     q := []string{beginWord}
     visited := map[string]bool{beginWord:true}
-    neighbors := adjTable(append(wordList, beginWord))
+    
+    wordSet := make(map[string]bool, len(wordList))
+    for _, word := range wordList {
+        wordSet[word] = true
+    }
+
     for len(q) > 0 {
         size := len(q)
         steps++
@@ -13,10 +17,17 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
             if now == endWord {
                 return steps
             }
-            for _, nei := range neighbors[now] {
-                if !visited[nei] {
-                    visited[nei] = true
-                    q = append(q, nei)
+            for i := range now {
+                for char := byte('a'); char <= 'z'; char++ {
+                    if char != now[i] {
+                        nextWord := now[:i] + string(char) + now[i+1:]
+                        if _, ok := wordSet[nextWord]; ok {
+                            if !visited[nextWord] {
+                                visited[nextWord] = true
+                                q = append(q, nextWord)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -25,29 +36,3 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
 }
 
 
-func adjTable(wordList []string) map[string][]string{
-    // generating all possible substituting letters
-    // hit : *it, h*t, hi*
-    neighbors := make(map[string][]string, len(wordList))
-    for _, word := range wordList {
-        neighbors[word] = make([]string,0)
-    }
-
-    for _, word := range wordList {
-        for i := range word {
-            for j := range 26 {
-                char := byte(j + 'a')
-                if char != word[i] {
-                    wordBytes := []byte(word)
-                    wordBytes[i] = char
-                    genNei := string(wordBytes)
-                    if _, ok := neighbors[genNei]; ok {
-                        neighbors[genNei] = append(neighbors[genNei], word)
-                    }
-                }
-            }
-        }
-    }
-
-    return neighbors
-}
