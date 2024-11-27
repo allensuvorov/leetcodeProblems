@@ -19,14 +19,13 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
             }
             for i := range now {
                 for char := byte('a'); char <= 'z'; char++ {
-                    if char != now[i] {
-                        nextWord := now[:i] + string(char) + now[i+1:]
-                        if _, ok := wordSet[nextWord]; ok {
-                            if !visited[nextWord] {
-                                visited[nextWord] = true
-                                q = append(q, nextWord)
-                            }
-                        }
+                    if char == now[i] {
+                        continue
+                    }
+                    nextWord := now[:i] + string(char) + now[i+1:]
+                    if wordSet[nextWord] && !visited[nextWord] {
+                        visited[nextWord] = true
+                        q = append(q, nextWord)
                     }
                 }
             }
@@ -34,5 +33,3 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
     }
     return 0
 }
-
-
