@@ -1,8 +1,9 @@
 func rangeBitwiseAnd(left int, right int) int {
-    if left == right {
-        return left
+    shift := 0
+    for left < right {
+        left >>= 1
+        right >>= 1
+        shift++
     }
-    left >>= 1
-    right >>= 1
-    return rangeBitwiseAnd(left, right) << 1
+    return left << shift
 }
