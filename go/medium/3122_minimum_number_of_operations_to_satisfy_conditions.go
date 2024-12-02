@@ -11,38 +11,37 @@ Approach: Let's imagine this is a story about a lazy gardner.
 * What's the minimum total number of flowers the gardner needs to change?
 
 Solution: We are trying to keep each neighbor happy, whily being lazy. 
-* Let's count cost of each solution in the current garden and add best option from previous garden.
-* That will show best solution for each flower type so far.
+* Let's count cost (or actually savings) of each solution in the current garden 
+* and add best available option from previous garden.
+* That will show best solution for each flower type for current garden so far.
 */
 
 func minimumOperations(grid [][]int) int {
-    m := len(grid)
-    n := len(grid[0])
+    rows, cols := len(grid), len(grid[0])
+    const digitsVariety = 10 // number of possible digits 0-9
 
-    const digits = 10 // number of possible digits
+    prev := make([]int, digitsVariety) // prev best solution for each number
 
-    prev := [digits]int{} // prev best solution for each number
-
-    for c := range n {
-        curr := [digits]int{}
-        for r := range m { // curr count 
+    for c := range cols {
+        curr := make([]int, digitsVariety)
+        for r := range rows { // curr counts 
             curr[grid[r][c]]++
         }
-        for i := range digits { // curr count + best in prev for any other number
+        for digit := range curr { // curr count + best in prev for any other number
             maxPrev := 0
-            for j := range digits {
-                if i != j {
+            for j := range prev {
+                if digit != j {
                     maxPrev = max(maxPrev, prev[j])
                 }
             }
-            curr[i] += maxPrev
+            curr[digit] += maxPrev
         }
-        prev = curr
+        copy(prev, curr)
     }
 
     maxPrev := 0
-    for i := range digits {
-        maxPrev = max(maxPrev, prev[i])
+    for _, v := range prev {
+        maxPrev = max(maxPrev, v)
     }
-    return m * n - maxPrev
+    return rows * cols - maxPrev
 }
