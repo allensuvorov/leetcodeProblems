@@ -1,25 +1,17 @@
 func coinChange(coins []int, amount int) int {
     dp := make([]int, amount+1)
 
-    for i := 1; i < len(dp); i++ {
-        best := math.MaxInt
-        for _, j := range coins {
-            if j == i {
-                best = 1
-                break
+    for a := 1; a < len(dp); a++ {
+        dp[a] = math.MaxInt32
+        for _, c := range coins {
+            if c <= a {
+                cur := 1 + dp[a - c] // cur best
+                dp[a] = min(dp[a], cur)
             }
-            if j < i && dp[j] != -1 && dp[i - j] != -1 {
-                cur := dp[j] + dp[i - j] // cur best
-                best = min(best, cur)
-            }
-        }
-
-        if best == math.MaxInt {
-            dp[i] = -1
-        } else {
-            dp[i] = best
         }
     }
-    fmt.Println(dp)
-    return dp[len(dp)-1]
+    if dp[amount] == math.MaxInt32 {
+        return -1
+    }
+    return dp[amount]
 }
