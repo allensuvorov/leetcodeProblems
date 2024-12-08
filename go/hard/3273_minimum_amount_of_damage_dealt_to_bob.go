@@ -15,11 +15,11 @@ func minDamage(power int, damage []int, health []int) int64 {
 		totalDPS += v
 	}
 
-	minDamage := 0
+	var minDamage int64 = 0
 	for i := len(priority) - 1; i >= 0; i-- {
 		time := ceil(health[priority[i]], power)
-		minDamage += time * totalDPS // take damage
-		totalDPS -= damage[priority[i]] // kill enemy
+		minDamage += int64(time * totalDPS) // take damage
+		totalDPS -= damage[priority[i]] // kill
 	}
 
 	return int64(minDamage)
