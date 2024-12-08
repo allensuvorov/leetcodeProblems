@@ -5,14 +5,9 @@ func minDamage(power int, damage []int, health []int) int64 {
 	}
 
 	slices.SortFunc(priority, func(a, b int) int {
-
-		timeToKillA := ceil(health[a], power)
-		timeToKillB := ceil(health[b], power)
-
-		if float64(damage[a])/float64(timeToKillA) < float64(damage[b])/float64(timeToKillB) {
-			return -1
-		}
-		return 1
+		timeA := ceil(health[a], power)
+		timeB := ceil(health[b], power)
+		return compare(damage[a], timeA, damage[b], timeB)
 	})
 
 	totalDPS := 0
@@ -21,22 +16,22 @@ func minDamage(power int, damage []int, health []int) int64 {
 	}
 
 	minDamage := 0
-
 	for i := len(priority) - 1; i >= 0; i-- {
-
-		timeToKill := ceil(health[priority[i]], power)
-		minDamage += timeToKill * totalDPS // take damage
-		totalDPS -= damage[priority[i]] // kill
+		time := ceil(health[priority[i]], power)
+		minDamage += time * totalDPS // take damage
+		totalDPS -= damage[priority[i]] // kill enemy
 	}
 
 	return int64(minDamage)
 }
 
-func ceil(a, b int) int {
-	ceil := a / b
+func compare(damageA, timeA, damageB, timeB int) int {
+    if damageA * timeB < damageB * timeA {
+        return - 1
+    }
+    return 1
+}
 
-	if a%b > 0 {
-		ceil++
-	}
-    return ceil
+func ceil(a, b int) int {
+    return (a + b - 1)/b 
 }
