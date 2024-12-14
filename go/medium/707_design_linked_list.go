@@ -4,7 +4,6 @@ type MyLinkedList struct {
     len int
 }
 
-
 type listNode struct {
     val int
     next *listNode
@@ -13,14 +12,6 @@ type listNode struct {
 
 func Constructor() MyLinkedList {
     return MyLinkedList{}
-}
-
-
-func (this *MyLinkedList) printList (s string) {
-    for runner := this.head; runner != nil; runner = runner.next {
-        fmt.Print(runner.val, " -> ")
-    }
-    fmt.Println(s)
 }
 
 
@@ -43,7 +34,6 @@ func (this *MyLinkedList) getNode(index int) *listNode {
     }
     return nil
 }
-
 
 func (this *MyLinkedList) AddAtHead(val int)  {
     newNode := &listNode{val:val}
@@ -82,7 +72,6 @@ func (this *MyLinkedList) AddAtIndex(index int, val int)  {
         next := prev.next
         prev.next = newNode
         newNode.next = next
-      
         this.len++
     }
 }
