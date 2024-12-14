@@ -2,16 +2,11 @@
 // time: O(n)
 // space: O(n)
 func majorityElement(nums []int) int {
-    hn := len(nums)/2
-    m := make(map[int]int)
-    // fill up the map
-    for _, v := range nums{
-        m[v]++ 
-    }
-    // find maj
-    for k, v := range m {
-        if v > hn {
-            return k
+    counts := make(map[int]int)
+    for _, v := range nums {
+        counts[v]++
+        if counts[v] > len(nums)/2 {
+            return v
         }
     }
     return 0
