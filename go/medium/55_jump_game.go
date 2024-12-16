@@ -1,12 +1,10 @@
 func canJump(nums []int) bool {
-    r := len(nums) - 1
-    for l := r - 1; l >= 0; l-- {
-        if nums[l] + l >= r {
-            r = l
+    n := len(nums)
+    highestSolution := n - 1
+    for i := n - 1; i >= 0; i-- {
+        if i + nums[i] >= highestSolution {
+            highestSolution = i
         }
     }
-    if r > 0 {
-        return false
-    }
-    return true
+    return highestSolution == 0
 }
