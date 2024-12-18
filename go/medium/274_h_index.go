@@ -1,28 +1,17 @@
-// count sort
 func hIndex(citations []int) int {
-    counts := make([]int, 1000 + 1)
+    const maxCitation = 1000
+    counts := make([]int, maxCitation + 1)
     for _, v := range citations {
         counts[v]++
     }
     sum := 0
-    for i := len(counts) - 1; i >= 0; i-- {
-        sum += counts[i]
-        if sum >= i {
-            return i
+    c := maxCitation
+    for c >= 0 && c > sum  {
+        sum += counts[c]
+        if c <= sum {
+            return c
         }
+        c--
     }
-    return 0
-}
-
-// general sort
-func hIndex(citations []int) int {
-    n := len(citations)
-    slices.Sort(citations)
-    i := n - 1
-    ans := 0
-    for i >= 0 && citations[i] >= n - i {
-        ans++
-        i--
-    }
-    return ans
+    return c
 }
