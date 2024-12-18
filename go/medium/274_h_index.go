@@ -1,3 +1,4 @@
+// count sort
 func hIndex(citations []int) int {
     counts := make([]int, 1000 + 1)
     for _, v := range citations {
@@ -11,4 +12,17 @@ func hIndex(citations []int) int {
         }
     }
     return 0
+}
+
+// general sort
+func hIndex(citations []int) int {
+    n := len(citations)
+    slices.Sort(citations)
+    i := n - 1
+    ans := 0
+    for i >= 0 && citations[i] >= n - i {
+        ans++
+        i--
+    }
+    return ans
 }
