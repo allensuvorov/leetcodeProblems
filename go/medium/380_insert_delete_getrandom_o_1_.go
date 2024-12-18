@@ -1,44 +1,48 @@
 type RandomizedSet struct {
-    nums []int
-    set map[int]int
+    m map[int]int
+    a []int
 }
 
 
 func Constructor() RandomizedSet {
-    return RandomizedSet{[]int{}, map[int]int{}}
+    return RandomizedSet {
+        m: make(map[int]int), 
+        a: make([]int, 0),
+    }
 }
 
 
 func (this *RandomizedSet) Insert(val int) bool {
-    if _, ok := this.set[val]; ok {
+    if _, exists := this.m[val]; exists {
         return false
     }
-
-    this.nums = append(this.nums, val)
-    this.set[val] = len(this.nums) - 1
-
+    this.a = append(this.a, val)
+    this.m[val] = len(this.a) - 1
     return true
 }
 
 
 func (this *RandomizedSet) Remove(val int) bool {
-    if _, ok := this.set[val]; !ok {
+    if index, exists := this.m[val]; !exists {
         return false
+    } else {
+        last := len(this.a) - 1
+        this.a[index] = this.a[last]
+        this.m[this.a[index]] = index
+        delete(this.m, val)
+        this.a = this.a[:last]
     }
-
-    i := this.set[val]
-    end := len(this.nums) - 1
-    this.nums[i] = this.nums[end] // swap val from end
-    this.set[this.nums[end]] = i // update index in set
-    this.nums = this.nums[:end] // pop
-    delete(this.set, val)
     return true
+
 }
 
 
 func (this *RandomizedSet) GetRandom() int {
-    return this.nums[rand.Intn(len(this.nums))]
+    n := len(this.a)
+    randIndex := rand.Intn(n)
+    return this.a[randIndex]
 }
+
 
 /**
  * Your RandomizedSet object will be instantiated and called as such:
@@ -47,5 +51,3 @@ func (this *RandomizedSet) GetRandom() int {
  * param_2 := obj.Remove(val);
  * param_3 := obj.GetRandom();
  */
-
- // 2, 2 
