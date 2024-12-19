@@ -18,19 +18,20 @@ func intToRoman(num int) string {
 }
 
 func intToRoman(num int) string {
-	if num == 0 {
-		return ""
-	}
+    if num == 0 {
+        return ""
+    }
 
-	value := []int{1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000}
-	symbol := []string{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"}
+    values := []int     {1,    4,    5,   9,    10,  40,   50,  90,   100, 400, 500, 900, 1000}
+    symbols := []string {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"}
+    
+    i := len(values) - 1
+    for i >= 0 {
+        if values[i] <= num {
+            break
+        }
+        i--
+    }
 
-	i := 0
-	for i = len(value) - 1; i >= 0; i-- {
-		if value[i] <= num {
-			break
-		}
-	}
-
-	return symbol[i] + intToRoman(num-value[i])
+    return symbols[i] + intToRoman(num - values[i])
 }
