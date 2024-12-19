@@ -1,3 +1,11 @@
+// built-in methods solution
+func reverseWords(s string) string {
+    words := strings.Fields(s)
+    slices.Reverse(words)
+    return strings.Join(words, " ")
+}
+
+// prev solution
 func reverseWords(s string) string {
     res := []byte{}
     words := strings.Fields(s)
