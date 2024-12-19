@@ -5,17 +5,22 @@ func reverseWords(s string) string {
     return strings.Join(words, " ")
 }
 
-// prev solution
+// no built-in methods solution
 func reverseWords(s string) string {
-    res := []byte{}
-    words := strings.Fields(s)
-    for _, w := range words {
-        if len(res) == 0 {
-            res = append(res, []byte(w)...)    
-        } else {
-            w = w + " "
-            res = append([]byte(w), res...)
+    res := ""
+    word := ""
+    for i, v := range s {
+        if v != ' ' {
+            word += string(v)
+        } 
+        if (v == ' ' || i == len(s)-1) && len(word) > 0 {
+            if len(res) == 0 {
+                res = word
+            } else {
+                res = word + " " + res
+            }
+            word = ""
         }
     }
-    return string(res)
+    return res
 }
