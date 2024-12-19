@@ -14,3 +14,29 @@ func convert(s string, numRows int) string {
     }    
     return string(res)
 }
+
+// time O(n)
+// space O(n)
+
+func convert(s string, numRows int) string {
+    if numRows == 1 {
+        return s
+    }
+    
+    rows := make([]string, numRows)
+    row := 0
+    shift := -1
+    for i := range s {
+        rows[row] += string(s[i])
+        if row == 0 || row == len(rows) - 1 {
+            shift = -shift
+        }
+        row += shift
+    }
+
+    res := ""
+    for _, row := range rows {
+        res += row
+    }
+    return res
+}
