@@ -1,11 +1,11 @@
 func longestCommonPrefix(strs []string) string {
-    ans := []byte(strs[0])
-    for i := 1; i < len(strs) && len(ans) > 0; i++ {
-        j := 0
-        for j < len(ans) && j < len(strs[i]) && ans[j] == strs[i][j] {
-            j++
+    lcp := strs[0]
+    for _, v := range strs{
+        i := 0
+        for i < len(lcp) && i < len(v) && lcp[i] == v[i] {
+            i++
         }
-        ans = ans[:j]
+        lcp = lcp[:i]
     }
-    return string(ans)
+    return string(lcp)
 }
