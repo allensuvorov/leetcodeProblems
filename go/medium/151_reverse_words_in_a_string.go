@@ -7,8 +7,7 @@ func reverseWords(s string) string {
 
 // no built-in methods solution
 func reverseWords(s string) string {
-    res := ""
-    word := ""
+    var res, word string
     for i, v := range s {
         if v != ' ' {
             word += string(v)
@@ -20,7 +19,39 @@ func reverseWords(s string) string {
                 res = word + " " + res
             }
             word = ""
+
         }
     }
     return res
+}
+
+// recurcive solution
+func reverseWords(s string) string {
+    if len(s) == 0 {
+        return ""
+    }
+
+    // get first word
+    var word string
+    i := 0
+    for i < len(s) {
+        if s[i] != ' ' {
+            word += string(s[i])
+        } else if len(word) > 0 {
+            break
+        }
+        i++
+    }
+    
+    if len(word) == 0 {
+        return ""
+    }
+
+    next := reverseWords(s[i:])
+    
+    if len(next) == 0 {
+        return word
+    }
+
+    return next + " " + word
 }
