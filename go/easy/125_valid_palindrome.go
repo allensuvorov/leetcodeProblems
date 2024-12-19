@@ -1,15 +1,12 @@
 func isPalindrome(s string) bool {
-    s = strings.ToLower(s)
-    l, r := 0, len(s) - 1
-    for l < r {
-        if !unicode.IsNumber(rune(s[l])) && !unicode.IsLetter(rune(s[l])) {
-            l++
-            continue
+    alphaNumeric := func(r rune) rune {
+        if unicode.IsLetter(r) || unicode.IsDigit(r) {
+            return unicode.ToLower(r)
         }
-        if !unicode.IsNumber(rune(s[r])) && !unicode.IsLetter(rune(s[r])) {
-            r--
-            continue
-        }
+        return -1
+    }
+    s = strings.Map(alphaNumeric, s)
+    for l, r := 0, len(s) - 1; l < r; {
         if s[l] != s[r] {
             return false
         }
