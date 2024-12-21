@@ -1,20 +1,28 @@
 func minSubArrayLen(target int, nums []int) int {
-    ans := len(nums) + 1
+    minSize := math.MaxInt
+    sum := nums[0]
     l, r := 0, 0
-    sum := 0
-    for r < len(nums) {
-        sum += nums[r]
-        for l < len(nums) && sum >= target {
-            if r - l + 1 < ans {
-                ans = r - l + 1
+    for l < len(nums) && r < len(nums) {
+        
+        if sum < target {
+            r++
+            if r < len(nums) {
+                sum += nums[r]
             }
+            continue
+        } 
+        
+        if sum >= target {
+            minSize = min(minSize, r - l + 1)
+            fmt.Println(l, r, minSize, sum)
             sum -= nums[l]
             l++
+            continue
         }
-        r++
     }
-    if ans == len(nums) + 1 {
+
+    if minSize == math.MaxInt {
         return 0
     }
-    return ans
+    return minSize
 }
