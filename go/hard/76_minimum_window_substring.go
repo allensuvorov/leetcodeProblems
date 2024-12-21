@@ -1,42 +1,32 @@
 func minWindow(s string, t string) string {
-    tCount, window := [127]int{}, [127]int{}
-    for i := 0; i < len(t); i++ {
-        tCount[t[i]]++
-    }
-    
-    have, need := 0, 0
-    for _, v := range tCount {
-        if v != 0 {
-            need++
-        }
-    }
-    
-    res, resLen := []int{-1,-1}, len(s) + 10
-    l := 0
-    for r := range s {
-        if tCount[s[r]] != 0{
-            window[s[r]]++
-            if window[s[r]] == tCount[s[r]] {
-                have++
-            }
-        }
+    minWin := ""
+    minWinLen := math.MaxInt
+    tCounts := make(map[byte]int)
+    wCounts := make(map[byte]int)
 
-        for have == need {
-            // update results
-            if (r - l + 1) < resLen {
-                res = []int{l, r}
-                resLen = r - l + 1
+    for i := range t {
+        tCounts[t[i]]++
+    }
+
+    targetIncluded := func() bool {
+        for k, v := range tCounts {
+            if wCounts[k] < v {
+                return false
             }
-            // pop from the left of our window
-            window[s[l]]--
-            if tCount[s[l]] != 0 && window[s[l]] < tCount[s[l]] {
-                have--
+        }
+        return true
+    }
+
+    for l, r := 0, 0; r < len(s); r++ {
+        wCounts[s[r]]++
+        for targetIncluded() {
+            if minWinLen > r - l + 1 {
+                minWinLen = r - l + 1
+                minWin = s[l:r+1]
             }
+            wCounts[s[l]]--
             l++
         }
     }
-    if resLen == len(s) + 10 {
-        return ""
-    }
-    return s[res[0]:(res[1] + 1)]
+    return minWin
 }
