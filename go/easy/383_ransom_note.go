@@ -1,11 +1,13 @@
 func canConstruct(ransomNote string, magazine string) bool {
-    cf := [26]rune{}
-    for _, v := range magazine {
-        cf[v-'a']++
+    have := make(map[byte]int)
+    for i := range magazine {
+        have[magazine[i]]++
     }
-    for _, v := range ransomNote {
-        cf[v-'a']--
-        if cf[v-'a'] < 0 {
+
+    need := make(map[byte]int)
+    for i := range ransomNote {
+        need[ransomNote[i]]++
+        if need[ransomNote[i]] > have[ransomNote[i]] {
             return false
         }
     }
