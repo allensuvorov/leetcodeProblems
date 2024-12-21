@@ -8,22 +8,25 @@ func minWindow(s string, t string) string {
         tCounts[t[i]]++
     }
 
-    targetIncluded := func() bool {
-        for k, v := range tCounts {
-            if wCounts[k] < v {
-                return false
-            }
-        }
-        return true
-    }
+    have, need := 0, len(t)
 
     for l, r := 0, 0; r < len(s); r++ {
+        if tCounts[s[r]] > wCounts[s[r]] {
+            have++
+        }
+
         wCounts[s[r]]++
-        for targetIncluded() {
+
+        for have == need {
             if minWinLen > r - l + 1 {
                 minWinLen = r - l + 1
                 minWin = s[l:r+1]
             }
+
+            if tCounts[s[l]] == wCounts[s[l]] {
+                have--
+            }
+
             wCounts[s[l]]--
             l++
         }
