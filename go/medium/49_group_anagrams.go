@@ -1,20 +1,16 @@
-package medium
-
 func groupAnagrams(strs []string) [][]string {
-    m := make(map[[26]int][]string)
+    groups := make(map[[26]int][]string)
 
-    for i := range strs {
-        cf := [26]int{} // char collection imprint
-        for _, c := range strs[i] {
-            cf[c-'a']++
+    for _, str := range strs {
+        counts := [26]int{}
+        for _, v := range str {
+            counts[v - 'a']++
         }
-        m[cf] = append(m[cf], strs[i])
+        groups[counts] = append(groups[counts], str)
     }
-    res := make([][]string, len(m))
-    i := 0
-    for k := range m {
-        res[i] = m[k]
-        i++
+    res := make([][]string, 0, len(groups))
+    for _, group := range groups {
+        res = append(res, group)
     }
     return res
 }
