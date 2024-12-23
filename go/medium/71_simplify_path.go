@@ -1,15 +1,18 @@
 func simplifyPath(path string) string {
-    stack := make([]string, 0)
-    for _, name := range strings.Split(path, "/") {
-        switch name {
-        case "", ".": // do nothing
+    stack := []string{}
+    names := strings.Split(path, "/")
+    
+    for _, v := range names {
+        switch v {
+        case "", ".": // skip
         case "..": // pop
             if len(stack) > 0 {
                 stack = stack[:len(stack)-1]
             }
-        default: // push
-            stack = append(stack, name)
+        default:  // append
+            stack = append(stack, v)
         }
     }
+
     return "/" + strings.Join(stack, "/")
 }
