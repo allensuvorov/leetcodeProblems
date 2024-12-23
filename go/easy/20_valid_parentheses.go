@@ -1,21 +1,21 @@
-type node struct {
-    Val byte
-    Next *node
-}
-
 func isValid(s string) bool {
-    m := map[byte]byte{')':'(', '}':'{', ']':'['}
-    var stack *node
-    for i := range s{
-        if v, ok := m[s[i]]; !ok {
-            newNode := node {s[i], stack} // push
-            stack = &newNode
-        } else {
-            if stack == nil || v != stack.Val {
+    stack := []byte{}
+    open := map[byte]byte{
+        '(':')', 
+        '{':'}',
+        '[':']',
+    }
+
+    for i := range s {
+        if _, exists := open[s[i]]; exists { // open paren
+            stack = append(stack, s[i])
+        } else { // closed paren
+            if len(stack) == 0 || open[stack[len(stack)-1]] != s[i] {
                 return false
             }
-            stack = stack.Next // pop
+            stack = stack[:len(stack)-1]
         }
     }
-    return stack == nil
+    
+    return len(stack) == 0
 }
