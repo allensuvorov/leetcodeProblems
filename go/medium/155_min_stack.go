@@ -1,42 +1,46 @@
 type MinStack struct {
-	head *node
+    vs []int
+    ms []int
 }
 
-type node struct {
-	val  int
-	min  int
-	next *node
-}
 
 func Constructor() MinStack {
-	return MinStack{}
+    return MinStack{}
 }
 
-func (s *MinStack) Push(val int) {
-	if s.head == nil {
-		s.head = &node{val: val, min: val, next: nil}
-		return
-	}
 
-	s.head = &node{val: val, min: min(s.head.min, val), next: s.head}
+func (this *MinStack) Push(val int)  {
+    this.vs = append(this.vs, val)
+
+    if len(this.ms) == 0 || val <= this.ms[len(this.ms) - 1] {
+        this.ms = append(this.ms, val)
+    }
 }
 
-func (s *MinStack) Pop() {
-	s.head = s.head.next
+
+func (this *MinStack) Pop()  {
+    if this.vs[len(this.vs)-1] == this.ms[len(this.ms)-1] {
+        this.ms = this.ms[:len(this.ms)-1]
+    }
+    this.vs = this.vs[:len(this.vs)-1]
 }
 
-func (s *MinStack) Top() int {
-	return s.head.val
+
+func (this *MinStack) Top() int {
+    return this.vs[len(this.vs)-1]
 }
 
-func (s *MinStack) GetMin() int {
-	return s.head.min
+
+func (this *MinStack) GetMin() int {
+    return this.ms[len(this.ms)-1]
 }
 
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
 
-	return y
-}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Push(val);
+ * obj.Pop();
+ * param_3 := obj.Top();
+ * param_4 := obj.GetMin();
+ */
