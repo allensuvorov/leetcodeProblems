@@ -7,19 +7,19 @@ func reverseWords(s string) string {
 
 // no built-in methods solution
 func reverseWords(s string) string {
-    var res, word string
+    var res string
+    var word []rune
     for i, v := range s {
         if v != ' ' {
-            word += string(v)
+            word = append(word, v)
         } 
-        if (v == ' ' || i == len(s)-1) && len(word) > 0 {
-            if len(res) == 0 {
-                res = word
+        if len(word) > 0 && (v == ' ' || i == len(s) - 1){    
+            if len(res) > 0 {
+                res = string(word) + " " + res
             } else {
-                res = word + " " + res
+                res = string(word)
             }
-            word = ""
-
+            word = []rune{}
         }
     }
     return res
