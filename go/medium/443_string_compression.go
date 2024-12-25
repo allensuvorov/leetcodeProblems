@@ -1,35 +1,24 @@
 func compress(chars []byte) int {
-    // just return the chars
-    lastSym := chars[0]
-    lastPos := 0
-    insertPos := 0
-    
-    for i := range chars {
-        if chars[i] != lastSym{
-            insertPos = pack(chars, lastSym, i - lastPos, insertPos)
-            lastSym = chars[i]            
-            lastPos = i
-        } 
+    if len(chars) == 1 {
+        return 1
     }
-    insertPos = pack(chars, lastSym, len(chars) - lastPos, insertPos)
-    return insertPos
-}
-
-func pack(chars []byte, lastSym byte, cnt, insertPos int) int {
-    chars[insertPos] = lastSym
-    insertPos++
-    
-    if cnt > 1 {
-        if cnt < 10{
-            chars[insertPos] = '0' + byte(cnt)
-            insertPos++
-        } else {
-            digits := strconv.Itoa(cnt)
-            for i := range digits{
-                chars[insertPos] = digits[i]
-                insertPos++
+    lenth := 0
+    count := 1
+    for i := 0; i < len(chars); i++ {
+        if i == len(chars)-1 || chars[i] != chars[i+1] {
+            chars[lenth] = chars[i]
+            lenth++
+            if count > 1 {
+                digits := []byte(strconv.Itoa(count))
+                for i := range digits {
+                    chars[i + lenth] = digits[i]
+                }
+                lenth += len(digits)
             }
+            count = 1
+        } else {
+            count++
         }
     }
-    return insertPos
+    return lenth
 }
