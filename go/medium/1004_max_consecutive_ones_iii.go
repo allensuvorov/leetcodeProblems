@@ -5,10 +5,6 @@ func longestOnes(nums []int, k int) int {
         if nums[r] == 0 {
             zeroCount++
         }
-
-        if zeroCount <= k {
-            maxLen = max(maxLen, r - l + 1)
-        }
         
         for zeroCount > k {
             if nums[l] == 0 {
@@ -16,7 +12,7 @@ func longestOnes(nums []int, k int) int {
             }
             l++
         }
-        
+        maxLen = max(maxLen, r - l + 1)
     }
     return maxLen
 }
