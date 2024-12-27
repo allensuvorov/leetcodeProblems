@@ -3,13 +3,13 @@ func pivotIndex(nums []int) int {
     for _, v := range nums {
         sum += v
     }
-    l, r := 0, sum
+    left, right := 0, sum
     for i, v := range nums {
+        right -= v
         if i > 0 {
-            l += nums[i-1]
+            left += nums[i-1]
         }
-        r -= v
-        if l == r {
+        if left == right {
             return i
         }
     }
