@@ -3,38 +3,39 @@ func closeStrings(word1 string, word2 string) bool {
         return false
     }
 
-    if getSet(word1) != getSet(word2) {
-        return false
+    charCount1, charCount2 := make(map[byte]int), make(map[byte]int)
+
+    for i := range word1 {
+        charCount1[word1[i]]++
+        charCount2[word2[i]]++
     }
 
-    fcfc1 := getFreqCount(word1) 
-    fcfc2 := getFreqCount(word2)
+    if len(charCount1) != len(charCount2) {
+        return false
+    }
+    
+    // same chars
+    for k := range charCount1 {
+        if _, exists := charCount2[k]; !exists {
+            return false
+        }
+    }
 
-    for k, v := range fcfc1 {
-        if fcfc2[k] != v {
+    // same counts
+    countCount1 := make(map[int]int)
+    for _, v := range charCount1 {
+        countCount1[v]++
+    }
+
+    countCount2 := make(map[int]int) 
+    for _, v := range charCount2 {
+        countCount2[v]++
+    }
+
+    for k, v1 := range countCount1 {
+        if v2, ok := countCount2[k]; !ok || v1 != v2 {
             return false
         }
     }
     return true
-}
-
-func getSet(s string) [26]bool {
-    byteSet := [26]bool{}
-    for _, v := range s {
-        byteSet[v - 'a'] = true
-    }
-    return byteSet
-}
-
-func getFreqCount (s string) map[int]int {
-    byteCount := [26]int{}
-    for _, v := range s {
-        byteCount[v - 'a']++
-    }
-
-    freqCount := map[int]int{}
-    for _, v := range byteCount {
-        freqCount[v]++
-    }
-    return freqCount
 }
