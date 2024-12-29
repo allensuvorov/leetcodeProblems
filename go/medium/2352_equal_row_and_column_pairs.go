@@ -1,26 +1,25 @@
 func equalPairs(grid [][]int) int {
-    // O(n^2) or O(n^3) time complexity
     n := len(grid)
     const maxLen = 200
-    rowInventory := make(map[[maxLen]int]int, n)
-
+    // count rows and cols
+    rowHashCount := make(map[[maxLen]int]int)
     for r := range n {
-        row := [maxLen]int{}
+        arr := [maxLen]int{}
         for c := range n {
-            row[c] = grid[r][c]
+            arr[c] = grid[r][c]
         }
-        rowInventory[row]++
+        rowHashCount[arr]++
     }
 
-    equalPairsCount := 0
+    pairsCount := 0
     
     for c := range n {
-        col := [maxLen]int{}
+        arr := [maxLen]int{}
         for r := range n {
-            col[r] = grid[r][c]
+            arr[r] = grid[r][c]
         }
-        equalPairsCount += rowInventory[col]
+        pairsCount += rowHashCount[arr]
     }
 
-    return equalPairsCount
+    return pairsCount
 }
