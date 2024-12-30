@@ -22,3 +22,36 @@ func asteroidCollision(asteroids []int) []int {
     }
     return stack
 }
+
+// redo
+func removeStars(s string) string {
+	stack := []rune{}
+	for _, v := range s {
+		stack = append(stack, v)
+		if len(stack) > 1 {
+			a := stack[len(stack)-2]
+			b := stack[len(stack)-1]
+
+			for len(stack) > 1 && a > 0 && b < 0 {
+				if abs(a) < abs(b) {
+					stack[len(stack)-2] = b
+					stack = stack[:len(stack)-1]
+				} else if abs(a) > abs(b) {
+                    stack = stack[:len(stack)-1]
+				} else {
+					stack = stack[:len(stack)-2]
+                }
+				a = stack[len(stack)-2]
+				b = stack[len(stack)-1]
+			}
+		}
+	}
+    return string(stack)
+}
+
+func abs(num int) int {
+	if num < 0 {
+		return -num
+	}
+	return num
+}
