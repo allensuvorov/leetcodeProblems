@@ -9,3 +9,16 @@ func countBits(n int) []int {
     }
     return ans
 }
+
+
+// Big O (n lon n)
+
+func countBits(n int) []int {
+    ans := make([]int, n + 1)
+    for num := range n + 1 {
+        for x := num; x > 0; x >>= 1 {
+            ans[num] += x & 1
+        }
+    }
+    return ans
+}
