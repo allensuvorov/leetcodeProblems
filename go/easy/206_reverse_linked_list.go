@@ -12,6 +12,3 @@ func reverseList(head *ListNode) *ListNode {
     }
     return prev
 }
-
-//        P    H
-// nil <- 1    2 ->  3
