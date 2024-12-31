@@ -25,3 +25,46 @@ func decodeString(s string) string {
     }
     return string(stack)
 }
+
+// redo
+func decodeString(s string) string {
+	stack := []string{}
+	for _, v := range s {
+		switch {
+		case unicode.IsLetter(v):
+			if len(stack) == 0 || stack[len(stack)-1] == "[" {
+				stack = append(stack, string(v))
+			} else {
+				stack[len(stack)-1] += string(v)
+			}
+		case unicode.IsDigit(v):
+			if len(stack) == 0 || !unicode.IsNumber(rune(stack[len(stack)-1][0])) {
+				stack = append(stack, string(v))
+			} else {
+				stack[len(stack)-1] += string(v)
+			}
+		case v == '[':
+			stack = append(stack, string(v))
+		case v == ']':
+			word := stack[len(stack)-1]
+			stack = stack[:len(stack)-2]
+
+			number, err := strconv.Atoi(stack[len(stack)-1])
+			if err != nil {
+				fmt.Println(err)
+			}
+			multiWord := ""
+			for range number {
+				multiWord += word
+			}
+			stack = stack[:len(stack)-1]
+
+			if len(stack) > 0 && unicode.IsLetter(rune(stack[len(stack)-1][0])) {
+				stack[len(stack)-1] += multiWord
+			} else {
+				stack = append(stack, multiWord)
+			}
+		}
+	}
+	return stack[0]
+}
