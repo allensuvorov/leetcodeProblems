@@ -1,16 +1,15 @@
 func tribonacci(n int) int {
-    // loop solution
+    if n < 2 {
+        return n
+    }
+    if n == 2 {
+        return 1
+    }
+
     a, b, c := 0, 1, 1
-    abc := []int{0,1,1}
-    fib := 0
-    if n < 3 {
-        fib = abc[n]
+
+    for range n - 2 {
+        a, b, c = b, c, a + b + c
     }
-    for i := 3; i <= n; i++ {
-        fib = a + b + c
-        a = b
-        b = c
-        c = fib
-    }
-    return fib
+    return c
 }
