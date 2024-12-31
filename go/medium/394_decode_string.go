@@ -53,12 +53,8 @@ func decodeString(s string) string {
 			if err != nil {
 				fmt.Println(err)
 			}
-			multiWord := ""
-			for range number {
-				multiWord += word
-			}
 			stack = stack[:len(stack)-1]
-
+            		multiWord := strings.Repeat(word, number)
 			if len(stack) > 0 && unicode.IsLetter(rune(stack[len(stack)-1][0])) {
 				stack[len(stack)-1] += multiWord
 			} else {
