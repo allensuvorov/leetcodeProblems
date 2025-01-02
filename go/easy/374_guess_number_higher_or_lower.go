@@ -10,16 +10,16 @@
 func guessNumber(n int) int {
     l := 1
     r := n
-    for l <= r {
-        m := l + (r - l)/2
+    for l < r {
+        m := l +(r-l)/2
         switch guess(m) {
-        case 1: 
-            l = m + 1
-        case -1: 
-            r = m - 1
-        default: 
+        case 0: 
             return m
+        case 1:
+            l = m+1
+        case -1:
+            r = m-1
         }
     }
-    return -1
+    return l
 }
