@@ -1,19 +1,17 @@
 func canVisitAllRooms(rooms [][]int) bool {
-    visited := make([]bool, len(rooms))
-    visited[0] = true
-    stack := []int{0}
-    for len(stack) > 0 {
-        room := stack[len(stack)-1]
-        stack = stack[:len(stack)-1]
-        for _, key := range rooms[room] {
-            if !visited[key] {
-                visited[key] = true
-                stack = append(stack, key)
-            }
+	visited := make([]bool, len(rooms))
+	visitedCount := 0
+	var dfs func(room int) 
+    dfs = func(room int) {
+        if visited[room] {
+            return
+        }
+        visited[room] = true
+        visitedCount++
+        for _, subRoom := range rooms[room] {
+            dfs(subRoom)
         }
     }
-    for _, ok := range visited {
-        if !ok {return false}
-    }
-    return true
+    dfs(0)
+    return visitedCount == len(rooms)
 }
