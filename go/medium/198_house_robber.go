@@ -1,19 +1,11 @@
 func rob(nums []int) int {
-
-    curMax := 0
-    prevMax := 0
-
-    for _, stash := range nums {
-        option1 := prevMax + stash
-        option2 := curMax
-
-        nextMax := max(option1, option2)
-
-        prevMax = curMax
-        curMax = nextMax
+    a, b, c := 0, 0, 0
+    for _, v := range nums {
+        a, b, c = b, c, v + max(a, b)
     }
-    return curMax
+    return max(b,c)
 }
 
-// 1, 2, 3
-// prev, cur, next
+// Input: nums = [1,2,3,1]
+//                  a,b,c
+//                1,2,4,3
