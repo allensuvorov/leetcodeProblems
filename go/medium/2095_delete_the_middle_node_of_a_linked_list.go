@@ -18,8 +18,38 @@ func deleteMiddle(head *ListNode) *ListNode {
         if fast.Next != nil {
             fast = fast.Next.Next
         }
-        fmt.Println(prev.Val, slow.Val)
     }
     prev.Next = slow.Next
+    return head
+}
+
+// redo
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func deleteMiddle(head *ListNode) *ListNode {
+    if head.Next == nil {
+        return nil
+    }
+
+    listLen := 0
+    for runner := head; runner != nil; runner = runner.Next {
+        listLen++
+    }
+
+    half := listLen / 2
+
+    runner := head
+    for range half - 1 {
+        runner = runner.Next
+    }
+
+
+    runner.Next = runner.Next.Next 
+        
     return head
 }
