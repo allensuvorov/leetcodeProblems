@@ -6,34 +6,17 @@
  * }
  */
 func pairSum(head *ListNode) int {
-    listLenth := 0
-    for runner := head; runner != nil; runner = runner.Next {
-        listLenth++
+    var dummy *ListNode
+    prev := dummy
+    cur := head
+
+    for fast := head; fast != nil && fast.Next != nil; {
+        cur.Next, prev, cur, fast = prev, cur, cur.Next, fast.Next.Next
     }
 
-    second := splitList(head, listLenth / 2)
-    second = reverseList(second)
-
-    // find max
-    first := head
-    maxPairSum := 0
-    for range listLenth / 2 {
-        maxPairSum = max(maxPairSum, first.Val + second.Val)
-        first = first.Next
-        second = second.Next
+    res := 0
+    for r1, r2 := prev, cur; r1 != nil; r1, r2 = r1.Next, r2.Next {
+        res = max(res, r1.Val + r2.Val)
     }
-    return maxPairSum
-}
-
-func splitList(head *ListNode, half int) *ListNode {
-    for range half {
-        head = head.Next
-    }
-    return head
-}
-
-func reverseList(head *ListNode) *ListNode {
-    var prev *ListNode
-    for cur := head; cur != nil; cur.Next, prev, cur = prev, cur, cur.Next {}
-    return prev
+    return res
 }
