@@ -1,3 +1,52 @@
+// one que
+func predictPartyVictory(senate string) string {
+    q := []byte(senate)
+    r, d := 0, 0
+    for _, v := range senate {
+        if v == 'R' {
+            r++
+        } else {
+            d++
+        }
+    }
+
+    bal := 0
+    for r != 0 && d != 0 {
+        if bal > 0 {
+            if q[0] == 'R' {
+                bal++
+                q = append(q, q[0])
+            } else {
+                bal--
+                d--
+            }
+            q = q[1:]
+        } else if bal < 0 {
+            if q[0] == 'D' {
+                bal--
+                q = append(q, q[0])
+            } else {
+                bal++
+                r--
+            }
+            q = q[1:]
+        } else {
+            if q[0] == 'R' {
+               bal++
+            } else {
+                bal--
+            }
+            q = append(q, q[0])
+            q = q[1:]
+        }        
+    }
+
+    if r > 0 {
+        return "Radiant"
+    }
+    return "Dire"
+}
+
 // 2 queues implemented via channels
 func predictPartyVictory(senate string) string {
     n := len(senate)
