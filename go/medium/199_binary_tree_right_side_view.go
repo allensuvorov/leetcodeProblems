@@ -10,21 +10,21 @@ func rightSideView(root *TreeNode) []int {
     if root == nil {
         return nil
     }
+    res := []int{}
     q := []*TreeNode{root}
-    ans := []int{}
     for len(q) > 0 {
-        rowLen := len(q)
-        ans = append(ans, q[0].Val)
-        for range rowLen {
+        res = append(res, q[len(q)-1].Val)
+        levelSize := len(q)
+        for range levelSize {
             now := q[0]
             q = q[1:]
-            if now.Right != nil {
-                q = append(q, now.Right)
-            }
             if now.Left != nil {
                 q = append(q, now.Left)
             }
+            if now.Right != nil {
+                q = append(q, now.Right)
+            }
         }
     }
-    return ans
+    return res
 }
