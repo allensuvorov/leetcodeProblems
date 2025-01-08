@@ -1,22 +1,36 @@
-func nearestExit(maze [][]byte, entrance []int) int {  
-    maze[entrance[0]][entrance[1]] = '1'
-    q := [][]int{append(entrance, 0)}
+func nearestExit(maze [][]byte, entrance []int) int {
+    rows, cols := len(maze), len(maze[0])
+    q := [][]int{entrance}
+    stepCount := 0
     for len(q) > 0 {
-        for _, edge := range [][]int{{-1,0}, {1,0}, {0,1}, {0,-1}} {
-            nr := q[0][0] + edge[0]
-            nc := q[0][1] + edge[1]
-            if nr >= 0 && nr < len(maze) && 
-                nc >= 0 && nc < len(maze[0]) && 
-                maze[nr][nc] == '.' {
-                if nr == 0 || nr == len(maze) - 1 || 
-                    nc == 0 || nc == len(maze[0]) - 1  {
-                    return q[0][2] + 1
+        rowSize := len(q)
+        for range rowSize {// pick next step
+            now := q[0]
+            q = q[1:]
+            r, c := now[0], now[1]
+            if now[0] != entrance[0] || now[1] != entrance[1] { // if not at entrance
+                if r == 0 || r == rows - 1 || c == 0 || c == cols - 1 { // if exit
+                    return stepCount
                 }
-                maze[nr][nc] = '1'
-                q = append(q, []int{nr, nc, q[0][2] + 1})
+            }
+            if r > 0 && maze[r - 1][c] == '.' {
+                q = append(q, []int{r - 1, c})
+                maze[r-1][c] = '-'
+            }
+            if r < rows - 1 && maze[r + 1][c] == '.' {
+                q = append(q, []int{r + 1, c})
+                maze[r+1][c] = '-'
+            }
+            if c > 0 && maze[r][c - 1] == '.' {
+                q = append(q, []int{r, c - 1})
+                maze[r][c-1] = '-'
+            }
+            if c < cols - 1 && maze[r][c + 1] == '.' {
+                q = append(q, []int{r, c + 1})
+                maze[r][c+1] = '-'
             }
         }
-        q = q[1:]
+        stepCount++
     }
     return -1
 }
