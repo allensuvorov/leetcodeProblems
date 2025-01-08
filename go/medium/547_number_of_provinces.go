@@ -1,21 +1,24 @@
 func findCircleNum(isConnected [][]int) int {
-    count := 0
-    visited := make([]bool, len(isConnected))
-    for i := range isConnected {
-        if !visited[i] {
-            count++
-            dfs(isConnected, visited, i)
+    n := len(isConnected)
+    provCount := 0
+    for i := range n {
+        if isConnected[i][i] == 1 {
+            provCount++
+            bfs(isConnected, i)
         }
     }
-    return count
+    return provCount
 }
 
-func dfs(isConnected [][]int, visited []bool, now int) {
-    if !visited[now] {
-        visited[now] = true
-        for i := range isConnected {
-            if isConnected[now][i] == 1 && !visited[i] {
-                dfs(isConnected, visited, i)
+func bfs(isConnected [][]int, now int) {
+    q := []int{now}
+    for len(q) > 0 {
+        now := q[0]
+        q = q[1:]
+        isConnected[now][now] = 2
+        for nei := range isConnected {
+            if isConnected[now][nei] == 1 && isConnected[nei][nei] == 1 {
+                q = append(q, nei)
             }
         }
     }
