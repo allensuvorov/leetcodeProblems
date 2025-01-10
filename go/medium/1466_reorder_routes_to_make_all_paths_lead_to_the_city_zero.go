@@ -1,35 +1,31 @@
 func minReorder(n int, connections [][]int) int {
-    adjacent := make([][]int, n)
-    conMap := make([]map[int]bool, n)
-
-    for _, edge := range connections {
-        adjacent[edge[0]] = append(adjacent[edge[0]], edge[1])
-        adjacent[edge[1]] = append(adjacent[edge[1]], edge[0])
-        if conMap[edge[0]] == nil {
-            conMap[edge[0]] = map[int]bool{edge[1]:true}
-        } else {
-            conMap[edge[0]][edge[1]] = true
+    origins := make(map[int]map[int]int, n)
+    for i, v := range connections {
+        if _, ok := origins[v[0]]; !ok {
+            origins[v[0]] = make(map[int]int)
         }
+        if _, ok := origins[v[1]]; !ok {
+            origins[v[1]] = make(map[int]int)
+        }
+        origins[v[0]][v[1]] = i
+        origins[v[1]][v[0]] = i
     }
+    visited := make(map[int]bool, n)
+    reorderCount := 0
 
-    count := 0
-    visited := make([]bool, n)
-
-    var dfs func(now int)
-    dfs = func(now int){
-        if !visited[now] {
-            visited[now] = true
-            for _, city := range adjacent[now] {
-                if !visited[city] {
-                    if !conMap[city][now] {
-                        count++
-                    }
-                    dfs(city)
-                }
+    var dfs func(destination int)
+    dfs = func(destination int) {
+        if visited[destination] {
+            return
+        }
+        visited[destination] = true
+        for origin, i := range origins[destination] {
+            if !visited[origin] && origin != connections[i][0] {
+                reorderCount++
             }
+            dfs(origin)
         }
     }
-
     dfs(0)
-    return count
+    return reorderCount
 }
