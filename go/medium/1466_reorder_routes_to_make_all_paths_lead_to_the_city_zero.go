@@ -1,30 +1,21 @@
 func minReorder(n int, connections [][]int) int {
-    origins := make([]map[int]int, n)
-    for i, v := range connections {
-        if origins[v[0]] == nil {
-            origins[v[0]] = make(map[int]int)
-        }
-        if origins[v[1]] == nil {
-            origins[v[1]] = make(map[int]int)
-        }
-        origins[v[0]][v[1]] = i
-        origins[v[1]][v[0]] = i
+    adj := make([][][]int, n)
+    for _, v := range connections {
+        adj[v[0]] = append(adj[v[0]], []int{v[1], 1}) // 0 - from
+        adj[v[1]] = append(adj[v[1]], []int{v[0], 0}) // 1 - to
     }
-    visited := make(map[int]bool, n)
-    reorderCount := 0
 
-    var dfs func(destination int)
-    dfs = func(destination int) {
-        visited[destination] = true
-        for origin, i := range origins[destination] {
-            if !visited[origin] {
-                if origin != connections[i][0] {
-                    reorderCount++
-                }
-                dfs(origin)
+    count := 0
+    var dfs func(node, parent int)
+    dfs = func(node, parent int) {
+        for _, v := range adj[node] {
+            nei, direction := v[0], v[1]
+            if nei != parent {
+                count += direction
+                dfs(nei, node)
             }
         }
     }
-    dfs(0)
-    return reorderCount
+    dfs(0, -1)
+    return count
 }
