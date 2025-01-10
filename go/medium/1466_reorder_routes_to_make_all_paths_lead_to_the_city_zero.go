@@ -1,10 +1,10 @@
 func minReorder(n int, connections [][]int) int {
-    origins := make(map[int]map[int]int, n)
+    origins := make([]map[int]int, n)
     for i, v := range connections {
-        if _, ok := origins[v[0]]; !ok {
+        if origins[v[0]] == nil {
             origins[v[0]] = make(map[int]int)
         }
-        if _, ok := origins[v[1]]; !ok {
+        if origins[v[1]] == nil {
             origins[v[1]] = make(map[int]int)
         }
         origins[v[0]][v[1]] = i
@@ -15,15 +15,14 @@ func minReorder(n int, connections [][]int) int {
 
     var dfs func(destination int)
     dfs = func(destination int) {
-        if visited[destination] {
-            return
-        }
         visited[destination] = true
         for origin, i := range origins[destination] {
-            if !visited[origin] && origin != connections[i][0] {
-                reorderCount++
+            if !visited[origin] {
+                if origin != connections[i][0] {
+                    reorderCount++
+                }
+                dfs(origin)
             }
-            dfs(origin)
         }
     }
     dfs(0)
