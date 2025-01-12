@@ -4,9 +4,10 @@ func maxFrequency(nums []int, k int, numOperations int) int {
     for _, v := range nums {
         counts[v]++
     }
-    // some unchanged
+    
     res := 0
     
+    // some unchanged
     for i, l, r := 0, 0, 0; i < len(nums); i++ {
         // keep left pointer within nums[i] - k
         for l <= i && nums[l] < nums[i] - k {
