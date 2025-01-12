@@ -1,37 +1,37 @@
 func orangesRotting(grid [][]int) int {
-    minutes := 0
-    fresh := 0
+    rows, cols := len(grid), len(grid[0])
     q := [][]int{}
-    for i := range grid {
-        for j := range grid[i] {
-            switch grid[i][j] {
-            case 1:
-                fresh++
-            case 2:
-                q = append(q, []int{i,j,0})
+    freshCount := 0
+    for r := range grid {
+        for c := range grid[0] {
+            if grid[r][c] == 2 {
+                q = append(q, []int{r, c})
+            }
+            if grid[r][c] == 1 {
+                freshCount++
             }
         }
     }
-    if fresh == 0 {
-        return 0
-    }
-
-    // BFS
-    for len(q) > 0 {
-        for _, edge := range [][]int{{1,0}, {-1,0}, {0,1}, {0,-1}} {
-            nr := q[0][0] + edge[0]
-            nc := q[0][1] + edge[1]
-            if nr >= 0 && nr < len(grid) && nc >= 0 && nc < len(grid[0]) && grid[nr][nc] == 1 {
-                grid[nr][nc] = 2
-                fresh--
-                minutes = q[0][2] + 1
-                q = append(q, []int{nr, nc, minutes})
+    minuteCount := 0
+    for len(q) > 0 && freshCount > 0 {
+        size := len(q)
+        for range size {
+            now := q[0]
+            q = q[1:]
+            for _, dir := range [][]int{{1,0}, {-1,0}, {0,1}, {0,-1}} {
+                if r, c := now[0]+dir[0], now[1]+dir[1]; r >= 0 && r < rows && c >= 0 && c < cols {
+                    if grid[r][c] == 1 {
+                        grid[r][c] = 2
+                        freshCount--
+                        q = append(q, []int{r,c})
+                    }
+                }
             }
         }
-        q = q[1:]
+        minuteCount++
     }
-    if fresh != 0 {
-        return -1
+    if freshCount == 0 {
+        return minuteCount
     }
-    return minutes
+    return -1
 }
