@@ -1,23 +1,21 @@
 func combinationSum3(k int, n int) [][]int {
-    ans := [][]int{}
-    nums := []int{1,2,3,4,5,6,7,8,9}
-    
-    var dfs func(nums, comb []int, sum int)
-    dfs = func(nums, comb []int, sum int) {
-        if len(comb) == k && sum == n {
-            ans = append(ans, slices.Clone(comb))
+    res := [][]int{}
+    comb := []int{}
+    var dfs func(k, sum, num int)
+    dfs = func(k, sum, num int) {
+        if k == 0 {
+            if sum == 0 {
+                res = append(res, slices.Clone(comb))
+            }
             return
         }
 
-        if len(comb) > k || sum > n {
-            return
-        }
-        
-        for i, v := range nums {
-            dfs(nums[i+1:], append(comb, v), sum + v)
+        for num := num; num <=9; num++ {
+            comb = append(comb, num)
+            dfs(k-1, sum-num, num+1)
+            comb = comb[:len(comb)-1]
         }
     }
-    
-    dfs(nums, []int{}, 0)
-    return ans
+    dfs(k, n, 1)
+    return res
 }
