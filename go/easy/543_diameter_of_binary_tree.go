@@ -7,25 +7,17 @@
  * }
  */
 func diameterOfBinaryTree(root *TreeNode) int {
-    maxSum := 0
-    
-    var dfs func (node *TreeNode) int
-    dfs = func(node *TreeNode) int {
-        if node == nil {
+    longestPath := 0
+    var dfs func(root *TreeNode) int
+    dfs = func(root *TreeNode) int {
+        if root == nil {
             return 0
         }
-
-        left := dfs(node.Left)
-        right := dfs(node.Right)
-        
-        // update maxSum
-        maxSum = max(maxSum, left + right)
-        
-        // return maxBranch
-        return max(left, right) + 1
+        l := dfs(root.Left)
+        r := dfs(root.Right)
+        longestPath = max(longestPath, l + r)
+        return 1 + max(l, r)
     }
     dfs(root)
-    return maxSum
+    return longestPath
 }
-
-
