@@ -1,18 +1,31 @@
 func findKthLargest(nums []int, k int) int {
-    // counting sort
-    // - 10_000 ... 10_000
-    const offset = 10_000
-    freqArray := make([]int, 2 * 1e4 + 1)
-    for _, v := range nums {
-        freqArray[v + offset]++
+    h := &maxHeap{}
+    heap.Init(h)
+    for i := range nums {
+        heap.Push(h, nums[i])
     }
 
-    ans := 0
-    for i := len(freqArray) - 1; i >= 0 && k > 0; i--{
-        k -= freqArray[i]
-        if k == 0 {
-            return i - offset
-        }
+    res := 0
+    for range k {
+        res = heap.Pop(h).(int)
     }
-    return ans    
+    return res
+}
+
+type maxHeap []int
+
+func (h maxHeap) Len() int           { return len(h) }
+func (h maxHeap) Less(i, j int) bool { return h[i] > h[j] }
+func (h maxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *maxHeap) Push(x any) {
+	*h = append(*h, x.(int))
+}
+
+func (h *maxHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
 }
