@@ -1,55 +1,57 @@
-import (
-	"container/heap"
-)
-
 func totalCost(costs []int, k int, candidates int) int64 {
-    lHeap := &IntHeap{}
-    rHeap := &IntHeap{}
-    
-    l := candidates - 1
-    r := max(candidates, len(costs) - candidates)
-    
-    *lHeap = costs[:l + 1]
-    *rHeap = costs[r:]
+    h := &minHeap{}
+    heap.Init(h)
+    l, r := 0, len(costs) - 1
+    for i := 0; i < candidates && l <= r; i++ {
+        if l <= r {
+            heap.Push(h, candidate{costs[l], l})
+            l++
+        }
+        if l <= r { 
+            heap.Push(h, candidate{costs[r], r})
+            r--
+        }
+    }
 
-    heap.Init(lHeap)
-    heap.Init(rHeap)
-    
-    res := 0
-
+    var result int64
     for range k {
-        if (rHeap.Len() != 0 && lHeap.Len() != 0 && (*rHeap)[0] < (*lHeap)[0]) || 
-            lHeap.Len() == 0 {
-            res += heap.Pop(rHeap).(int)
-            if r - l > 1 {
-                r--
-                heap.Push(rHeap, costs[r])
-            }
-        } else {
-            res += heap.Pop(lHeap).(int)
-            if r - l > 1 {
+        cand := heap.Pop(h).(candidate)
+        result += int64(cand.cost)
+        if l <= r {
+            if cand.index <= l {
+                heap.Push(h, candidate{costs[l], l})
                 l++
-                heap.Push(lHeap, costs[l])
+            } else {
+                heap.Push(h, candidate{costs[r], r})
+                r--
             }
         }
     }
-    return int64(res)
+    return result
 }
 
-// An IntHeap is a min-heap of ints.
-type IntHeap []int
-
-func (h IntHeap) Len() int           { return len(h) }
-func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
-func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-
-func (h *IntHeap) Push(x any) {
-	// Push and Pop use pointer receivers because they modify the slice's length,
-	// not just its contents.
-	*h = append(*h, x.(int))
+type candidate struct {
+    cost int
+    index int
 }
 
-func (h *IntHeap) Pop() any {
+type minHeap []candidate
+
+func (h minHeap) Len() int           { return len(h) }
+func (h minHeap) Less(i, j int) bool { 
+    if h[i].cost == h[j].cost {
+        return h[i].index < h[j].index
+    }
+    return h[i].cost < h[j].cost
+}
+
+func (h minHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *minHeap) Push(x any) {
+	*h = append(*h, x.(candidate))
+}
+
+func (h *minHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
