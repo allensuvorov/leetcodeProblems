@@ -1,11 +1,10 @@
 func maxProfit(prices []int, fee int) int {
-	cost := math.MaxInt
-	profit := 0
+    profit := 0
+    cost := math.MaxInt
 
-	for _, price := range prices {
-        cost = min(cost, price - profit)
-        profit = max(profit, price - cost - fee)
-	}
-
+    for _, v := range prices {
+        cost = min(cost, v - profit)
+        profit = max(profit, v - cost - fee)
+    }
     return profit
 }
