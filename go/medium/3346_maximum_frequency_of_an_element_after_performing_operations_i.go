@@ -13,22 +13,22 @@ func maxFrequency(nums []int, k int, numOperations int) int {
         for l <= i && nums[l] < nums[i] - k {
             l++
         }
-        // keep right pointer within nums[i] + k
+        // keep right pointer within nums[i] + k + 1
         for r < len(nums) && nums[r] <= nums[i] + k{
-            spread := r - l + 1
-            res = max(res, min(spread, counts[nums[i]] + numOperations))
             r++
         }
-        r--
+        window := r - l
+        res = max(res, min(window, counts[nums[i]] + numOperations))
     }
+
     // change everything
     for l, r := 0, 0; r < len(nums); r++ {
-        for l <= r && nums[l] < nums[r] - 2 * k {
+        for l <= r && nums[l] + 2 * k < nums[r] {
             l++
         }
-        spread := r - l + 1
-        if spread <= numOperations {
-            res = max(res, spread)
+        window := r - l + 1
+        if window <= numOperations {
+            res = max(res, window)
         }
     }
     return res
