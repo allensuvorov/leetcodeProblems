@@ -1,14 +1,14 @@
 func maxFrequency(nums []int, k int, numOperations int) int {
     slices.Sort(nums) // sorting
-    counts := make(map[int]int) // frequency map
-    for _, v := range nums {
-        counts[v]++
-    }
-    
     res := 0
-    
+    duplicateCount := 1
     // some unchanged
     for i, l, r := 0, 0, 0; i < len(nums); i++ {
+        if i > 0 && nums[i] == nums[i-1] {
+            duplicateCount++
+        } else {
+            duplicateCount = 1
+        }
         // keep left pointer within nums[i] - k
         for l <= i && nums[l] < nums[i] - k {
             l++
@@ -18,7 +18,7 @@ func maxFrequency(nums []int, k int, numOperations int) int {
             r++
         }
         window := r - l
-        res = max(res, min(window, counts[nums[i]] + numOperations))
+        res = max(res, min(window, duplicateCount + numOperations))
     }
 
     // change everything
