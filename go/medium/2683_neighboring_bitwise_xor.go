@@ -5,3 +5,15 @@ func doesValidArrayExist(derived []int) bool {
     }
     return xorSum == 0 
 }
+
+// reverse
+func doesValidArrayExist(derived []int) bool {
+    first := 1
+    curr := 1
+    for _, v := range derived {
+        if v == 1 {
+            curr = -curr
+        }
+    }
+    return curr == f
+}
