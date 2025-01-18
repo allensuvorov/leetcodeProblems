@@ -1,23 +1,19 @@
 type Trie struct {
-    root *node
-}
-
-type node struct {
-    children [26]*node
+    children [26]*Trie
     isWord bool
 }
 
 
 func Constructor() Trie {
-    return Trie{&node{}}
+    return Trie{}
 }
 
 
 func (this *Trie) Insert(word string) {
-    now := this.root
+    now := this
     for _, c := range word {
         if now.children[c - 'a'] == nil {
-            now.children[c - 'a'] = new(node)
+            now.children[c - 'a'] = new(Trie)
         }
         now = now.children[c - 'a']
     }
@@ -26,7 +22,7 @@ func (this *Trie) Insert(word string) {
 
 
 func (this *Trie) Search(word string) bool {
-    now := this.root
+    now := this
     for _, c := range word {
         if now.children[c - 'a'] == nil {
             return false
@@ -38,7 +34,7 @@ func (this *Trie) Search(word string) bool {
 
 
 func (this *Trie) StartsWith(prefix string) bool {
-    now := this.root
+    now := this
     for _, c := range prefix {
         if now.children[c - 'a'] == nil {
             return false
