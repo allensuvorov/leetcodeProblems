@@ -5,7 +5,27 @@ func reverseWords(s string) string {
     return strings.Join(words, " ")
 }
 
-// no built-in methods solution
+// no built-in methods solution - slice
+func reverseWords(s string) string {
+    words := []byte{}
+    word := []byte{}
+    for i := range s {
+        if s[i] != ' ' {
+            word = append(word, s[i])
+        }
+        if len(word) > 0 && (s[i] == ' ' || i == len(s)-1) {
+            if len(words) > 0 {
+                word = append(word, ' ')
+            }
+            words = append(word, words...)
+            word = []byte{}
+        }
+    }
+    return string(words)
+}
+
+
+// no built-in methods solution - string
 func reverseWords(s string) string {
     var res string
     var word []rune
