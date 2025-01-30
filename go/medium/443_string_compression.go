@@ -1,26 +1,23 @@
 func compress(chars []byte) int {
-	n := len(chars)
-    i := 0
-    res := 0
-	
-    for i < n {
-	    // read a group
-        groupLength := 1
-        for i + groupLength < n && chars[i + groupLength] == chars[i] {
-            groupLength++
+    plant := 0
+    for l := 0; l < len(chars); {
+        // read a group
+        r := l + 1
+        for r < len(chars) && chars[r] == chars[l] {
+            r++
         }
+        // write compressed group info
+        chars[plant] = chars[l]
+        plant++
 
-        // write the group
-        chars[res] = chars[i]
-        res++
-        if groupLength > 1 {
-            strRepr := strconv.Itoa(groupLength)
-            for i := range strRepr {
-                chars[res] = strRepr[i]
-                res++
+        if r - l > 1 {
+            s := strconv.Itoa(r - l)
+            for i := range s {
+                chars[plant] = s[i]
+                plant++
             }
         }
-        i += groupLength
-    }   
-    return res
+        l = r
+    }
+    return plant
 }
