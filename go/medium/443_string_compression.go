@@ -1,23 +1,21 @@
 func compress(chars []byte) int {
-    plant := 0
-    for l := 0; l < len(chars); {
-        // read a group
+    n := len(chars)
+    w := 0
+    for l := 0; l < n; {
         r := l + 1
-        for r < len(chars) && chars[r] == chars[l] {
+        for r < n && chars[r] == chars[l] {
             r++
         }
-        // write compressed group info
-        chars[plant] = chars[l]
-        plant++
-
-        if r - l > 1 {
-            s := strconv.Itoa(r - l)
+        chars[w] = chars[l]
+        w++
+        if (r-l) > 1 {
+            s := strconv.Itoa(r-l)
             for i := range s {
-                chars[plant] = s[i]
-                plant++
+                chars[w] = s[i]
+                w++
             }
         }
         l = r
     }
-    return plant
+    return w
 }
