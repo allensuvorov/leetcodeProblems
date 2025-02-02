@@ -1,17 +1,16 @@
 func compress(chars []byte) int {
-    n := len(chars)
     w := 0
-    for l := 0; l < n; {
-        // read
+    for l := 0; l < len(chars); {
+        // read, measure 
         r := l + 1
-        for r < n && chars[l] == chars[r] {
+        for r < len(chars) && chars[r] == chars[l] {
             r++
         }
         // write
-        chars[w] = chars[l] // write char
+        chars[w] = chars[l]
         w++
-        if (r-l) > 1 { // write char count
-            s := strconv.Itoa(r-l)
+        if (r - l) > 1 {
+            s := strconv.Itoa(r - l)
             for i := range s {
                 chars[w] = s[i]
                 w++
