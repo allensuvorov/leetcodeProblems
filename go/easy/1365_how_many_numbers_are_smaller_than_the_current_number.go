@@ -1,18 +1,22 @@
 func smallerNumbersThanCurrent(nums []int) []int {
-    sortedNums := slices.Clone(nums)
-    slices.Sort(sortedNums)
-
-    uniqNumIdx := make(map[int]int) // map of unique numbers
+    freqMap := make([]int, 101)
+    for _, v := range nums {
+        freqMap[v]++
+    }
     
-    for i, v := range sortedNums {
-        if _, exists := uniqNumIdx[v]; !exists {
-            uniqNumIdx[v] = i
+    smallerNumCount := make([]int, 101)
+    for i := range freqMap{
+        if i > 0 {
+            smallerNumCount[i] = freqMap[i-1] + smallerNumCount[i-1]
         }
     }
 
-    res := make([]int, len(nums))
+    res := make([]int, len(nums)) 
+    
     for i, v := range nums {
-        res[i] = uniqNumIdx[v]
+        res[i] = smallerNumCount[v]
     }
+
     return res
 }
+
