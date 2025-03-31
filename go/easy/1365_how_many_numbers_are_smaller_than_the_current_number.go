@@ -1,3 +1,6 @@
+* tc: O(n)
+* sc: O(k)
+
 func smallerNumbersThanCurrent(nums []int) []int {
     freqMap := make([]int, 101)
     for _, v := range nums {
