@@ -1,3 +1,4 @@
+// time O (n)
 func minOperations(boxes string) []int {
     lSum := make([]int, len(boxes))
     rSum := make([]int, len(boxes))
@@ -27,4 +28,24 @@ func minOperations(boxes string) []int {
         res[i] = lSum[i] + rSum[i]
     }
     return res
+}
+
+// time O(n^2)
+func minOperations(boxes string) []int {
+    res := make([]int, len(boxes))
+    for i := range boxes {
+        for j := range boxes {
+            if j != i && boxes[j] == '1' {
+                res[i] += abs(j - i)
+            }
+        }
+    }
+    return res
+}
+
+func abs(a int) int {
+    if a < 0 {
+        return -a
+    }
+    return a
 }
