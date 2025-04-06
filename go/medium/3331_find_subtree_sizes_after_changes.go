@@ -1,50 +1,32 @@
 func findSubtreeSizes(parent []int, s string) []int {
-    // First - update parents
-    // to go top->down, need to create adjList - children
-    children := make([][]int, len(parent))
-    for i := range parent {
-        if i != 0 {
-            children[parent[i]] = append(children[parent[i]], i)
-        }
-    }
-    ancestors := make(map[byte][]int) // map of stacks of ansestors
-
-    var updateParent func(number int)
-    updateParent = func(number int) {
-        // update parent if needed
-        if ancestors[s[number]] != nil && len(ancestors[s[number]]) > 0{
-            top := len(ancestors[s[number]]) - 1
-            parent[number] = ancestors[s[number]][top]
-        }
-        ancestors[s[number]] = append(ancestors[s[number]], number)
-        for _, child := range children[number] {
-            updateParent(child)
-        }
-        top := len(ancestors[s[number]]) - 1
-        ancestors[s[number]] = ancestors[s[number]][:top]
+    n := len(parent) 
+    g := make([][]int, n) // create top->down graph
+    for i := 1; i < n; i++ {
+        p := parent[i]
+        g[p] = append(g[p], i)
     }
 
-    updateParent(0)
-    // Second - count sizes
-    // update adjList children
-    children = make([][]int, len(parent))
-    for i := range parent {
-        if i != 0 {
-            children[parent[i]] = append(children[parent[i]], i)
-        }
-    }
+    size := make([]int, n)
+    ancestor := [26]int{} // ancestors
 
-    res := make([]int, len(parent))
-
-    var countSize func(number int) int
-    countSize = func(number int) int {
-        size := 1
-        for _, child := range children[number] {
-            size += countSize(child)
-        }
-        res[number] = size
-        return size
+    for i := range ancestor {
+        ancestor[i] = -1
     }
-    countSize(0)
-    return res
+    var dfs func(x int)
+    dfs = func(x int) {
+        size[x] = 1 // count the node itself
+        old := ancestor[s[x]-'a'] // save old ancestor
+        ancestor[s[x]-'a'] = x
+        for _, y := range g[x] { // y is the child
+            dfs(y)
+            anc := x // be default x is the new parent
+            if v := ancestor[s[y]-'a']; v != -1 {
+                anc = v
+            }
+            size[anc] += size[y]
+        }
+        ancestor[s[x]-'a'] = old
+    }
+    dfs(0)
+    return size
 }
