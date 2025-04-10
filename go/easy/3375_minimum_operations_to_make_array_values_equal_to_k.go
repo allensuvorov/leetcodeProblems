@@ -1,21 +1,14 @@
 func minOperations(nums []int, k int) int {
-    set := make([]bool, 101)
+    set := make(map[int]bool)
 
     for _, v := range nums {
-        set[v] = true
-    }
-
-    res := 0
-    for i := 1; i < len(set); i++ {
-        if set[i] {
-            if i < k {
-                return -1
-            }
-            if i > k {
-                res++
-            }
+        if v < k {
+            return -1
+        }
+        if v > k {
+            set[v] = true
         }
     }
 
-    return res
-} 
+    return len(set)
+}
