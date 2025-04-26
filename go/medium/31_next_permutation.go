@@ -21,7 +21,13 @@ func nextPermutation(nums []int)  {
         nums[l], nums[r] = nums[r], nums[l]
     }
 
-    slices.Sort(nums[l+1:]) // O(n log n)
+    l = l + 1
+    r = n - 1
+    for l < r {
+        nums[l], nums[r] = nums[r], nums[l]
+        l++
+        r--
+    }
 }
 
     // find most right inc - swap with next val (smalles of the bigger ones)
