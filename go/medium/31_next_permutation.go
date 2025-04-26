@@ -1,27 +1,19 @@
 func nextPermutation(nums []int)  {
-    n := len(nums)
-    if n == 1 {
-        return
-    }
-
-    i := n - 2
+    i := len(nums) - 2
     for i >= 0 && nums[i] >= nums[i+1] {
         i--
     }
     
-    k := 0
-    for j := i+1; i >= 0 && j < n; j++ {
-        if nums[j] > nums[i] {
-            k = j
+    if i >= 0 {
+        j := len(nums) - 1
+        for nums[j] <= nums[i] {
+            j--
         }
-    }
-
-    if k > 0 {
-        nums[i], nums[k] = nums[k], nums[i]
+        nums[i], nums[j] = nums[j], nums[i]
     }
 
     l := i + 1
-    r := n - 1
+    r := len(nums) - 1
     for l < r {
         nums[l], nums[r] = nums[r], nums[l]
         l++
@@ -29,7 +21,7 @@ func nextPermutation(nums []int)  {
     }
 }
 
-    // find most right inc - swap with next val (smalles of the bigger ones)
-    // , and inc sort from r val
-    // if no inc - inc sort
+    // find most right inc - swap with next val (smallest of the bigger ones)
+    // and inc sort from r val
+    // if no inc - inc sort via reversing
 
