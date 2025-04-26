@@ -4,25 +4,24 @@ func nextPermutation(nums []int)  {
         return
     }
 
-    l, r := n - 2, n - 1
-    for l >= 0 && nums[l] >= nums[r] {
-        l--
-        r--
+    i := n - 2
+    for i >= 0 && nums[i] >= nums[i+1] {
+        i--
     }
-
     
-    for i := r; l >= 0 && i < n; i++ {
-        if nums[i] > nums[l] {
-            r = i
+    k := 0
+    for j := i+1; i >= 0 && j < n; j++ {
+        if nums[j] > nums[i] {
+            k = j
         }
     }
 
-    if r > 0 {
-        nums[l], nums[r] = nums[r], nums[l]
+    if k > 0 {
+        nums[i], nums[k] = nums[k], nums[i]
     }
 
-    l = l + 1
-    r = n - 1
+    l := i + 1
+    r := n - 1
     for l < r {
         nums[l], nums[r] = nums[r], nums[l]
         l++
