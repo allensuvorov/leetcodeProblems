@@ -22,11 +22,11 @@ func countNegatives(grid [][]int) int {
     r, c := rows - 1, 0 // start a left bottom corner
     res := 0
     for r >= 0 && c < cols {
-        if grid[r][c] >= 0 {
-            c++
-        } else {
+        if grid[r][c] < 0 {
             res += cols - c
             r--
+        } else {
+            c++
         }
     }
     return res
