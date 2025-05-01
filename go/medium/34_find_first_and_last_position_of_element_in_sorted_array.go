@@ -1,13 +1,11 @@
 func searchRange(nums []int, target int) []int {
-    n := len(nums)
-    // bin search to find starting position
-    start := -1
-    l, r := 0, n - 1
+    start := -1 // bin search to find starting position
+    l, r := 0, len(nums) - 1
     for l <= r {
         m := l + (r - l)/2
         if nums[m] == target {
-            r = m - 1
             start = m
+            r = m - 1
         } else if nums[m] > target {
             r = m - 1
         } else if nums[m] < target {
@@ -15,9 +13,8 @@ func searchRange(nums []int, target int) []int {
         }
     }
 
-    // bin search to find ending position
-    end := -1
-    l, r = 0, n - 1
+    end := -1 // bin search to find ending position
+    l, r = 0, len(nums) - 1
     for l <= r {
         m := l + (r - l)/2
         if nums[m] == target {
