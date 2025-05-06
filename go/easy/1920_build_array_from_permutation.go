@@ -9,3 +9,13 @@ func buildArray(nums []int) []int {
 
     return nums
 }
+
+// Do as required
+func buildArray(nums []int) []int {
+    n := len(nums)
+    ans := make([]int, n)
+    for i, v := range nums {
+        ans[i] = nums[v]
+    }
+    return ans
+}
