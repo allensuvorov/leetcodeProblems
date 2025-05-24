@@ -6,21 +6,33 @@
  * }
  */
 func swapNodes(head *ListNode, k int) *ListNode {
-    count := 1
-    r1, r2 := head, head
-    temp := head
-    for r1 != nil {
-        if count == k {
-            temp = r1
+    // get list lenth
+    // find target nodes
+    nodeCount := 0
+    var l, r *ListNode // targets
+    for runner := head; runner != nil; runner = runner.Next {
+        nodeCount++
+        // left target node
+        if nodeCount == k {
+            l = runner
         }
-        if r1.Next == nil {
-            r2.Val, temp.Val = temp.Val, r2.Val
+
+        // right target node
+        if nodeCount == k {
+            r = head
         }
-        if count >= k {
-            r2 = r2.Next
+
+        // move right target
+        if nodeCount > k {
+            r = r.Next
         }
-        r1 = r1.Next
-        count++
     }
+
+    // swap
+    l.Val, r.Val = r.Val, l.Val
     return head
 }
+// nodeCount = 3
+// 1 - 2 - 3 - 4 - 5   k = 2
+//                     ^
+//             r
