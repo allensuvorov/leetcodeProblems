@@ -1,40 +1,30 @@
 type Spreadsheet struct {
-    data [][]int
+    data map[string]int
 }
 
 
 func Constructor(rows int) Spreadsheet {
-    data := make([][]int, rows)
-    for i := range data {
-        data[i] = make([]int, 26)
-    }
+    data := make(map[string]int)
     return Spreadsheet{data: data}
 }
 
-func getRC(s string) (int, int) {
-    r, _ := strconv.Atoi(s[1:])
-    c := int(s[0]-'A')
-    return r - 1, c
-}
 
 func (this *Spreadsheet) getNum (s string) int {
     if num, err := strconv.Atoi(s); err == nil {
         return num
     }
 
-    r, c := getRC(s)
-    return this.data[r][c]
+    return this.data[s]
 }
 
+
 func (this *Spreadsheet) SetCell(cell string, value int)  {
-    r, c := getRC(cell)
-    this.data[r][c] = value
+    this.data[cell] = value
 }
 
 
 func (this *Spreadsheet) ResetCell(cell string)  {
-    r, c := getRC(cell)
-    this.data[r][c] = 0
+    this.data[cell] = 0
 }
 
 
