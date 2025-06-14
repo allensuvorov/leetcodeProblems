@@ -19,7 +19,7 @@ func rotateTheBox(boxGrid [][]byte) [][]byte {
             // for each empty space
             for s := p - 1; s >= 0; s-- { // s - scout index
                 if rotatedBox[s][c] == '*' {
-                    p = s - 1
+                    p = s
                     break
                 }
                 if rotatedBox[s][c] == '#' { 
