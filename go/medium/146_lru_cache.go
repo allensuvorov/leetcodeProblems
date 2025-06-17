@@ -1,52 +1,52 @@
 import "container/list"
 
+type LRUCache struct {
+    C int
+    L *list.List
+    M map[int]*list.Element
+}
+
 type Node struct {
     Key int
-    Val int
+    Value int
 }
-
-
-type LRUCache struct {
-    capacity int
-    cache map[int] *list.Element
-    list *list.List
-}
-
 
 func Constructor(capacity int) LRUCache {
-    return LRUCache { 
-        capacity: capacity, 
-        cache: make(map[int]*list.Element), 
-        list: list.New(),
+    return LRUCache{
+        C: capacity,
+        L: list.New(),
+        M: make(map[int]*list.Element, capacity), 
     }
 }
 
 
 func (this *LRUCache) Get(key int) int {
-    if element, ok := this.cache[key]; ok {
-        this.list.MoveToBack(element)
-        return element.Value.(Node).Val
+    if node, ok := this.M[key]; ok {
+        this.L.MoveToBack(node)
+        return node.Value.(*Node).Value
     }
     return -1
 }
 
 
 func (this *LRUCache) Put(key int, value int)  {
-    node := Node {Key: key, Val: value}
-    if element, ok := this.cache[key]; ok {
-        element.Value = node
-        this.list.MoveToBack(element)
+    if node, ok := this.M[key]; ok { // exist
+        this.L.MoveToBack(node)
+        node.Value.(*Node).Value = value
     } else {
-        if this.list.Len() == this.capacity {
-            oldest := this.list.Front()
-            delete(this.cache, oldest.Value.(Node).Key)
-            this.list.Remove(this.list.Front())
+        node := &Node{
+            Key: key,
+            Value: value,
         }
-        element = this.list.PushBack(node)
-        this.cache[key] = element
+        if this.L.Len() == this.C { // map is at capacity
+            lru := this.L.Front() // get LRU from back of the list
+            lruKey := lru.Value.(*Node).Key
+            delete(this.M, lruKey)
+            this.L.Remove(lru)
+        }
+        this.M[key] = this.L.PushBack(node)
     }
 }
-
 
 
 /**
@@ -55,3 +55,4 @@ func (this *LRUCache) Put(key int, value int)  {
  * param_1 := obj.Get(key);
  * obj.Put(key,value);
  */
+ 
