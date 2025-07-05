@@ -1,20 +1,17 @@
 func matrixReshape(mat [][]int, r int, c int) [][]int {
-    rows := len(mat)
-    cols := len(mat[0])
-
-    if r * c != rows * cols {
+    if r * c != len(mat) * len(mat[0]) {
         return mat
     }
 
     res := make([][]int, r)
-    for row := range res {
+    for row := range r {
         res[row] = make([]int, c)
     }
 
-    for targetR := range r {
-        for targetC := range c {
-            i := targetR * c + targetC
-            res[targetR][targetC] = mat[i / cols][i % cols]
+    for row := range r {
+        for col := range c {
+            i := row * c + col
+            res[row][col] = mat[i / len(mat[0])][i % len(mat[0])]
         }
     }
     return res
