@@ -15,16 +15,13 @@ func maxFreeTime(eventTime int, k int, startTime []int, endTime []int) int {
         
         // remove trailing free time
         if l := r - k; l >= 0 {
-            
             trailingFreeTime := startTime[l]
             if l > 0 {
                 trailingFreeTime -= endTime[l - 1]
             }
             windowFreeTime -= trailingFreeTime
-        }
-        
+        }   
         result = max(result, windowFreeTime)   
     }
-
     return result
 }
