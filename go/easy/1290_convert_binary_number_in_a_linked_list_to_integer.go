@@ -7,9 +7,10 @@
  */
 
 func getDecimalValue(head *ListNode) int {
-    result := 0
-    for node := head; node != nil; node = node.Next {
-        result = result*2 + node.Val
+    res := 0
+    for runner := head; runner != nil; runner = runner.Next {
+        res = res * 2
+        res = res + runner.Val
     }
-    return result
+    return res
 }
