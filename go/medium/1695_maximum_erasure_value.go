@@ -1,17 +1,17 @@
 func maximumUniqueSubarray(nums []int) int {
-    windowSet := make(map[int]struct{})
+    windowSet := make([]bool, 10_001)
     windowSum := 0
     l := 0
     res := 0
     for _, v := range nums {
         windowSum += v
         // sweep the tail to remove all dups from window
-        for _, exists := windowSet[v]; exists; _, exists = windowSet[v] {
+        for windowSet[v] {
             windowSum -= nums[l]            
-            delete(windowSet, nums[l]) 
+            windowSet[nums[l]] = false 
             l++
         }
-        windowSet[v] = struct{}{}
+        windowSet[v] = true
 
         res = max(res, windowSum)
     }
