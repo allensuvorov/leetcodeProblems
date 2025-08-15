@@ -3,10 +3,10 @@ func gcdOfStrings(str1 string, str2 string) string {
         return ""
     }
 
-    gcdLen := min(len(str1), len(str2))
-    for gcdLen > 1 && (len(str1) % gcdLen != 0 || len(str2) % gcdLen != 0) {
-        gcdLen--
+    divLen := min(len(str1), len(str2))
+    for divLen >= 1 && !(len(str1) % divLen == 0 && len(str2) % divLen == 0) {
+        divLen-- 
     }
 
-    return str1[:gcdLen]
+    return str1[:divLen]
 }
