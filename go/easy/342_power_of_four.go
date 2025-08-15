@@ -1,14 +1,9 @@
 func isPowerOfFour(n int) bool {
-    if n <= 0 {
+    sqrt := math.Sqrt(float64(n))
+    if sqrt != float64(int(sqrt)) {
         return false
     }
-    
-    for n >= 4 {
-        if n % 4 != 0 {
-            return false
-        }
-        n = n / 4
-    }
+    intSqRt := int(sqrt)
 
-    return n == 1
+    return n > 0 && intSqRt & (intSqRt - 1) == 0
 }
