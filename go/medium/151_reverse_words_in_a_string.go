@@ -1,3 +1,5 @@
+
+
 // built-in methods solution
 func reverseWords(s string) string {
     words := strings.Fields(s)
@@ -5,7 +7,33 @@ func reverseWords(s string) string {
     return strings.Join(words, " ")
 }
 
-// no built-in methods solution - slice
+// no built-in methods solution - linear run time
+func reverseWords(s string) string {
+    res := []byte{}
+    n := len(s)
+    // read s from end, parse each work and append to res
+    l, r := n - 1, n - 1;
+    for l >= 0 {
+        if s[l] == ' ' {
+            if l < r { // there is a word
+                res = append(res, []byte(s[l+1:r+1])...)
+                res = append(res, ' ')
+            }
+            r = l - 1 // r catches up with l, and jumps over
+        }
+        l--
+    }
+
+    if l < r {
+        res = append(res, []byte(s[l+1:r+1])...)
+        res = append(res, ' ')
+    }
+
+    return string(res)[:len(res)-1] // cut extra space at the end
+}
+
+
+// no built-in methods solution - slice - O(n^2)
 func reverseWords(s string) string {
     words := []byte{}
     word := []byte{}
@@ -17,7 +45,7 @@ func reverseWords(s string) string {
             if len(words) > 0 {
                 word = append(word, ' ')
             }
-            words = append(word, words...)
+            words = append(word, words...) // prepending makes it O(n^2)
             word = []byte{}
         }
     }
