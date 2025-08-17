@@ -1,10 +1,13 @@
 func compress(chars []byte) int {
-    w := 0 // writer index
-    r := 0 // reader index
+    r := 0 // read index
+    w := 0 // write index
     for r < len(chars) {
-        chars[w] = chars[r] // new group
+        // write the current group character
+        chars[w] = chars[r]
+        
+        // read the group lenght
         groupLen := 0
-        for r < len(chars) && chars[w] == chars[r] {
+        for r < len(chars) && chars[r] == chars[w] {
             groupLen++
             r++
         }
