@@ -5,7 +5,7 @@ func compress(chars []byte) int {
         // write the current group character
         chars[w] = chars[r]
         
-        // read the group lenght
+        // read the group length
         groupLen := 0
         for r < len(chars) && chars[r] == chars[w] {
             groupLen++
