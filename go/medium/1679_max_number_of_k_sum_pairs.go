@@ -16,13 +16,13 @@ func maxOperations(nums []int, k int) int {
 
 // sorting
 func maxOperations(nums []int, k int) int {
-    res := 0
     slices.Sort(nums)
-    for l, r := 0, len(nums)-1; l<r; {
-        if nums[l] + nums[r] < k {
-            l++
-        } else if nums[l] + nums[r] > k {
+    res := 0
+    for l, r := 0, len(nums) - 1; l < r; {
+        if nums[l] + nums[r] > k {
             r--
+        } else if nums[l] + nums[r] < k {
+            l++
         } else {
             res++
             l++
