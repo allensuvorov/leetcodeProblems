@@ -1,27 +1,29 @@
 func findDifference(nums1 []int, nums2 []int) [][]int {
-    set1 := map[int]bool{}
+    set1 := make(map[int]bool)
+    set2 := make(map[int]bool)
+
     for _, v := range nums1 {
         set1[v] = true
     }
 
-    set2 := map[int]bool{}
     for _, v := range nums2 {
         set2[v] = true
     }
-
-    res := make([][]int, 2)
     
+    // check what is missing in nums2 (set2)
+    result1 := []int{}
     for v := range set1 {
         if !set2[v] {
-            res[0] = append(res[0], v)
+            result1 = append(result1, v)
         }
     }
 
+    // check what is missing in nums1 (set1)
+    result2 := []int{}
     for v := range set2 {
         if !set1[v] {
-            res[1] = append(res[1], v)
+            result2 = append(result2, v)
         }
     }
-
-    return res
+    return [][]int{result1, result2}
 }
