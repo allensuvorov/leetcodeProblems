@@ -1,15 +1,19 @@
 func maxVowels(s string, k int) int {
-    vowels := map[byte]bool{'a':true, 'e':true, 'i':true, 'o':true, 'u':true}
-    maxCount := 0
-    count := 0
+    maxVowelCount := 0
+    windowVowelCount := 0
+    vowels := []byte{'a', 'e', 'i', 'o', 'u'}
     for i := range s {
-        if vowels[s[i]] {
-            count++
+        if slices.Contains(vowels, s[i]) {
+            windowVowelCount++
         }
-        if i >= k && vowels[s[i-k]] {
-            count--
+
+        if i >= k && slices.Contains(vowels, s[i - k]) { // we have window and a vowel tail
+            windowVowelCount-- // update the count
         }
-        maxCount = max(maxCount, count)
+        
+        if i + 1 >= k { // we have a window
+            maxVowelCount = max(maxVowelCount, windowVowelCount)
+        }
     }
-    return maxCount   
+    return maxVowelCount
 }
