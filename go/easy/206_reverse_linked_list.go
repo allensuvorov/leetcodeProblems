@@ -6,9 +6,9 @@
  * }
  */
 func reverseList(head *ListNode) *ListNode {
-    var prev *ListNode
-    for head != nil {
+    var prev *ListNode; // that dummy takes care of pointing the NEW end node to nil
+    for head != nil { // checks that any node exists
         head.Next, prev, head = prev, head, head.Next
     }
-    return prev
+    return prev // that dummy is also our new head
 }
