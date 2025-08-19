@@ -1,19 +1,22 @@
 type RecentCounter struct {
-    q []int
+    timeLog []int
 }
 
 
 func Constructor() RecentCounter {
-    return RecentCounter{make([]int, 0)}
+    return RecentCounter{[]int{}}
 }
 
 
 func (this *RecentCounter) Ping(t int) int {
-    this.q = append(this.q, t)
-    for this.q[0] < t - 3000 {
-        this.q = this.q[1:]
+    // append new ping
+    this.timeLog = append(this.timeLog, t)
+    
+    //deque outdated pings
+    for this.timeLog[0] < (t - 3000) {
+        this.timeLog = this.timeLog[1:] 
     }
-    return len(this.q)
+    return len(this.timeLog)
 }
 
 
