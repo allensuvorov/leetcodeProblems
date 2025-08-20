@@ -11,7 +11,10 @@ func tribonacci(n int) int {
 
     a, b, c := 0, 1, 1
     for range n - 2 {
-        a, b, c = b, c, a + b + c
+        temp := a + b + c
+        a = b
+        b = c
+        c = temp
     }
 
     return c
