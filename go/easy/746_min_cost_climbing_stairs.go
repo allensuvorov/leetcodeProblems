@@ -1,7 +1,10 @@
 func minCostClimbingStairs(cost []int) int {
-    a, b := 0, 0
+    prev, curr := 0, 0
     for _, v := range cost {
-        a, b = b, v + min(a, b)
+        temp := curr
+        curr = v + min(curr, prev)
+        prev = temp
     }
-    return min(a, b)
+
+    return min(prev, curr)
 }
