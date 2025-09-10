@@ -1,4 +1,6 @@
 func peopleAwareOfSecret(n int, delay int, forget int) int {
-    // can not simulate
-    // then what?
+    // wow
+    // editorial shows solution: Simulation + Deque
+    // hints show a 2 dimension PD solution
+    // need to review
 }
