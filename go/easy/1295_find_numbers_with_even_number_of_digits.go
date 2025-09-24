@@ -1,11 +1,14 @@
 func findNumbers(nums []int) int {
     count := 0
     for _, v := range nums {
-        if v >= 10 && v <= 99 ||
-           v >= 1_000 && v <= 9_999 ||
-           v >= 100_000 && v <= 999_999 {
+        digitCount := 0
+        for v > 0 {
+            digitCount++
+            v = v / 10
+        }
+        if digitCount % 2 == 0 {
             count++
-           }
+        }
     }
     return count
 }
