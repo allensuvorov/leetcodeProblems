@@ -1,11 +1,11 @@
 func numWaterBottles(numBottles int, numExchange int) int {
-    ans := 0
+    res := 0
     emptyBottles := 0
     for numBottles > 0 {
-        ans += numBottles
-        emptyBottles += numBottles
-        numBottles = emptyBottles / numExchange
-        emptyBottles = emptyBottles % numExchange
+        res += numBottles // drink
+        emptyBottles += numBottles // they are all empty now
+        numBottles = emptyBottles / numExchange // exchange
+        emptyBottles = emptyBottles % numExchange // empty
     }
-    return ans
+    return res
 }
