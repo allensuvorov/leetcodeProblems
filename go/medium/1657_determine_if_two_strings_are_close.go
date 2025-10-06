@@ -3,39 +3,35 @@ func closeStrings(word1 string, word2 string) bool {
         return false
     }
 
-    charCount1, charCount2 := make(map[byte]int), make(map[byte]int)
-
+    var charSet1, charSet2 [26]bool
     for i := range word1 {
-        charCount1[word1[i]]++
-        charCount2[word2[i]]++
+        charSet1[word1[i] - 'a'] = true
+        charSet2[word2[i] - 'a'] = true
     }
 
-    if len(charCount1) != len(charCount2) {
+    if charSet1 != charSet2 {
         return false
     }
-    
-    // same chars
-    for k := range charCount1 {
-        if _, exists := charCount2[k]; !exists {
+
+    var charCount1, charCount2 [26]int
+
+    for i := range word1 {
+        charCount1[word1[i] - 'a']++
+        charCount2[word2[i] - 'a']++
+    }
+
+    freqCount1, freqCount2 := map[int]int{}, map[int]int{}
+
+    for i := range charCount1 {
+        freqCount1[charCount1[i]]++
+        freqCount2[charCount2[i]]++
+    }
+
+    for freq1, count1 := range freqCount1 {
+        if count2, ok := freqCount2[freq1]; !ok || count1 != count2 {
             return false
         }
     }
 
-    // same counts
-    countCount1 := make(map[int]int)
-    for _, v := range charCount1 {
-        countCount1[v]++
-    }
-
-    countCount2 := make(map[int]int) 
-    for _, v := range charCount2 {
-        countCount2[v]++
-    }
-
-    for k, v1 := range countCount1 {
-        if v2, ok := countCount2[k]; !ok || v1 != v2 {
-            return false
-        }
-    }
-    return true
+    return  true
 }
