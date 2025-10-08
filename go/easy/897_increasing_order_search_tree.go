@@ -7,34 +7,31 @@
  * }
  */
 func increasingBST(root *TreeNode) *TreeNode {
-    var newRoot *TreeNode
-    var dfs func(node *TreeNode) *TreeNode
-    dfs = func(node *TreeNode) *TreeNode {
+    var res, prev *TreeNode
+
+
+    var lnr func(node *TreeNode)
+    lnr = func (node *TreeNode) {
         if node == nil {
-            return nil
+            return
         }
 
-        if node.Left != nil && newRoot == nil {
-            if node.Left.Left == nil {
-                newRoot = node.Left
-            }
+        lnr(node.Left)
+
+        if prev == nil {
+            res = node
+            fmt.Println(res.Val)
         }
 
-        left := dfs(node.Left)
-        if left != nil {
-            left.Right = node
+        if prev != nil {
+            prev.Right = node
         }
 
-        right := dfs(node.Right)
-        if right != nil {
-            return right
-        }
-        return node
-    }    
+        node.Left = nil
+        prev = node
 
-    dfs(root)
-    if newRoot == nil {
-        return root
+        lnr(node.Right)
     }
-    return newRoot
+    lnr(root)
+    return res
 }
