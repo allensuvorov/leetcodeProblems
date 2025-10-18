@@ -7,3 +7,11 @@ func climbStairs(n int) int {
     }
     return one
 }
+
+func climbStairs(n int) int {
+    a, b := 1, 2
+    for range n - 1 {
+        a, b = b, a + b
+    }
+    return a
+}
