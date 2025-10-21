@@ -1,4 +1,6 @@
--- Write your PostgreSQL query statement below
-SELECT tweet_id
-FROM TWEETS
-WHERE CHAR_LENGTH(CONTENT) > 15
+SELECT
+    tweet_id
+FROM
+    Tweets
+WHERE
+    CHARACTER_LENGTH(content) > 15;
