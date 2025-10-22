@@ -27,3 +27,29 @@ func isVowel(c byte) bool {
     }
     return false
 }
+
+// using slices.Contains
+// - swap, with two pointers
+// - search using a loop
+// - check for a vowel
+func reverseVowels(s string) string {
+    vowels := []byte("aeiouAEIOU")
+    temp := []byte(s)
+    
+    for l, r := 0, len(s) - 1; l < r; {
+        if !slices.Contains(vowels, temp[l]) {
+            l++
+            continue
+        }
+        if !slices.Contains(vowels, temp[r]) {
+            r-- 
+            continue
+        }
+        
+        temp[r], temp[l] = temp[l], temp[r]
+
+        l++
+        r--
+    }
+    return string(temp)
+}
