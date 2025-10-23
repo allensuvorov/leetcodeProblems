@@ -1,12 +1,11 @@
-
-
+////////////////////////////////////////////////////////////////
 // built-in methods solution
 func reverseWords(s string) string {
     words := strings.Fields(s)
     slices.Reverse(words)
     return strings.Join(words, " ")
 }
-
+////////////////////////////////////////////////////////////////
 // no built-in methods solution - linear run time
 func reverseWords(s string) string {
     res := []byte{}
@@ -32,7 +31,7 @@ func reverseWords(s string) string {
     return string(res)[:len(res)-1] // cut extra space at the end
 }
 
-
+////////////////////////////////////////////////////////////////
 // no built-in methods solution - slice - O(n^2)
 func reverseWords(s string) string {
     words := []byte{}
@@ -52,7 +51,7 @@ func reverseWords(s string) string {
     return string(words)
 }
 
-
+////////////////////////////////////////////////////////////////
 // no built-in methods solution - string
 func reverseWords(s string) string {
     var res string
@@ -72,8 +71,8 @@ func reverseWords(s string) string {
     }
     return res
 }
-
-// recurcive solution
+////////////////////////////////////////////////////////////////
+// recursive solution
 func reverseWords(s string) string {
     if len(s) == 0 {
         return ""
@@ -103,3 +102,66 @@ func reverseWords(s string) string {
 
     return next + " " + word
 }
+
+////////////////////////////////////////
+// in-place solution for a byte slice
+func reverseWords(s string) string {
+	data := []byte(s)
+
+	// move extra spaces
+	data = trimSpace(data)
+
+	// reverse the entire string
+	reverse(data)
+
+	// reverse each word
+    l, r := 0, 0
+    for r < len(data) {
+        if data[r] == ' ' {
+            reverse(data[l:r])
+            l = r + 1
+        }
+        r++
+    }
+
+    // last word
+    reverse(data[l:r])
+
+	return string(data)
+}
+
+func trimSpace(data []byte) []byte{
+	// move spaces
+	l, r := 0, 0
+	firstSpace := true
+	inWords := false
+	for r < len(data) {
+		if data[r] != ' ' {
+			data[l], data[r] = data[r], data[l]
+			l++
+			firstSpace = true
+			inWords = true
+		} else if inWords && firstSpace {
+			l++
+			firstSpace = false
+		}
+		r++
+	}
+    
+    data = data[:l]
+    if data[l-1] == ' ' {
+        data = data[:l-1]
+    }
+    return data
+}
+
+func reverse(data []byte) {
+	l, r := 0, len(data)-1
+	for l < r {
+		data[l], data[r] = data[r], data[l]
+        l++
+        r--
+	}
+}
+
+////////////////////////////////////////////////////////////////
