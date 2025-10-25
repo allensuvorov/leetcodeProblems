@@ -1,7 +1,5 @@
 func increasingTriplet(nums []int) bool {
-    min1 := math.MaxInt
-    min2 := math.MaxInt
-
+    min1, min2 := math.MaxInt, math.MaxInt
     for _, v := range nums {
         if v <= min1 {
             min1 = v
