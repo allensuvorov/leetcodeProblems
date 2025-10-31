@@ -17,17 +17,20 @@ func maxOperations(nums []int, k int) int {
 // sorting
 func maxOperations(nums []int, k int) int {
     slices.Sort(nums)
-    res := 0
-    for l, r := 0, len(nums) - 1; l < r; {
-        if nums[l] + nums[r] > k {
-            r--
-        } else if nums[l] + nums[r] < k {
+    l := 0
+    r := len(nums) - 1
+    result := 0
+    for l < r {
+        switch {
+        case nums[l] + nums[r] == k:
+            result++
             l++
-        } else {
-            res++
-            l++
             r--
+        case nums[l] + nums[r] > k:
+            r--
+        case nums[l] + nums[r] < k:
+            l++
         }
     }
-    return res
+    return result
 }
