@@ -1,3 +1,4 @@
+// count sort with smaller n
 func frequencySort(nums []int) []int {
     const offset = 100
     freqList := make([]int, 201)
@@ -24,9 +25,40 @@ func frequencySort(nums []int) []int {
     return ans
 }
 
-// ind  1, 2, 3
-// freq 2, 3, 1
+// general case - with hash map
+func frequencySort(nums []int) []int {
+    freqCount := map[int]int{}
+    for _, v := range nums {
+        freqCount[v]++
+    }
 
-// 1: 2
-// 2: 3
-// 3: 1, 
+    freqs := []freqRecord{}
+    for val, freq := range freqCount {
+        freqs = append(freqs, freqRecord{
+            val: val,
+            freq: freq,
+            })
+    }
+
+    slices.SortFunc(freqs, 
+        func(a, b freqRecord) int {
+            return cmp.Or( // return first non zero
+                cmp.Compare(a.freq, b.freq),
+                cmp.Compare(b.val, a.val),
+            )
+        },
+    )
+    
+    res := make([]int, 0, len(nums))
+    for _, v := range freqs {
+        for range v.freq {
+            res = append(res, v.val)
+        }
+    }
+    return res
+}
+
+type freqRecord struct {
+    val int
+    freq int
+}
