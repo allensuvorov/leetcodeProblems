@@ -1,20 +1,15 @@
 func uniqueOccurrences(arr []int) bool {
-    // get counts
-    counts := make(map[int]int)
-    
+    occurrences := map[int]int{}
     for _, v := range arr {
-        counts[v]++
+        occurrences[v]++
     }
 
-    
-    // check counts for repeating a value
-    hasCount := make(map[int]bool)
-
-    for _, v := range counts {
-        if hasCount[v] {
+    seen := map[int]bool{} // set
+    for _, v := range occurrences {
+        if seen[v] {
             return false
         }
-        hasCount[v] = true
+        seen[v] = true    
     }
     return true
 }
