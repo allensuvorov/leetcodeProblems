@@ -1,11 +1,13 @@
 func closeStrings(word1 string, word2 string) bool {
-    charCount1 := [26]int{}
-    for i := range word1 {
-        charCount1[word1[i] - 'a']++
+    if len(word1) != len(word2) {
+        return false
     }
 
+    charCount1 := [26]int{}
     charCount2 := [26]int{}
-    for i := range word2 {
+
+    for i := range word1 {
+        charCount1[word1[i] - 'a']++
         charCount2[word2[i] - 'a']++
     }
 
