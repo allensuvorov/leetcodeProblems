@@ -1,22 +1,23 @@
 func equalPairs(grid [][]int) int {
-    const n = 200
-    rowCounts := make(map[[n]int]int) 
-    res := 0
-
-    for r := range grid {
-        rowArray := [n]int{}
-        for i, v := range grid[r] {
-            rowArray[i] = v
+    n := len(grid)
+    const keySize = 200
+    rowCount := map[[keySize]int]int{}
+    for r := range n {
+        var temp [keySize]int
+        for c := range n {
+            temp[c] = grid[r][c]
         }
-        rowCounts[rowArray]++
+        rowCount[temp]++
     }
-    
-    for c := range grid[0] {
-        colArray := [n]int{}
-        for r := range grid[c] {
-            colArray[r] = grid[r][c]
+
+    res := 0
+    for c := range n {
+        var temp [keySize]int
+        fmt.Println(temp)
+        for r := range n {
+            temp[r] = grid[r][c]
         }
-        res = res + rowCounts[colArray]
+        res = res + rowCount[temp]
     }
     return res
 }
