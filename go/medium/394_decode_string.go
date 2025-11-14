@@ -68,24 +68,12 @@ func decodeString(s string) string {
 // redo 14 Nov 2025
 func decodeString(s string) string {
     stack := []rune{}
-    result := []rune{}
     for _, v := range s {
-        
-        if unicode.IsLetter(v) {
-            if len(stack) == 0 {
-                result = append(result, v)
-            } else {
-                stack = append(stack, v)
-            }
-        }
-
-        if unicode.IsNumber(v) || v == '[' {
+        if v != ']' {
             stack = append(stack, v)
-        }
-
-        if v == ']' {
+        } else { // decode
             openBracketIndex := len(stack) - 1
-            for openBracketIndex >= 0 && unicode.IsLetter(stack[openBracketIndex]) {
+            for openBracketIndex >= 0 && stack[openBracketIndex] != '[' {
                 openBracketIndex--
             }
             letters := append([]rune{}, stack[openBracketIndex + 1:]...)
@@ -108,13 +96,9 @@ func decodeString(s string) string {
                 subString = append(subString, letters...)
             }
 
-            if len(stack) == 0 {
-                result = append(result, subString...)
-            } else {
-                stack = append(stack, subString...)
-            }
+            stack = append(stack, subString...)
         }
         
     }
-    return string(result)
+    return string(stack)
 }
