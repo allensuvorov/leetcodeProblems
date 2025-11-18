@@ -45,6 +45,42 @@ func predictPartyVictory(senate string) string {
     return "Dire"
 }
 
+// 1 queue with maps
+func predictPartyVictory(senate string) string {
+    const r = 1
+    const d = -1
+    voterCount := map[int]int{}
+    q := make([]int, 0, len(senate))
+    for _, v := range senate {
+        if v == 'R' {
+            voterCount[r]++
+            q = append(q, r)
+        } else {
+            voterCount[d]++
+            q = append(q, d)
+        }
+    }
+
+    votedOutCount := map[int]int{}
+
+    for voterCount[r] != 0 && voterCount[d] != 0 {
+        voter := q[0]
+        if votedOutCount[voter] < 0 { // can not vote
+            votedOutCount[voter]++
+        } else { // can vote
+            votedOutCount[-voter]--
+            voterCount[-voter]-- // opposite voder decremented
+            q = append(q, voter)
+        }
+        q = q[1:] // deque in any case
+    }
+    if voterCount[r] > 0 {
+        return "Radiant"
+    } else {
+        return "Dire"
+    }
+}
+
 // 2 queues implemented via channels
 func predictPartyVictory(senate string) string {
     n := len(senate)
