@@ -7,24 +7,31 @@
  * }
  */
 func leafSimilar(root1 *TreeNode, root2 *TreeNode) bool {
-    var dfs func(node *TreeNode, leaves *[]int) *[]int
-    
-    dfs = func(node *TreeNode, leaves *[]int) *[]int {
-        if node == nil {
-            return nil
-        }
-        left := dfs(node.Left, leaves)
-        right := dfs(node.Right, leaves)
-        if left == nil && right == nil {
-            *leaves = append(*leaves, node.Val)
-        }
-        return leaves
+    leaves1 := []int{}
+    dfs(root1, &leaves1)
+    leaves2 := []int{}
+    dfs(root2, &leaves2)
+
+
+    if len(leaves1) != len(leaves2) {
+        return false
     }
 
-    leftLeaves := dfs(root1, &[]int{})
-    rightLeaves := dfs(root2, &[]int{})
-    fmt.Println(*leftLeaves, *rightLeaves)
-
-    return slices.Compare(*leftLeaves, *rightLeaves) == 0
+    for i := range leaves1 {
+        if leaves1[i] != leaves2[i] {
+            return false
+        }
+    }
+    return true
 }
 
+func dfs(root *TreeNode, leaves *[]int){
+    if root == nil {
+        return
+    }
+    if root.Left == nil && root.Right == nil {
+        *leaves = append(*leaves, root.Val)
+    }
+    dfs(root.Left, leaves)
+    dfs(root.Right, leaves)
+}
