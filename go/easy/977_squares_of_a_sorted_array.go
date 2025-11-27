@@ -18,3 +18,22 @@ func sortedSquares(nums []int) []int {
     }
     return res
 }
+
+// compute squires once, two pointers is the same
+func sortedSquares(nums []int) []int {
+    for i := range nums {
+        nums[i] = nums[i] * nums[i]
+    }
+    l, r := 0, len(nums) - 1
+    result := make([]int, len(nums))
+    for i := len(result) - 1; i >= 0; i-- {
+        if nums[l] < nums[r] {
+            result[i] = nums[r]
+            r--
+        } else {
+            result[i] = nums[l]
+            l++
+        }
+    }
+    return result
+}
