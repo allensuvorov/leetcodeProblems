@@ -21,3 +21,24 @@ func goodNodes(root *TreeNode) int {
     }
     return dfs(root, root.Val)
 }
+
+// closure
+func goodNodes(root *TreeNode) int {
+    result := 0
+
+    var dfs func(root *TreeNode, maxSoFar int)
+    dfs = func(root *TreeNode, maxSoFar int) {
+        if root == nil {
+            return
+        }
+        if root.Val >= maxSoFar {
+            result++
+            maxSoFar = root.Val
+        }
+        dfs(root.Left, maxSoFar)
+        dfs(root.Right, maxSoFar)
+    }
+    dfs(root, math.MinInt)
+    return result
+}
+
