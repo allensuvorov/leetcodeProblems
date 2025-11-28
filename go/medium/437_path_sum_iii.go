@@ -24,3 +24,22 @@ func pathSum(root *TreeNode, targetSum int) int {
     dfs(root, 0)
     return res
 }
+
+// redo
+func pathSum(root *TreeNode, targetSum int) int {
+    result := 0
+    var dfs func(root *TreeNode, prefSum int, prefSums map[int]int)
+    dfs = func(root *TreeNode, prefSum int, prefSums map[int]int) {
+        if root == nil {
+            return
+        }
+        prefSum += root.Val
+        result += prefSums[prefSum - targetSum] 
+        prefSums[prefSum]++
+        dfs(root.Left, prefSum, prefSums)
+        dfs(root.Right, prefSum, prefSums)
+        prefSums[prefSum]--
+    }
+    dfs(root, 0, map[int]int{0:1})
+    return result
+}
