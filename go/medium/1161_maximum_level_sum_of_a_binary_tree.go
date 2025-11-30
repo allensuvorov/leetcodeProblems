@@ -7,18 +7,17 @@
  * }
  */
 func maxLevelSum(root *TreeNode) int {
-    res := 0
-    level := 0
-    maxLevelSum := math.MinInt
+    maxSum := math.MinInt
+    res := 0 // result
     q := []*TreeNode{root}
+    x := 1 // level
     for len(q) > 0 {
-        levelSize := len(q)
-        levelSum := 0
-        level++
-        for range levelSize {
+        size := len(q)
+        curSum := 0
+        for range size {
             now := q[0]
             q = q[1:]
-            levelSum += now.Val
+            curSum += now.Val
             if now.Left != nil {
                 q = append(q, now.Left)
             }
@@ -26,10 +25,11 @@ func maxLevelSum(root *TreeNode) int {
                 q = append(q, now.Right)
             }
         }
-        if levelSum > maxLevelSum {
-            maxLevelSum = levelSum
-            res = level
+        if curSum > maxSum {
+            maxSum = curSum
+            res = x
         }
+        x++
     }
     return res
 }
