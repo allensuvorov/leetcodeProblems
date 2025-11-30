@@ -7,19 +7,18 @@
  * }
  */
 func rightSideView(root *TreeNode) []int {
-    result := []int{}
     if root == nil {
-        return result
+        return nil
     }
+    res := []int{}
     q := []*TreeNode{root}
 
     for len(q) > 0 {
-        result = append(result, q[len(q) - 1].Val)
-        levelSize := len(q)
-        for range levelSize {
+        size := len(q)
+        res = append(res, q[size - 1].Val)
+        for range size {
             now := q[0]
             q = q[1:]
-
             if now.Left != nil {
                 q = append(q, now.Left)
             }
@@ -28,7 +27,6 @@ func rightSideView(root *TreeNode) []int {
             }
         }
     }
-    return result
+    return res
 }
-
 // iterative bfs with q, take value from end of q
