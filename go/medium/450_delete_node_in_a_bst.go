@@ -7,26 +7,33 @@
  * }
  */
 func deleteNode(root *TreeNode, key int) *TreeNode {
-    if root == nil {
-        return root
-    }
-    // search
-    if key < root.Val {
-        root.Left = deleteNode(root.Left, key)
-    } else if key > root.Val {
-        root.Right = deleteNode(root.Right, key)
-    } else { // delete
-        if root.Left == nil {
-            return root.Right
-        } else if root.Right == nil {
-            return root.Left
-        }
-        cur := root.Right
-        for cur.Left != nil {
-            cur = cur.Left
-        }
-        root.Val = cur.Val
-        root.Right = deleteNode(root.Right, root.Val) // recursive delete
-    }
-    return root
+	if root == nil {
+		return nil
+	}
+	if key < root.Val {
+		root.Left = deleteNode(root.Left, key)
+	}
+	if key > root.Val {
+		root.Right = deleteNode(root.Right, key)
+	}
+
+	if key == root.Val {
+		// key == root.Val case
+		// one child or no children cases
+		if root.Left == nil {
+			return root.Right
+		}
+		if root.Right == nil {
+			return root.Left
+		}
+		// we have two children - find next bigger
+		nextBigger := root.Right
+		for nextBigger.Left != nil {
+			nextBigger = nextBigger.Left
+		}
+		root.Val = nextBigger.Val
+		root.Right = deleteNode(root.Right, nextBigger.Val)
+	}
+
+	return root
 }
