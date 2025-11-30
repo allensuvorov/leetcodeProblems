@@ -6,24 +6,29 @@
  *     Right *TreeNode
  * }
  */
-
-func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
     if root == nil {
         return nil
     }
 
-    if root == p || root == q {
+    if root == p || root == q { // i am once of targets and could be LCA
         return root
     }
 
     l := lowestCommonAncestor(root.Left, p, q)
     r := lowestCommonAncestor(root.Right, p, q)
 
-    switch {
-    case l != nil && r != nil: // lca case
+    if l != nil && r != nil { // i am the LCA
         return root
-    case l != nil:
+    }
+
+    if l != nil {
         return l
     }
-    return r
+
+    if r != nil {
+        return r
+    }
+     
+    return nil
 }
