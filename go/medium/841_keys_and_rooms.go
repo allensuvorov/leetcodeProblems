@@ -1,20 +1,18 @@
 // iterative DFS with a stack
 func canVisitAllRooms(rooms [][]int) bool {
-    todos := []int{0} // rooms to visit
-    seen := map[int]bool{0:true}
-
-    for len(todos) > 0 {
-        top := len(todos)-1
-        room := todos[top]
-        todos = todos[:top]
-        for _, key := range rooms[room] {
-            if !seen[key] {
-                seen[key] = true
-                todos = append(todos, key)
+    todo := []int{0}
+    visited := make(map[int]bool)
+    for len(todo) > 0 {
+        now := todo[len(todo)-1]
+        todo = todo[:len(todo)-1]
+        visited[now] = true
+        for _, nei := range rooms[now] {
+            if !visited[nei] {
+                todo = append(todo, nei)
             }
         }
     }
-    return len(seen) == len(rooms)
+    return len(visited) == len(rooms) 
 }
 
 // nested DFS
