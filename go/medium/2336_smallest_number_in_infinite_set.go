@@ -1,35 +1,60 @@
+import (
+	"container/heap"
+)
+
 type SmallestInfiniteSet struct {
-    h *minHeap
-    set map[int]bool
+    isPresent map[int]bool
+    h *IntHeap
+    currentInteger int
 }
 
 
 func Constructor() SmallestInfiniteSet {
-    h := &minHeap{}
+    h := &IntHeap{}
     heap.Init(h)
-    set := make(map[int]bool)
-    for i := 1; i <= 1000; i++ {
-        heap.Push(h, i)
-        set[i] = true
+    return SmallestInfiniteSet{
+        isPresent: make(map[int]bool),
+        h: h,
+        currentInteger: 1,
     }
-    return SmallestInfiniteSet{h, set}
 }
 
 
 func (this *SmallestInfiniteSet) PopSmallest() int {
-    num := heap.Pop(this.h).(int)
-    this.set[num] = false
-    return num
+    if this.h.Len() == 0 {
+        old := this.currentInteger
+        this.currentInteger++
+        return old
+    }
+    delete(this.isPresent, (*this.h)[0])
+    return heap.Pop(this.h).(int)
 }
 
 
 func (this *SmallestInfiniteSet) AddBack(num int)  {
-    if !this.set[num] {
-        heap.Push(this.h, num )
-        this.set[num] = true
+    if num < this.currentInteger && !this.isPresent[num] {
+        this.isPresent[num] = true
+        heap.Push(this.h, num)
     }
 }
 
+type IntHeap []int
+
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *IntHeap) Push(x any) {
+	*h = append(*h, x.(int))
+}
+
+func (h *IntHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
 
 /**
  * Your SmallestInfiniteSet object will be instantiated and called as such:
@@ -38,20 +63,7 @@ func (this *SmallestInfiniteSet) AddBack(num int)  {
  * obj.AddBack(num);
  */
 
- type minHeap []int
 
-func (h minHeap) Len() int           { return len(h) }
-func (h minHeap) Less(i, j int) bool { return h[i] < h[j] }
-func (h minHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
-func (h *minHeap) Push(x any) {
-	*h = append(*h, x.(int))
-}
 
-func (h *minHeap) Pop() any {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
-	return x
-}
+
