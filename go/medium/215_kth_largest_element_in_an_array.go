@@ -1,28 +1,28 @@
-func findKthLargest(nums []int, k int) int {
-    h := &maxHeap{}
-    heap.Init(h)
-    for i := range nums {
-        heap.Push(h, nums[i])
-    }
+import "container/heap"
 
-    res := 0
-    for range k {
-        res = heap.Pop(h).(int)
+func findKthLargest(nums []int, k int) int {
+    h := &IntHeap{}
+    heap.Init(h)
+    for _, v := range nums {
+        heap.Push(h, v)
+        if h.Len() > k {
+            heap.Pop(h)
+        }
     }
-    return res
+    return (*h)[0]
 }
 
-type maxHeap []int
+type IntHeap []int
 
-func (h maxHeap) Len() int           { return len(h) }
-func (h maxHeap) Less(i, j int) bool { return h[i] > h[j] }
-func (h maxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
-func (h *maxHeap) Push(x any) {
+func (h *IntHeap) Push(x any) {
 	*h = append(*h, x.(int))
 }
 
-func (h *maxHeap) Pop() any {
+func (h *IntHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
