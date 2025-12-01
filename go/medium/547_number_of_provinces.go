@@ -1,3 +1,4 @@
+// recurcive BFS
 func findCircleNum(isConnected [][]int) int {
     n := len(isConnected)
     provCount := 0
@@ -24,24 +25,11 @@ func bfs(isConnected [][]int, now int) {
     }
 }
 
-// build graph, iterative dfs
+// iterative DFS
 func findCircleNum(isConnected [][]int) int {
     n := len(isConnected)
-    // DFS, track seen
-    // every !seen is new province
     result := 0
     seen := make(map[int]bool)
-
-    // build adjList
-    g := make([][]int, n)
-    for i := range n {
-        for j := range n {
-            if i != j && isConnected[i][j] == 1 {
-                g[i] = append(g[i], j)
-            }
-        }
-    }
-    
     for city := range n {
         if !seen[city] {
             result++
@@ -52,8 +40,8 @@ func findCircleNum(isConnected [][]int) int {
             now := todo[len(todo)-1]
             todo = todo[:len(todo)-1]
             seen[now] = true
-            for _, nei := range g[now] {
-                if !seen[nei] {
+            for nei := range isConnected[now] {
+                if !seen[nei] && isConnected[now][nei] == 1 {
                     todo = append(todo, nei)
                 }
             }
