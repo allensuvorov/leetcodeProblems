@@ -1,3 +1,4 @@
+// stack via linked list
 type node struct{
     Val int
     Ind int
@@ -15,4 +16,19 @@ func finalPrices(prices []int) []int {
         stack = &newNode
     }
     return prices
+}
+
+// stack - via slice
+func finalPrices(prices []int) []int {
+    stack := []int{}
+    discPrices := make([]int, len(prices))
+    for i, v := range prices {
+        discPrices[i] = v
+        for len(stack) > 0 && prices[stack[len(stack)-1]] >= v {
+            discPrices[stack[len(stack)-1]] -= v 
+            stack = stack[:len(stack)-1]
+        }
+        stack = append(stack, i)
+    }
+    return discPrices
 }
