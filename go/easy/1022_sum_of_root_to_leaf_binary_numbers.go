@@ -8,22 +8,20 @@
  */
 func sumRootToLeaf(root *TreeNode) int {
     res := 0
-    var dfs func(root *TreeNode, path int)
-    dfs = func(root *TreeNode, path int) {
+    var dfs func(root *TreeNode, num int)
+    dfs = func(root *TreeNode, num int) {
         if root == nil {
             return
         }
-
-        path = path << 1 + root.Val
-
+        num = num * 2 + root.Val
+        
         if root.Left == nil && root.Right == nil {
-            res = res + path
+            res += num
+            return
         }
-
-        dfs(root.Left, path)
-        dfs(root.Right, path)
+        dfs(root.Left, num)
+        dfs(root.Right, num)
     }
-
     dfs(root, 0)
     return res
 }
