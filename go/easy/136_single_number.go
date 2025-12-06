@@ -1,7 +1,7 @@
 func singleNumber(nums []int) int {
-    single := 0 
+    ans := 0
     for _, v := range nums {
-        single = single ^ v
+        ans ^= v
     }
-    return single
+    return ans
 }
