@@ -1,37 +1,40 @@
 func orangesRotting(grid [][]int) int {
-    rows, cols := len(grid), len(grid[0])
-    q := [][]int{}
     freshCount := 0
-    for r := range grid {
-        for c := range grid[0] {
-            if grid[r][c] == 2 {
-                q = append(q, []int{r, c})
-            }
+    rows := len(grid)
+    cols := len(grid[0])
+    q := [][]int{}
+    for r := range rows {
+        for c := range cols {
             if grid[r][c] == 1 {
                 freshCount++
             }
+            if grid[r][c] == 2 {
+                q = append(q, []int{r, c})
+            }
         }
     }
-    minuteCount := 0
+    res := 0
     for len(q) > 0 && freshCount > 0 {
         size := len(q)
         for range size {
             now := q[0]
             q = q[1:]
-            for _, dir := range [][]int{{1,0}, {-1,0}, {0,1}, {0,-1}} {
-                if r, c := now[0]+dir[0], now[1]+dir[1]; r >= 0 && r < rows && c >= 0 && c < cols {
-                    if grid[r][c] == 1 {
-                        grid[r][c] = 2
+            for _, d := range [][]int{{1,0},{-1,0},{0,1},{0,-1}} {
+                nr, nc := now[0] + d[0], now[1] + d[1]
+                if nr >= 0 && nr < rows && nc >= 0 && nc < cols {
+                    if grid[nr][nc] == 1 {
+                        grid[nr][nc] = 2
                         freshCount--
-                        q = append(q, []int{r,c})
+                        q = append(q, []int{nr, nc})
                     }
                 }
             }
         }
-        minuteCount++
+        res++
     }
+
     if freshCount == 0 {
-        return minuteCount
+        return res
     }
     return -1
 }
