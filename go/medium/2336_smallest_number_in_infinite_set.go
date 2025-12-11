@@ -1,3 +1,55 @@
+// bool array
+type SmallestInfiniteSet struct {
+    curMin int
+    inSet []bool
+}
+
+
+func Constructor() SmallestInfiniteSet {
+    set := make([]bool, 1002)
+    for i := 1; i < len(set); i++ {
+        set[i] = true
+    }
+    return SmallestInfiniteSet{
+        curMin: 1,
+        inSet: set,
+    }
+}
+
+
+func (this *SmallestInfiniteSet) PopSmallest() int {
+    res := this.curMin
+    this.inSet[res] = false
+    for i := 1; i <= 1001; i++ {
+        if i == 1001 {
+            fmt.Println("i == 1001")
+        }
+        if this.inSet[i] {
+            this.curMin = i
+            return res
+        } 
+    }
+    return -1
+}
+
+
+func (this *SmallestInfiniteSet) AddBack(num int)  {
+    if !this.inSet[num] {
+        this.curMin = min(num, this.curMin)
+        this.inSet[num] = true
+    }
+}
+
+
+/**
+ * Your SmallestInfiniteSet object will be instantiated and called as such:
+ * obj := Constructor();
+ * param_1 := obj.PopSmallest();
+ * obj.AddBack(num);
+ */
+
+
+// heap
 import (
 	"container/heap"
 )
