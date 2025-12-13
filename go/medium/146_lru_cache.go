@@ -1,50 +1,51 @@
-import "container/list"
+type item struct {
+    le *list.Element
+    v int
+}
 
 type LRUCache struct {
-    C int
-    L *list.List
-    M map[int]*list.Element
+    c int
+    q *list.List // DLL, que of keys
+    m map[int]*item // map of pointers to items
 }
 
-type Node struct {
-    Key int
-    Value int
-}
 
 func Constructor(capacity int) LRUCache {
     return LRUCache{
-        C: capacity,
-        L: list.New(),
-        M: make(map[int]*list.Element, capacity), 
+        c: capacity,
+        q: list.New(),
+        m: make(map[int]*item),
     }
 }
 
 
 func (this *LRUCache) Get(key int) int {
-    if node, ok := this.M[key]; ok {
-        this.L.MoveToBack(node)
-        return node.Value.(*Node).Value
+    if item, ok := this.m[key]; ok { // if key in que move to back
+        this.q.MoveToBack(item.le)
+        return item.v
     }
     return -1
 }
 
 
 func (this *LRUCache) Put(key int, value int)  {
-    if node, ok := this.M[key]; ok { // exist
-        this.L.MoveToBack(node)
-        node.Value.(*Node).Value = value
-    } else {
-        node := &Node{
-            Key: key,
-            Value: value,
+    if obj, ok := this.m[key]; ok { // if element esixts
+        this.q.MoveToBack(obj.le) // if key in m, move to back
+        obj.v = value // update value
+    } else { // else push to back
+        le := this.q.PushBack(key)
+        obj := &item {
+            le: le,
+            v: value,
         }
-        if this.L.Len() == this.C { // map is at capacity
-            lru := this.L.Front() // get LRU from back of the list
-            lruKey := lru.Value.(*Node).Key
-            delete(this.M, lruKey)
-            this.L.Remove(lru)
-        }
-        this.M[key] = this.L.PushBack(node)
+        this.m[key] = obj
+    }
+
+    // if over cap, evict, 
+    if this.q.Len() > this.c {
+        le := this.q.Front()
+        this.q.Remove(le)
+        delete(this.m, le.Value.(int))
     }
 }
 
@@ -55,4 +56,10 @@ func (this *LRUCache) Put(key int, value int)  {
  * param_1 := obj.Get(key);
  * obj.Put(key,value);
  */
- 
+
+// q  key , key, key
+// using moves item to back of queue, evict from front
+
+// m k:v, k:v, k:v
+
+//  front  <-    back
