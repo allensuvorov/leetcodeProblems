@@ -1,3 +1,4 @@
+// r->l
 func canJump(nums []int) bool {
     n := len(nums)
     highestSolution := n - 1
@@ -7,4 +8,15 @@ func canJump(nums []int) bool {
         }
     }
     return highestSolution == 0
+}
+
+// l->r , new high
+func canJump(nums []int) bool {
+    newHigh := 0
+    for i, v := range nums {
+        if newHigh >= i {
+            newHigh = max(newHigh, i + v)
+        }
+    }
+    return newHigh >= len(nums) - 1
 }
