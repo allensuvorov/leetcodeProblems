@@ -1,33 +1,29 @@
 type FooBar struct {
-	gf, gb chan struct{}
+	c chan struct{}
     n int
 }
 
 func NewFooBar(n int) *FooBar {
-	gf := make(chan struct{}, 1)
-	gb := make(chan struct{}, 1)
-    gf <- struct{}{}
     return &FooBar{
-        gf: gf,
-        gb: gb,
+        c: make(chan struct{}),
         n: n,
     }
 }
 
 func (fb *FooBar) Foo(printFoo func()) {
 	for i := 0; i < fb.n; i++ {
-        <- fb.gf
         // printFoo() outputs "foo". Do not change or remove this line.
         printFoo()
-        fb.gb <- struct{}{}
+        <- fb.c
+        fb.c <- struct{}{}
 	}
 }
 
 func (fb *FooBar) Bar(printBar func()) {
 	for i := 0; i < fb.n; i++ {
-        <- fb.gb
+        fb.c <- struct{}{}
 		// printBar() outputs "bar". Do not change or remove this line.
         printBar()
-        fb.gf <- struct{}{}
+        <- fb.c
 	}
 }
