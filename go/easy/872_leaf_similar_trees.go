@@ -47,17 +47,15 @@ func leafSimilar(root1 *TreeNode, root2 *TreeNode) bool {
         findLeaves(root2, c2)
         close(c2)
     }()
+
     for {
         v1, ok1 := <- c1
         v2, ok2 := <- c2
         if !ok1 && !ok2 {
-            break
+            return true
         }
-        if ok1 != ok2 {
+        if ok1 != ok2 || v1 != v2 {
             return false
-        }
-        if v1 != v2 {
-            return false 
         }
     }
     return true
