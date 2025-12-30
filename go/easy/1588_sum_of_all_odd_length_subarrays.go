@@ -16,20 +16,38 @@ func sumOddLengthSubarrays(arr []int) int {
     return totalSum
 }
 
-//     1234578
-// 1:  1111111
-//     abcdefg
-// 3:  1233321
-//     abc
-//      bcd
-//       cde
-//        def
-//         efg
-// 5:  1233321
-//     abcde
-//      abcde
-//       abcde
-// 7:  1222221
-//     abcdef
-//      bcdefg
-//     1234578
+// concurrent with a mutex
+func sumOddLengthSubarrays(arr []int) int {
+    // n^2 with sliding window
+    // [workers] -> var with a mutex
+    totalSum := 0
+    var mu sync.Mutex
+    var wg sync.WaitGroup
+    for window := 1; window <= len(arr); window += 2 {
+        wg.Add(1)
+        go func() {
+            sumSubarrays(arr, window, &mu, &totalSum)
+            wg.Done()
+        }()
+    }
+
+    wg.Wait()
+    return totalSum
+}
+
+func sumSubarrays(arr []int, window int, mu *sync.Mutex, totalSum *int) {
+    res := 0
+    windowSum := 0
+    for i := range arr {
+        windowSum += arr[i]
+        if i + 1 > window { // cut tailing value
+            windowSum -= arr[i - window]
+        }
+        if i + 1 >= window {
+            res += windowSum
+        } 
+    }
+    mu.Lock()
+    *totalSum += res
+    mu.Unlock()
+}
