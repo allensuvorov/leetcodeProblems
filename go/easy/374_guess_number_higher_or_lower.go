@@ -8,18 +8,25 @@
  */
 
 func guessNumber(n int) int {
-    l := 1
-    r := n
-    for l < r {
-        m := l +(r-l)/2
+    l, r := 1, n
+    for l <= r {
+        m := l + (r - l)/2
         switch guess(m) {
-        case 0: 
+        case 0:
             return m
-        case 1:
-            l = m+1
         case -1:
-            r = m-1
+            r = m - 1
+        case 1:
+            l = m + 1
         }
     }
-    return l
+    return -1
 }
+
+/*
+          p
+1 2 3 4 5 6 7 8 9 10 
+          m
+            r
+          l
+*/
