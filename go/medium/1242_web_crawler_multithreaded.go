@@ -20,25 +20,24 @@ func crawl(startUrl string, htmlParser *HtmlParser) []string {
     var wg sync.WaitGroup
     var mu sync.Mutex
 
-    var dfs func(url string)
-    dfs = func(url string) {
-        for _, nextURL := range htmlParser.GetUrls(url){
-            
+    var dfs func(curURL string)
+    dfs = func(curURL string) {
+        for _, nextURL := range htmlParser.GetUrls(curURL){
+            u, _ := url.Parse(nextURL)
+
             mu.Lock()
-            isValid := !visited[nextURL] && 
-            strings.Contains(nextURL, hostName)
-            if isValid {
-                visited[nextURL] = true
+            if u.Hostname() != hostName || visited[nextURL]{
+                mu.Unlock()
+                continue
             }
+            visited[nextURL] = true
             mu.Unlock()
 
-            if isValid {
-                wg.Add(1)
-                go func() {
-                    defer wg.Done()
-                    dfs(nextURL)
-                }()
-            }
+            wg.Add(1)
+            go func() {
+                defer wg.Done()
+                dfs(nextURL)
+            }()
         }
     }
     
