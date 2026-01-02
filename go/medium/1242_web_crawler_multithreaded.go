@@ -22,12 +22,14 @@ func crawl(startUrl string, htmlParser *HtmlParser) []string {
 
     var dfs func(url string)
     dfs = func(url string) {
-        mu.Lock()
-        visited[url] = true
-        mu.Unlock()
         for _, nextURL := range htmlParser.GetUrls(url){
+            
             mu.Lock()
-            isValid := !visited[nextURL] && strings.Contains(nextURL, hostName)
+            isValid := !visited[nextURL] && 
+            strings.Contains(nextURL, hostName)
+            if isValid {
+                visited[nextURL] = true
+            }
             mu.Unlock()
 
             if isValid {
@@ -39,6 +41,8 @@ func crawl(startUrl string, htmlParser *HtmlParser) []string {
             }
         }
     }
+    
+    visited[startUrl] = true
     wg.Add(1)
     go func() {
         defer wg.Done()
