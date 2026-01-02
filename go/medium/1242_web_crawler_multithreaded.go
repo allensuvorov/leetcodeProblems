@@ -1,5 +1,3 @@
-// Step 1 - sequential solution
-
 import (
     "math/rand"
     "time"
@@ -19,18 +17,35 @@ func crawl(startUrl string, htmlParser *HtmlParser) []string {
     u, _ := url.Parse(startUrl)
     hostName := u.Hostname()
     visited := make(map[string]bool)
-    
+    var wg sync.WaitGroup
+    var mu sync.Mutex
+
     var dfs func(url string)
     dfs = func(url string) {
+        mu.Lock()
         visited[url] = true
+        mu.Unlock()
         for _, nextURL := range htmlParser.GetUrls(url){
-            if !visited[nextURL] && strings.Contains(nextURL, hostName) {
-                dfs(nextURL)
+            mu.Lock()
+            isValid := !visited[nextURL] && strings.Contains(nextURL, hostName)
+            mu.Unlock()
+
+            if isValid {
+                wg.Add(1)
+                go func() {
+                    defer wg.Done()
+                    dfs(nextURL)
+                }()
             }
         }
     }
-    
-    dfs(startUrl)
+    wg.Add(1)
+    go func() {
+        defer wg.Done()
+        dfs(startUrl)
+    }()
+
+    wg.Wait()
 
     result := make([]string, 0, len(visited))
     for url := range visited {
