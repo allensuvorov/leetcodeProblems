@@ -14,7 +14,10 @@ import (
     }
 */
 func crawl(startUrl string, htmlParser *HtmlParser) []string {
-    u, _ := url.Parse(startUrl)
+    u, err := url.Parse(startUrl)
+    if err != nil {
+        log.Fatal(err)
+    }
     hostName := u.Hostname()
     visited := make(map[string]bool)
     var wg sync.WaitGroup
@@ -23,8 +26,10 @@ func crawl(startUrl string, htmlParser *HtmlParser) []string {
     var dfs func(curURL string)
     dfs = func(curURL string) {
         for _, nextURL := range htmlParser.GetUrls(curURL){
-            u, _ := url.Parse(nextURL)
-
+            u, err := url.Parse(nextURL)
+            if err != nil {
+                log.Fatal(err)
+            }
             mu.Lock()
             if u.Hostname() != hostName || visited[nextURL]{
                 mu.Unlock()
