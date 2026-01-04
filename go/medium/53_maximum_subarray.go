@@ -21,3 +21,27 @@ func maxSubArray(nums []int) int {
     }
     return ans
 }
+
+// concurrent v1, synchronous channel - TLEs
+func maxSubArray(nums []int) int {
+    result := nums[0]
+    ch := make(chan int)
+    for i := range nums {
+        go maxSum(nums[i:], ch)
+    }
+    for range nums {
+        result = max(result, <- ch)
+    }
+    return result
+}
+
+func maxSum(nums []int, ch chan int) {
+    result := nums[0]
+    curSum := 0
+    for _, v := range nums {
+        curSum += v
+        result = max(result, curSum)
+    }
+    ch <- result
+}
+
