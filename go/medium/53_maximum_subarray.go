@@ -86,3 +86,43 @@ func maxSum(nums []int) int {
     }
     return result
 }
+
+// concurrency - semaphore chan + signaling chan
+import "runtime"
+func maxSubArray(nums []int) int {
+    bufferSize := runtime.NumCPU()
+    result := nums[0]
+    output := make(chan int, bufferSize)
+    allJobsConsumed := make(chan int)
+
+    go func() {
+        for range nums {
+            result = max(result, <- output)
+        }
+        allJobsConsumed <- 1
+    }()
+
+    sem := make(chan int, bufferSize)
+    for i := range nums {
+        sem <- 1
+        go func() {
+            maxSum(nums[i:], output)
+            <- sem
+        }()
+    }
+
+    <- allJobsConsumed
+
+    fmt.Printf("runtime.NumCPU(): %v \n", runtime.NumCPU())
+    return result
+}
+
+func maxSum(nums []int, output chan int) {
+    result := nums[0]
+    curSum := 0
+    for _, v := range nums {
+        curSum += v
+        result = max(result, curSum)
+    }
+    output <- result
+}
