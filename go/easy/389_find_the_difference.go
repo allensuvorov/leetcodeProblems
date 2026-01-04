@@ -18,3 +18,22 @@ func findTheDifference(s string, t string) byte {
     }
     return addedLetter
 }
+
+// concurrent solution with idiomatic signaling
+func findTheDifference(s string, t string) byte {
+    var bitMask1 byte
+    c := make(chan int)
+    go func() {
+        for i := range s {
+            bitMask1 ^=s[i]
+        }
+        c <- 1
+    }()
+    
+    var bitMask2 byte
+    for i := range t {
+        bitMask2 ^=t[i]
+    }
+    <- c
+    return bitMask1 ^ bitMask2
+}
