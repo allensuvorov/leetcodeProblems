@@ -45,3 +45,44 @@ func maxSum(nums []int, ch chan int) {
     ch <- result
 }
 
+// worker pool size NumCPU
+import "runtime"
+func maxSubArray(nums []int) int {
+    n := len(nums)
+    result := nums[0]
+
+    input := make(chan []int, n)
+    output := make(chan int, n)
+
+    workerPoolSize := runtime.NumCPU()
+    for range workerPoolSize {
+        go worker(input, output)
+    }
+
+    for i := range nums {
+        input <- nums[i:]
+    }
+    close(input)
+
+    for range nums {
+        result = max(result, <- output)
+    }
+    fmt.Printf("runtime.NumCPU(): %v \n", runtime.NumCPU())
+    return result
+}
+
+func worker(input chan []int, output chan int) {
+    for job := range input {
+        output <- maxSum(job)
+    }
+}
+
+func maxSum(nums []int) int {
+    result := nums[0]
+    curSum := 0
+    for _, v := range nums {
+        curSum += v
+        result = max(result, curSum)
+    }
+    return result
+}
