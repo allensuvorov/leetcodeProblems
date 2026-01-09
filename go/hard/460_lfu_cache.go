@@ -25,17 +25,25 @@ func (this *LFUCache) incFreq(key int) {
     f := this.keyToFreq[key]
     l := this.freqToKeysList[f]
     l.Remove(e)
-    if f == this.minFreq && l.Len() == 0 { // only evement in the list
+    
+    // Clean up the empty list
+    if l.Len() == 0 {
         delete(this.freqToKeysList, f)
-        this.minFreq++
+        if f == this.minFreq {
+            this.minFreq++
+        }
     }
+    // Increment frequency
     this.keyToFreq[key]++
-    f = this.keyToFreq[key]
-    if _, ok := this.freqToKeysList[f]; !ok { // add to the +1 list 
-        this.freqToKeysList[f] = list.New()
+    newFreq := this.keyToFreq[key]
+    
+    // Ini new list fot new freq, if needed
+    if _, ok := this.freqToKeysList[newFreq]; !ok {
+        this.freqToKeysList[newFreq] = list.New()
     }
-    e = this.freqToKeysList[f].PushBack(key)
-    this.keyToElement[key] = e
+
+    newElement := this.freqToKeysList[newFreq].PushBack(key)
+    this.keyToElement[key] = newElement
 }
 
 
@@ -47,35 +55,43 @@ func (this *LFUCache) Get(key int) int {
     return -1
 }
 
+func (this *LFUCache) evict() {
+    l := this.freqToKeysList[this.minFreq]
+    frontElement := l.Front()
+    lfuKey := frontElement.Value.(int)
+    
+    // Remove from list
+    l.Remove(frontElement)
+    if l.Len() == 0 {
+        delete(this.freqToKeysList, this.minFreq)
+    }
+    // Clean up all key maps
+    delete(this.keyToElement, lfuKey)
+    delete(this.keyToFreq, lfuKey)
+    delete(this.keyToVal, lfuKey)
+}
 
 func (this *LFUCache) Put(key int, value int)  {
-    if _, ok := this.keyToVal[key]; !ok { // new key
-        if len(this.keyToVal) == this.cap { // eviction case
-            l := this.freqToKeysList[this.minFreq]
-            frontElement := l.Front()
-            lfuKey := frontElement.Value.(int)
-            delete(this.keyToElement, lfuKey)
-            delete(this.keyToFreq, lfuKey)
-            delete(this.keyToVal, lfuKey)
-            l.Remove(frontElement)
-            if l.Len() == 0 {
-                delete(this.freqToKeysList, this.minFreq)
-            }
-        }
-        
-        if _, ok := this.freqToKeysList[1]; !ok { // always starts with freq = 1
-            this.freqToKeysList[1] = list.New()
-        }
-        
-        e := this.freqToKeysList[1].PushBack(key)
-        
-        this.keyToElement[key] = e
-        this.keyToFreq[key] = 1
-        this.minFreq = 1
-    } else {
+    if _, ok := this.keyToVal[key]; ok {
+        this.keyToVal[key] = value
         this.incFreq(key)
+        return
     }
+    // add new element
+    if len(this.keyToVal) == this.cap { // eviction case
+        this.evict()
+    }
+    
+    // Init a freq list for freq = 1, if needed
+    if _, ok := this.freqToKeysList[1]; !ok { 
+        this.freqToKeysList[1] = list.New()
+    }
+    
     this.keyToVal[key] = value
+    e := this.freqToKeysList[1].PushBack(key)
+    this.keyToElement[key] = e
+    this.keyToFreq[key] = 1
+    this.minFreq = 1
 }
 
 
@@ -85,4 +101,8 @@ func (this *LFUCache) Put(key int, value int)  {
  * obj := Constructor(capacity);
  * param_1 := obj.Get(key);
  * obj.Put(key,value);
+ */
+
+ /*
+ 
  */
