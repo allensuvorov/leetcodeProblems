@@ -25,16 +25,17 @@ func (this *LFUCache) incFreq(key int) {
     f := this.keyToFreq[key]
     l := this.freqToKeysList[f]
     l.Remove(e)
-    if f == this.minFreq && l.Len() == 0 {
+    if f == this.minFreq && l.Len() == 0 { // only evement in the list
         delete(this.freqToKeysList, f)
         this.minFreq++
     }
     this.keyToFreq[key]++
     f = this.keyToFreq[key]
-    if _, ok := this.freqToKeysList[f]; !ok {
+    if _, ok := this.freqToKeysList[f]; !ok { // add to the +1 list 
         this.freqToKeysList[f] = list.New()
     }
-    this.freqToKeysList[f].PushBack(key)
+    e = this.freqToKeysList[f].PushBack(key)
+    this.keyToElement[key] = e
 }
 
 
@@ -48,8 +49,8 @@ func (this *LFUCache) Get(key int) int {
 
 
 func (this *LFUCache) Put(key int, value int)  {
-    if _, ok := this.keyToElement[key]; !ok {
-        if len(this.keyToElement) == this.cap { // eviction case
+    if _, ok := this.keyToVal[key]; !ok { // new key
+        if len(this.keyToVal) == this.cap { // eviction case
             l := this.freqToKeysList[this.minFreq]
             frontElement := l.Front()
             lfuKey := frontElement.Value.(int)
@@ -57,9 +58,12 @@ func (this *LFUCache) Put(key int, value int)  {
             delete(this.keyToFreq, lfuKey)
             delete(this.keyToVal, lfuKey)
             l.Remove(frontElement)
+            if l.Len() == 0 {
+                delete(this.freqToKeysList, this.minFreq)
+            }
         }
         
-        if _, ok := this.freqToKeysList[1]; !ok {
+        if _, ok := this.freqToKeysList[1]; !ok { // always starts with freq = 1
             this.freqToKeysList[1] = list.New()
         }
         
