@@ -1,0 +1,4 @@
+- [ ] study and practice iterators
+  - [ ] https://leetcode.com/problems/peeking-iterator/
+  - [ ] https://leetcode.com/problems/flatten-nested-list-iterator
+  - [ ] go implementation - https://pkg.go.dev/iter
