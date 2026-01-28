@@ -12,3 +12,29 @@ func dailyTemperatures(temperatures []int) []int {
     }
     return res
 }
+
+// bounded-temp allows for a more intuitive solution
+// go right to left and track nextOccurrence
+// index is temperature, value is index (day)
+func dailyTemperatures(temperatures []int) []int {
+    nextOccurrence := make([]int, 101)
+    for i := range nextOccurrence {
+        nextOccurrence[i] = math.MaxInt
+    }
+    n := len(temperatures)
+    result := make([]int, n)
+    // from right to left <-
+    for i := n - 1; i >= 0; i-- {
+        t := temperatures[i]
+        nextOccurrence[t] = i
+        // lookup nextOccurrence for a higher temperature
+        minIndex := math.MaxInt
+        for j := t + 1; j < len(nextOccurrence); j++ {
+            minIndex = min(minIndex, nextOccurrence[j])
+        }
+        if minIndex != math.MaxInt {
+            result[i] = minIndex - i
+        }
+    }
+    return result
+}
