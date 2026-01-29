@@ -1,14 +1,14 @@
+// stack solution
 func dailyTemperatures(temperatures []int) []int {
     res := make([]int, len(temperatures))
-    days := []int{}
-
+    st := make([]int, 0) // stack of indices
     for i, v := range temperatures {
-        for len(days) > 0 && temperatures[days[len(days)-1]] < v {
-            top := len(days)-1
-            res[days[top]] = i - days[top]
-            days = days[:top]
+        for len(st) > 0 && temperatures[st[len(st) - 1]] < v {
+            top := len(st) - 1
+            res[st[top]] = i - st[top]
+            st = st[:top] // pop
         }
-        days = append(days, i)
+        st = append(st, i)
     }
     return res
 }
