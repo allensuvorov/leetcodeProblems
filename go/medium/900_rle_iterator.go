@@ -36,8 +36,3 @@ func (this *RLEIterator) Next(n int) int {
  * obj := Constructor(encoding);
  * param_1 := obj.Next(n);
  */
-
- /*
- 2,a
-
- */
