@@ -1,31 +1,33 @@
 type RLEIterator struct {
-    i int // 
-    j int // 
+    i int
     encoding []int
 }
 
 
 func Constructor(encoding []int) RLEIterator {
-    return RLEIterator{0, 0, encoding}
+    return RLEIterator{0, encoding}
 }
 
 
 func (this *RLEIterator) Next(n int) int {
-    repeated := this.encoding[i]
-    number := this.encoding[i+1]
-    
-    this.j++ // move to next
+    res := -1
+    for n > 0 {
+        // zero hopper
+        for this.i < len(this.encoding) && this.encoding[this.i] == 0 {
+            this.i += 2
+        }
 
-    if this.j > repeated {
-        if this.i == len(this.encoding) - 2 {
+        if this.i >= len(this.encoding) {
             return -1
         }
-            this.i++
-        }
+
+        res = this.encoding[this.i+1]
+        
+        drain := min(n, this.encoding[this.i])
+        n -= drain
+        this.encoding[this.i] -= drain
     }
-
-
-
+    return res
 }
 
 
@@ -36,8 +38,6 @@ func (this *RLEIterator) Next(n int) int {
  */
 
  /*
- 
-j = 0
-repeated := 0
+ 2,a
 
  */
