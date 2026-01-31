@@ -1,38 +1,35 @@
 type RLEIterator struct {
     i int
-    encoding []int
+    a []int
 }
 
 
-func Constructor(encoding []int) RLEIterator {
-    return RLEIterator{0, encoding}
+func Constructor(a []int) RLEIterator {
+    return RLEIterator{0, a}
 }
 
 
 func (this *RLEIterator) Next(n int) int {
-    res := -1
-    for n > 0 {
-        // zero hopper
-        for this.i < len(this.encoding) && this.encoding[this.i] == 0 {
+    for this.i < len(this.a) {
+        if n > this.a[this.i] {
+            n -= this.a[this.i]
             this.i += 2
+        } else {
+            this.a[this.i] -= n
+            return this.a[this.i+1]
         }
-
-        if this.i >= len(this.encoding) {
-            return -1
-        }
-
-        res = this.encoding[this.i+1]
-        
-        drain := min(n, this.encoding[this.i])
-        n -= drain
-        this.encoding[this.i] -= drain
     }
-    return res
+    return -1
 }
 
 
 /**
  * Your RLEIterator object will be instantiated and called as such:
- * obj := Constructor(encoding);
+ * obj := Constructor(a);
  * param_1 := obj.Next(n);
+ */
+
+ /*
+ 2,a
+
  */
