@@ -6,12 +6,14 @@
  *     Right *TreeNode
  * }
  */
-
 func inorderTraversal(root *TreeNode) []int {
     if root == nil {
-        return []int{}
+        return nil
     }
-    left := inorderTraversal(root.Left)
-    right := inorderTraversal(root.Right)
-    return append(append(left, root.Val), right...)
+    l := inorderTraversal(root.Left)
+    r := inorderTraversal(root.Right)
+    return append(
+        append(l, root.Val),
+        r...,
+    )
 }
