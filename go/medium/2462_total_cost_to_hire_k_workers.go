@@ -1,60 +1,71 @@
 func totalCost(costs []int, k int, candidates int) int64 {
-    h := &minHeap{}
-    heap.Init(h)
-    l, r := 0, len(costs) - 1
-    for i := 0; i < candidates && l <= r; i++ {
-        if l <= r {
-            heap.Push(h, candidate{costs[l], l})
-            l++
-        }
-        if l <= r { 
-            heap.Push(h, candidate{costs[r], r})
-            r--
-        }
-    }
+    var ans int64 = 0
+    n := len(costs)
+    l, r := 0, n - 1
 
-    var result int64
+    // initialize pq
+    pq := PriorityQueue{}
+    for l < min(r, candidates) {
+        pq = append(pq, &Cost{costs[l], l})
+        l++
+    }
+    l--
+    for r > max(l, n - candidates - 1) {
+        pq = append(pq, &Cost{costs[r], r})
+        r--
+    }
+    r++
+    heap.Init(&pq)
+
     for range k {
-        cand := heap.Pop(h).(candidate)
-        result += int64(cand.cost)
-        if l <= r {
-            if cand.index <= l {
-                heap.Push(h, candidate{costs[l], l})
+        // hire a worker
+        hired := heap.Pop(&pq).(*Cost)
+        // fmt.Printf("Hired worker: %+v, l=%v, r=%v, n=%v \n", hired, l, r, n)
+        ans += int64(hired.value)
+        if l + 1 < r {
+            if hired.index <= l {
                 l++
+                heap.Push(&pq, &Cost{costs[l], l})
             } else {
-                heap.Push(h, candidate{costs[r], r})
                 r--
+                heap.Push(&pq, &Cost{costs[r], r})
             }
         }
     }
-    return result
+
+    return ans
 }
 
-type candidate struct {
-    cost int
-    index int
+
+type Cost struct {
+	value    int
+	index   int
 }
 
-type minHeap []candidate
+type PriorityQueue []*Cost
 
-func (h minHeap) Len() int           { return len(h) }
-func (h minHeap) Less(i, j int) bool { 
-    if h[i].cost == h[j].cost {
-        return h[i].index < h[j].index
+func (pq PriorityQueue) Len() int { return len(pq) }
+
+func (pq PriorityQueue) Less(i, j int) bool {
+    if pq[i].value == pq[j].value {
+        return pq[i].index < pq[j].index
     }
-    return h[i].cost < h[j].cost
+	return pq[i].value < pq[j].value
 }
 
-func (h minHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-
-func (h *minHeap) Push(x any) {
-	*h = append(*h, x.(candidate))
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
 }
 
-func (h *minHeap) Pop() any {
-	old := *h
+func (pq *PriorityQueue) Push(x any) {
+	cost := x.(*Cost)
+	*pq = append(*pq, cost)
+}
+
+func (pq *PriorityQueue) Pop() any {
+	old := *pq
 	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
-	return x
+	cost := old[n-1]
+	*pq = old[0 : n-1]
+	return cost
 }
