@@ -7,38 +7,22 @@
  * }
  */
 func goodNodes(root *TreeNode) int {
-    var dfs func(root *TreeNode, greatest int) int
-    dfs = func(root *TreeNode, greatest int) int {
-        if root == nil {
-            return 0
-        }
-        good := 0
-        if root.Val >= greatest {
-            good = 1
-            greatest = root.Val
-        }
-        return good + dfs(root.Left, greatest) + dfs(root.Right, greatest)
-    }
     return dfs(root, root.Val)
 }
 
-// closure
-func goodNodes(root *TreeNode) int {
-    result := 0
-
-    var dfs func(root *TreeNode, maxSoFar int)
-    dfs = func(root *TreeNode, maxSoFar int) {
-        if root == nil {
-            return
-        }
-        if root.Val >= maxSoFar {
-            result++
-            maxSoFar = root.Val
-        }
-        dfs(root.Left, maxSoFar)
-        dfs(root.Right, maxSoFar)
+func dfs(root *TreeNode, good int) int {
+    if root == nil {
+        return 0
     }
-    dfs(root, math.MinInt)
-    return result
+    res := 0
+    if root.Val >= good {
+        res += 1
+        good = root.Val
+    }
+    
+    l := dfs(root.Left, good)
+    r := dfs(root.Right, good)
+
+    return res + l + r
 }
 
