@@ -17,3 +17,24 @@ func inorderTraversal(root *TreeNode) []int {
         r...,
     )
 }
+
+// concurrent processing of left and right at each node.
+func inorderTraversal(root *TreeNode) []int {
+    if root == nil {
+        return nil
+    }
+    var wg sync.WaitGroup
+    var l, r []int
+    wg.Add(1)
+    go func(){
+        l = inorderTraversal(root.Left)
+        wg.Done()
+    }()
+    wg.Add(1)
+    go func(){
+        r = inorderTraversal(root.Right)
+        wg.Done()
+    }()
+    wg.Wait()
+    return append(append(l, root.Val), r...)
+}
