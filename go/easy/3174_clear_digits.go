@@ -1,11 +1,18 @@
 func clearDigits(s string) string {
-    stack := []rune{}
+    var b []rune
     for _, v := range s {
-        if unicode.IsLetter(v) {
-            stack = append(stack, v)
+        if unicode.IsDigit(v) {
+            b = b[:len(b)-1]
         } else {
-            stack = stack[:len(stack)-1]
+            b = append(b, v)
         }
     }
-    return string(stack)
+    return string(b)
 }
+
+/*
+[abc321]
+[ab21]
+[a1]
+[]
+*/
