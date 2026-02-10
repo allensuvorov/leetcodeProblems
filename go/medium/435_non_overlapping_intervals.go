@@ -3,13 +3,13 @@ func eraseOverlapIntervals(intervals [][]int) int {
         return a[0] - b[0] // sort by start
     })
     res := 0
-    reach := math.MinInt
+    lastEnd := math.MinInt
     for _, v := range intervals{
-        if v[0] < reach { // if there is overlap
+        if v[0] < lastEnd { // if there is overlap
             res++
-            reach = min(reach, v[1]) // keep the shorter reach
+            lastEnd = min(lastEnd, v[1]) // keep the shorter lastEnd
         } else {
-            reach = v[1]
+            lastEnd = v[1]
         }
     }
     return res
