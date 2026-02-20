@@ -2,22 +2,23 @@ type Codec struct {
     longShort map[string]string
     shortLong map[string]string
     baseURL string
-    counter func() int
+    count int
 }
 
 
 func Constructor() Codec {
-    baseURL := "http://tinyurl.com"
-    count := 0
     return Codec {
         longShort: make(map[string]string),
         shortLong: make(map[string]string),
-        baseURL: baseURL,
-        counter: func() int {
-            count++
-            return count 
-        },
+        baseURL: "http://tinyurl.com",
+        count: 0,
     }
+}
+
+
+func (this *Codec) counter() int {
+    this.count++
+    return this.count
 }
 
 // Encodes a URL to a shortened URL.
