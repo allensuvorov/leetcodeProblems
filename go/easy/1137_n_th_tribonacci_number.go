@@ -1,21 +1,14 @@
 func tribonacci(n int) int {
-    if n == 0 {
-        return 0 
-    }
-    if n == 1 {
-        return 1 
-    }
-    if n == 2 {
-        return 1
+    if n < 2 {
+        return n
     }
 
     a, b, c := 0, 1, 1
     for range n - 2 {
-        temp := a + b + c
+        temp := c
+        c = a + b + c
         a = b
-        b = c
-        c = temp
+        b = temp
     }
-
     return c
 }
